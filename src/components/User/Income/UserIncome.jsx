@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../../Utils/axiosInstance";
@@ -7,7 +7,7 @@ import {
   fetchRecurring,
 } from "../../../redux/income/incomeSlice";
 import { LazyMotion, m, AnimatePresence } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import {
   BarChart,
@@ -432,7 +432,7 @@ export const UserIncome = () => {
                     icon: <FiPercent size={18} />,
                   },
                 ].map((card, idx) => (
-                  <motion.div
+                  <m.div
                     key={card.label}
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -493,7 +493,7 @@ export const UserIncome = () => {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </m.div>
             </m.div>
           )}
 
@@ -691,7 +691,7 @@ export const UserIncome = () => {
                     const src =
                       sourceConfig[income.source] || sourceConfig.Other;
                     return (
-                      <motion.div
+                      <m.div
                         key={income._id}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -729,16 +729,16 @@ export const UserIncome = () => {
                             })}
                           </p>
                         </div>
-                      </motion.div>
+                      </m.div>
                     );
                   })}
                 </div>
               )}
-            </motion.div>
+            </m.div>
           )}
 
           {activeTab === "recurring" && (
-            <motion.div
+            <m.div
               key="recurring"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -760,7 +760,7 @@ export const UserIncome = () => {
                 </div>
               </div>
 
-              <motion.form
+              <m.form
                 onSubmit={handleRecurringSubmit}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -840,7 +840,7 @@ export const UserIncome = () => {
                     )}
                   </button>
                 </div>
-              </motion.form>
+              </m.form>
 
               <div className="rounded-2xl bg-[var(--surface-primary)] border border-[var(--border)] overflow-hidden shadow-2xl">
                 <div className="px-6 py-5 border-b border-[var(--border)] flex items-center justify-between bg-[var(--surface-secondary)]/50">
@@ -885,7 +885,7 @@ export const UserIncome = () => {
                         </thead>
                         <tbody className="divide-y divide-[var(--border)]">
                           {recurringPayments.map((pay, i) => (
-                            <motion.tr
+                            <m.tr
                               key={pay._id}
                               initial={{ opacity: 0, x: -12 }}
                               animate={{ opacity: 1, x: 0 }}
@@ -935,7 +935,7 @@ export const UserIncome = () => {
                                   </button>
                                 </div>
                               </td>
-                            </motion.tr>
+                            </m.tr>
                           ))}
                         </tbody>
                       </table>
@@ -975,7 +975,7 @@ export const UserIncome = () => {
                   </>
                 )}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       )}
@@ -1099,6 +1099,7 @@ export const UserIncome = () => {
         </DialogContent>
       </MuiDialog>
     </div>
+    </LazyMotion>
   );
 };
 

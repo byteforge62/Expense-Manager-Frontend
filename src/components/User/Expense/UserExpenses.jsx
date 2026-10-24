@@ -8,7 +8,7 @@ import {
   fetchCategories,
 } from "../../../redux/expense/expenseSlice";
 import { LazyMotion, m, AnimatePresence } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 import {
   BarChart,
   Bar,
@@ -355,7 +355,7 @@ export const UserExpenses = () => {
                 {card.value}
               </p>
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
 
@@ -383,7 +383,7 @@ export const UserExpenses = () => {
       <AnimatePresence mode="wait">
         {/* --- OVERVIEW --- */}
         {activeTab === "overview" && (
-          <motion.div
+          <m.div
             key="overview"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -428,7 +428,7 @@ export const UserExpenses = () => {
               ) : (
                 <ul className="divide-y divide-[var(--border)]">
                   {recentExpenses.map((exp, i) => (
-                    <motion.li
+                    <m.li
                       key={exp._id}
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -464,17 +464,17 @@ export const UserExpenses = () => {
                           </p>
                         </div>
                       </div>
-                    </motion.li>
+                    </m.li>
                   ))}
                 </ul>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {/* --- ANALYTICS --- */}
         {activeTab === "analytics" && (
-          <motion.div
+          <m.div
             key="analytics"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -597,12 +597,12 @@ export const UserExpenses = () => {
                 </div>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {/* --- RECORDS --- */}
         {activeTab === "records" && (
-          <motion.div
+          <m.div
             key="records"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -802,7 +802,7 @@ export const UserExpenses = () => {
                 </div>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

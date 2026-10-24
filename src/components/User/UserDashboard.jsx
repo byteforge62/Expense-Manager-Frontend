@@ -143,7 +143,6 @@ const AICard = memo(
     iconColor,
     iconBg,
     borderColor,
-    accentColor,
     children,
     isLoading,
     onRefresh,
@@ -399,8 +398,6 @@ export const UserDashboard = () => {
     [],
   );
   const billsRef = useRef([]);
-  const recurringRef = useRef([]);
-  const [transactions, setTransactions] = useState([]);
   const [expenseInsights, setExpenseInsights] = useState("");
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [forecast, setForecast] = useState("");
@@ -541,14 +538,10 @@ export const UserDashboard = () => {
     const fetchSecondaryData = async () => {
       try {
         setloadingSecondary(true);
-        const [billsRes, recurringRes, txnRes] = await Promise.all([
-          axiosInstance.get(`/billByuserId/${userId}`),
-          axiosInstance.get(`/recurring/${userId}`),
-          axiosInstance.get(`/transactionsByUserId/${userId}`),
+        const billsRes = await Promise.all([
+          axiosInstance.get(`/billByuserId/${userId}`)
         ]);
         billsRef.current = billsRes.data.data || [];
-        setRecurring(recurringRes.data.data || []);
-        setTransactions(txnRes.data.data || []);
       } finally {
         setloadingSecondary(false);
         setloadingCharts(false);

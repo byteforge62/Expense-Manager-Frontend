@@ -1,6 +1,6 @@
 import React from "react";
 import { LazyMotion, m } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 import {
   FiFileText,
   FiDatabase,

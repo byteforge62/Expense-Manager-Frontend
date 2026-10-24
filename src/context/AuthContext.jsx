@@ -1,4 +1,4 @@
-import { useState, useContext, createContext,useMemo } from "react";
+import React, { useState, useContext, createContext,useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     return null;
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
  // Import useCallback at the top if not present, otherwise we're leveraging React's core hooks
   const login = React.useCallback((loginResponse) => {

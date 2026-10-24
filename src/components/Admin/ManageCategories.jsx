@@ -7,8 +7,7 @@ import {
   fetchCategories,
   addCategory,
   updateCategory,
-  // Ensure this is correctly imported or managed in your slice:
-  // deleteCategory as deleteCategoryAction 
+  deleteCategory
 } from "../../redux/category/categorySlice";
 
 // ================ Material UI Components ================
@@ -72,10 +71,16 @@ export const ManageCategories = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this category?")) return;
+
     try {
-      // replace with actual delete trigger name if it named differently
-      // await dispatch(deleteCategoryAction(id)); 
-      toast.success("Category deleted");
+      const resultAction = await dispatch(deleteCategory(id));
+
+      if (deleteCategory.fulfilled.match(resultAction)) {
+        toast.success("Category deleted");
+        dispatch(fetchCategories());
+      } else {
+        toast.error(resultAction.payload || "Failed to delete category");
+      }
     } catch {
       toast.error("Failed to delete category");
     }

@@ -398,7 +398,7 @@ export const UserDetails = () => {
                   "linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%)",
                 accent: "rgb(96, 165, 250)",
               },
-            ].map((card, idx) => (
+            ].map((card) => (
               <Grid size={{ xs: 12, md: 4 }} key={card.label}>
                 <Card
                   component={motion.div}

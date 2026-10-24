@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LazyMotion, m } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";

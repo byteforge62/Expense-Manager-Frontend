@@ -15,7 +15,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { LazyMotion, m } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -526,6 +526,7 @@ export const AdminDashboard = () => {
             </ButtonGroup>
           </Stack>
         </Stack>
+      </Box>
       </Box>
     </LazyMotion>
   );

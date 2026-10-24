@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { updateUser as updateAuthUser } from "../../redux/auth/authSlice";
 import { useAuth } from "../../context/AuthContext";
 import { LazyMotion, m, AnimatePresence } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -499,6 +499,7 @@ export const Account = () => {
               </AnimatePresence>
             </Stack>
           </Box>
+        </Grid>
         </Grid>
       </Box>
     </LazyMotion>

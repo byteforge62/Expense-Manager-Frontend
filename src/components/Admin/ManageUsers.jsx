@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LazyMotion, m, AnimatePresence } from "framer-motion";
-import { domAnimation } from "framer-motion/features/reducedMotion";
+import { domAnimation } from "framer-motion";
 import { fetchUsers, deleteUser } from "../../redux/user/userSlice";
 
 // ================ Material UI Components ================
@@ -309,7 +309,7 @@ export const ManageUsers = () => {
 
       {/* ── ENTITY MATRIX ── */}
       <Box
-        component={motion.div}
+        component={m.div}
         initial={{ opacity: 0, scale: 0.99 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
@@ -503,7 +503,7 @@ export const ManageUsers = () => {
                     {currentUsers.map((user, index) => (
                       <TableRow
                         key={user._id}
-                        component={motion.tr}
+                        component={m.tr}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0 }}

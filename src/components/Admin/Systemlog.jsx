@@ -373,7 +373,7 @@ export const Systemlog = () => {
 
             {/* RESPONSIVE VECTOR STACK (MOBILE ONLY VIEWPORTS) */}
             <Box sx={{ display: { xs: "block", lg: "none" }, p: 3, "& > :not(style)": { mb: 3 }, "& > :last-child": { mb: 0 } }}>
-              {filteredLogs.map((log, index) => (
+              {filteredLogs.map((log) => (
                 <Card
                   key={log._id}
                   component={motion.div}

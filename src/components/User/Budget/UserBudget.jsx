@@ -367,10 +367,9 @@ export const UserBudget = () => {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200
-              ${
-                activeTab === tab.id
-                  ? "bg-[var(--surface-primary)] border border-[var(--border)] text-emerald-500 shadow-sm"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-tertiary)]"
+              ${activeTab === tab.id
+                ? "bg-[var(--surface-primary)] border border-[var(--border)] text-emerald-500 shadow-sm"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-tertiary)]"
               }`}
           >
             {tab.icon}
@@ -769,7 +768,7 @@ export const UserBudget = () => {
                         </h3>
                       </div>
                       <div className="divide-y divide-[var(--border)]">
-                        {budgetPlan.budgetPlan.map((item,i) => (
+                        {budgetPlan.budgetPlan.map((item, i) => (
                           <motion.div
                             key={item.category}
                             initial={{ opacity: 0, x: -8 }}
@@ -804,7 +803,7 @@ export const UserBudget = () => {
                         </h3>
                       </div>
                       <ul className="space-y-4 relative z-10">
-                        {budgetPlan.recommendations.map((tip, i) => (
+                        {budgetPlan.recommendations.map((tip) => (
                           <li
                             key={tip}
                             className="flex items-start gap-4 text-xs font-medium text-[var(--text-secondary)] leading-relaxed"

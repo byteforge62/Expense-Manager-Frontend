@@ -49,12 +49,6 @@ const SOCIAL_LINKS = [
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const socialLinks = [
-    { icon: <FiTwitter />, href: "#", label: "Twitter" },
-    { icon: <FiGithub />, href: "#", label: "GitHub" },
-    { icon: <FiLinkedin />, href: "#", label: "LinkedIn" },
-  ];
-
   return (
     <Box
       component="footer"
