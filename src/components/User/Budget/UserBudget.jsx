@@ -184,7 +184,6 @@ export const UserBudget = () => {
       setIsSubmitting(true);
       await axiosInstance.post("/budget", {
         ...newBudget,
-        userID: userId,
         amount: Number(newBudget.amount),
       });
       setIsModalOpen(false);
