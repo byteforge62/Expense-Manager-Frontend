@@ -1,128 +1,189 @@
+
 import axios from "axios";
 import { startLoading, stopLoading } from "../../redux/ui/uiSlice";
 
-/**
- * --- AXIOS GLOBAL CONFIGURATION ---
- * We use a custom instance to handle common logic like headers,
- * auth tokens, and automatic error handling.
- */
-
 let store;
+let refreshPromise = null;
 
-// Hack: We need the Redux store to dispatch actions from here
+const API_BASE_URL = "https://learn-25-node-1.onrender.com/api";
+const REFRESH_URL = `${API_BASE_URL}/user/refresh-token`;
+
+const SAFE_RETRY_METHODS = new Set(["get", "head", "options"]);
+
 export const injectStore = (_store) => {
   store = _store;
 };
 
 const axiosInstance = axios.create({
-  baseURL: "https://learn-25-node-1.onrender.com/api",
+  baseURL: API_BASE_URL,
   timeout: 120000,
-  withCredentials: true, // Crucial for sending/receiving HttpOnly cookies
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// --- REQUEST INTERCEPTOR ---
-// Runs before every single request we make
+const isAuthRequest = (url = "", method = "get") => {
+  const normalizedUrl = url.toLowerCase();
+  const normalizedMethod = method.toLowerCase();
+
+  return (
+    normalizedUrl.includes("/login") ||
+    normalizedUrl.includes("/forgotpassword") ||
+    normalizedUrl.includes("/resetpassword") ||
+    normalizedUrl.includes("/logout") ||
+    normalizedUrl.includes("/refresh-token") ||
+    (normalizedUrl.endsWith("/user") && normalizedMethod === "post")
+  );
+};
+
+const stopGlobalLoader = (config) => {
+  if (store && config?._globalLoading) {
+    store.dispatch(stopLoading());
+    config._globalLoading = false;
+  }
+};
+
+const refreshAccessToken = async () => {
+  if (!refreshPromise) {
+    refreshPromise = axios
+      .post(
+        REFRESH_URL,
+        {},
+        {
+          withCredentials: true,
+          timeout: 120000,
+        },
+      )
+      .then(async (response) => {
+        const newToken = response.data?.token;
+
+        if (!newToken) {
+          throw new Error("Refresh response did not contain an access token.");
+        }
+
+        if (store) {
+          const { updateToken } = await import("../../redux/auth/authSlice");
+          store.dispatch(updateToken(newToken));
+        }
+
+        return newToken;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+};
+
+// REQUEST INTERCEPTOR
 axiosInstance.interceptors.request.use(
   (config) => {
-    // 1. Show the global loading spinner unless told otherwise
-    if (store && !config.skipGlobalLoader) {
+    if (store && !config.skipGlobalLoader && !config._globalLoading) {
       config._globalLoading = true;
       store.dispatch(startLoading(config.loadingText));
     }
 
-    // 2. Attach the JWT token if we have one in state
     const token = store?.getState()?.auth?.token;
+
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
   },
   (error) => {
-    // Hide loader if request setup fails
-    if (store && error.config?._globalLoading) {
-      store.dispatch(stopLoading());
-    }
+    stopGlobalLoader(error.config);
     return Promise.reject(error);
   },
 );
 
-// --- RESPONSE INTERCEPTOR ---
-// Runs after every response or error from the server
+// RESPONSE INTERCEPTOR
 axiosInstance.interceptors.response.use(
   (response) => {
-    // Hide loader on success
-    if (store && response.config?._globalLoading) {
-      store.dispatch(stopLoading());
-    }
+    stopGlobalLoader(response.config);
     return response;
   },
   async (error) => {
-    const { config, response } = error;
+    const config = error.config;
+    const response = error.response;
 
-    // Check if the request is an authentication-related or public request
-    const isAuthRequest = config.url?.includes("/login") ||
-                          config.url?.includes("/forgotpassword") ||
-                          config.url?.includes("/resetpassword") ||
-                          config.url?.includes("/logout") ||
-                          (config.url?.endsWith("/user") && config.method?.toLowerCase() === "post");
+    if (!config) {
+      return Promise.reject(error);
+    }
 
-    // --- CASE 1: TOKEN EXPIRED (401) ---
-    // If we get a 401, we try to refresh the token once before giving up
-    if (response?.status === 401 && !config._retry && !isAuthRequest) {
-      config._retry = true;
+    const method = (config.method || "get").toLowerCase();
+
+    // CASE 1: ACCESS TOKEN EXPIRED
+    if (
+      response?.status === 401 &&
+      !config._authRetry &&
+      !isAuthRequest(config.url, method)
+    ) {
+      config._authRetry = true;
+
       try {
-        const refreshRes = await axios.post(
-          "https://learn-25-node-1.onrender.com/api/user/refresh-token",
-          {},
-          { withCredentials: true },
-        );
+        const newToken = await refreshAccessToken();
 
-        const newToken = refreshRes.data.token;
-        if (newToken && store) {
-          const { updateToken } = await import("../../redux/auth/authSlice");
-          store.dispatch(updateToken(newToken));
-        }
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${newToken}`;
 
-        // Retry the original request with the new token
         return axiosInstance(config);
       } catch (refreshError) {
-        // Refresh failed (refresh token also expired), kick user to login
-        if (store) {
-          const { logout } = await import("../../redux/auth/authSlice");
-          store.dispatch(logout());
-          window.location.href = "/login";
+        // Only clear the session when the refresh token is rejected.
+        if (
+          refreshError.response?.status === 401 ||
+          refreshError.response?.status === 403
+        ) {
+          if (store) {
+            const { logout } = await import("../../redux/auth/authSlice");
+            store.dispatch(logout());
+          }
+
+          if (
+            typeof window !== "undefined" &&
+            window.location.pathname !== "/login"
+          ) {
+            window.location.href = "/login";
+          }
         }
+
+        stopGlobalLoader(config);
         return Promise.reject(refreshError);
       }
     }
 
-    // --- CASE 2: NETWORK/TIMEOUT ERRORS ---
-    // If the server is just slow or down, we try one more time after a short delay
-    if (config && !config._retry) {
-      config._retry = true;
-      const message = error.message || "";
-      const isTimeout =
-        message.includes("timeout") || error.code === "ECONNABORTED";
-      const isNetworkError =
-        message.includes("Network Error") || !error.response;
+    // CASE 2: NETWORK/TIMEOUT RETRY
+    // Only retry safe HTTP methods to avoid duplicate mutations.
+    const message = error.message || "";
 
-      if (isTimeout || isNetworkError) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        return axiosInstance(config);
-      }
+    const isTimeout =
+      error.code === "ECONNABORTED" ||
+      error.code === "ETIMEDOUT" ||
+      message.toLowerCase().includes("timeout");
+
+    const isNetworkError =
+      !response && error.code !== "ERR_CANCELED";
+
+    const shouldRetry =
+      SAFE_RETRY_METHODS.has(method) &&
+      !config._networkRetry &&
+      (isTimeout || isNetworkError);
+
+    if (shouldRetry) {
+      config._networkRetry = true;
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      return axiosInstance(config);
     }
 
-    // Always hide the loader if an error happens
-    if (store && config?._globalLoading) {
-      store.dispatch(stopLoading());
-    }
+    // CASE 3: FINAL ERROR
+    stopGlobalLoader(config);
     return Promise.reject(error);
   },
 );
 
 export default axiosInstance;
-
