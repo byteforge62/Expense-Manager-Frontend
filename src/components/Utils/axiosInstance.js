@@ -5,8 +5,10 @@ import { startLoading, stopLoading } from "../../redux/ui/uiSlice";
 let store;
 let refreshPromise = null;
 
-const API_BASE_URL = "https://learn-25-node-1.onrender.com/api";
-const REFRESH_URL = `${API_BASE_URL}/user/refresh-token`;
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://learn-25-node-1.onrender.com/api";
+  const REFRESH_URL = `${API_BASE_URL}/user/refresh-token`;
 
 const SAFE_RETRY_METHODS = new Set(["get", "head", "options"]);
 
