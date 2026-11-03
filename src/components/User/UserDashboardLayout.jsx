@@ -13,6 +13,7 @@ import {
   FiSun,
   FiMoon,
   FiUser,
+  FiShoppingBag,
 } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -66,6 +67,11 @@ const navTabs = [
     label: "History",
     path: "/private/transactions",
     icon: <FiList size={16} />,
+  },
+  {
+    label: "Purchases",
+    path: "/private/purchases",
+    icon: <FiShoppingBag size={16} />,
   },
 ];
 

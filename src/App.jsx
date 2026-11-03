@@ -29,6 +29,7 @@ import { UserIncome } from "./components/User/Income/UserIncome";
 import { RecurringTransactions } from "./components/User/RecurringTransactions";
 import { Reports } from "./components/User/Reports";
 import { Transaction } from "./components/User/Transaction";
+import { PurchaseIntelligence } from "./features/purchase-intelligence/PurchaseIntelligence";
 
 // =============== ADMIN COMPONENTS ===============
 // Management tools reserved for administrative accounts
@@ -91,6 +92,7 @@ function App() {
             <Route path="recurring" element={<RecurringTransactions />} />
             <Route path="reports" element={<Reports />} />
             <Route path="transactions" element={<Transaction />} />
+            <Route path="purchases" element={<PurchaseIntelligence />} />
             <Route path="userdashboard" element={<UserDashboard />} />
             <Route path="account/:userId" element={<Account />} />
           </Route>
