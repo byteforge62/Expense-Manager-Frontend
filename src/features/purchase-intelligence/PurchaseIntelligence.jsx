@@ -88,6 +88,15 @@ function ProductCard({ product, availableCash, onAnalyze, onUpdate, onDelete, bu
   const analysis = product.lastAnalysis?.result;
   const risk = analysis?.risk;
   const isBusy = busyId === product._id;
+  const analysisCash =
+    availableCash !== "" &&
+      availableCash !== null &&
+      availableCash !== undefined
+      ? Number(availableCash)
+      : product.lastAnalysis?.availableCash;
+
+  const canAnalyze =
+    Number.isFinite(analysisCash) && analysisCash >= 0;
 
   return (
     <Card variant="outlined" sx={{ height: "100%", borderRadius: 4, borderColor: "divider" }}>
@@ -171,11 +180,13 @@ function ProductCard({ product, availableCash, onAnalyze, onUpdate, onDelete, bu
                 variant="outlined"
                 sx={{ height: 40, minWidth: 0 }}
                 disabled={isBusy || (!listingDraft.platform.trim() && !listingDraft.url.trim()) || !listingDraft.price || Number(listingDraft.price) <= 0}
-                onClick={() => onUpdate(product._id, { listing: {
-                  platform: listingDraft.platform.trim() || extractPlatform(listingDraft.url),
-                  url: listingDraft.url.trim() || undefined,
-                  price: Number(listingDraft.price),
-                } })}
+                onClick={() => onUpdate(product._id, {
+                  listing: {
+                    platform: listingDraft.platform.trim() || extractPlatform(listingDraft.url),
+                    url: listingDraft.url.trim() || undefined,
+                    price: Number(listingDraft.price),
+                  }
+                })}
                 aria-label="Add retailer listing"
               ><FiPlus /></Button>
             </Grid>
@@ -251,8 +262,8 @@ function ProductCard({ product, availableCash, onAnalyze, onUpdate, onDelete, bu
             fullWidth
             variant="contained"
             startIcon={isBusy ? <CircularProgress size={16} color="inherit" /> : <FiRefreshCw />}
-            disabled={isBusy || availableCash === "" || Number(availableCash) < 0}
-            onClick={() => onAnalyze(product._id)}
+            disabled={isBusy || !canAnalyze}
+            onClick={() => onAnalyze(product._id, analysisCash)}
           >
             Re-analyze
           </Button>
@@ -382,18 +393,30 @@ export function PurchaseIntelligence() {
     }
   };
 
-  const handleAnalyze = async (productId) => {
-    const cash = Number(form.availableCash);
+  const handleAnalyze = async (productId, cashAmount) => {
+    const cash = Number(cashAmount);
+
     if (!Number.isFinite(cash) || cash < 0) {
-      setError("Enter a valid available cash amount in the Add product form before analyzing.");
+      setError("Enter a valid available cash amount before analyzing.");
       return;
     }
+
     setBusyId(productId);
     setError("");
+    setNotice("");
+
     try {
-      const response = await axiosInstance.post(`/purchase-intelligence/${productId}/analyze`, { availableCash: cash });
+      const response = await axiosInstance.post(
+        `/purchase-intelligence/${productId}/analyze`,
+        { availableCash: cash },
+      );
+
       const updated = response.data.data.product;
-      setProducts((current) => current.map((item) => item._id === productId ? updated : item));
+
+      setProducts((current) =>
+        current.map((item) => (item._id === productId ? updated : item)),
+      );
+
       setNotice("Affordability analysis refreshed.");
     } catch (requestError) {
       setError(getErrorMessage(requestError));
