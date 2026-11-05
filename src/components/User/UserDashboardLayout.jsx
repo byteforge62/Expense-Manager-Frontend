@@ -1,44 +1,48 @@
-import { useLocation, Outlet, Link as RouterLink } from "react-router-dom";
+
 import { useState } from "react";
+import { Link as RouterLink, Outlet, useLocation } from "react-router-dom";
+
 import {
-  FiLogOut,
-  FiMenu,
-  FiTrendingUp,
-  FiTrendingDown,
-  FiPieChart,
-  FiRepeat,
-  FiTarget,
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Drawer,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+
+import {
+  FiActivity,
   FiBarChart2,
   FiList,
-  FiSun,
+  FiLogOut,
+  FiMenu,
   FiMoon,
-  FiUser,
+  FiPieChart,
+  FiRepeat,
   FiShoppingBag,
+  FiSun,
+  FiTarget,
+  FiTrendingDown,
+  FiTrendingUp,
+  FiUser,
 } from "react-icons/fi";
+
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 
-// ================ Material UI Components ================
-import Box from "@mui/material/Box";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Link from "@mui/material/Link";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-
 /**
- * --- NAVIGATION CONFIGURATION ---
- * Shared labels and paths for the desktop and mobile navigation.
+ * Shared navigation configuration for desktop and mobile.
  */
 const navTabs = [
   {
@@ -56,8 +60,16 @@ const navTabs = [
     path: "/private/expenses",
     icon: <FiTrendingDown size={16} />,
   },
-  { label: "Flows", path: "/private/recurring", icon: <FiRepeat size={16} /> },
-  { label: "Budgets", path: "/private/budget", icon: <FiTarget size={16} /> },
+  {
+    label: "Flows",
+    path: "/private/recurring",
+    icon: <FiRepeat size={16} />,
+  },
+  {
+    label: "Budgets",
+    path: "/private/budget",
+    icon: <FiTarget size={16} />,
+  },
   {
     label: "Reports",
     path: "/private/reports",
@@ -69,21 +81,22 @@ const navTabs = [
     icon: <FiList size={16} />,
   },
   {
+    label: "Forecast",
+    path: "/private/forecast",
+    icon: <FiActivity size={16} />,
+  },
+  {
     label: "Purchases",
     path: "/private/purchases",
     icon: <FiShoppingBag size={16} />,
   },
 ];
 
-/**
- * --- USER DASHBOARD LAYOUT ---
- * The primary shell for all logged-in user activities.
- * Handles the responsive top nav, mobile dock, and page transitions.
- */
 export const UserDashboardLayout = () => {
   const { logout, user } = useAuth();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -91,45 +104,97 @@ export const UserDashboardLayout = () => {
   };
 
   const drawerContent = (
-    <Box sx={{ width: 260, bgcolor: "background.paper", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+    <Box
+      sx={{
+        width: 260,
+        bgcolor: "background.paper",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       <Box>
-        {/* Brand Header inside Drawer */}
         <Stack
           direction="row"
           alignItems="center"
           spacing={2}
-          sx={{ px: 3, py: 3, borderBottom: 1, borderColor: "divider" }}
+          sx={{
+            px: 3,
+            py: 3,
+            borderBottom: 1,
+            borderColor: "divider",
+          }}
         >
-          <Avatar sx={{ bgcolor: "cyan.main", width: 36, height: 36, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>T</Typography>
+          <Avatar
+            sx={{
+              bgcolor: "cyan.main",
+              width: 36,
+              height: 36,
+              borderRadius: 2,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              T
+            </Typography>
           </Avatar>
-          <Typography variant="subtitle1" sx={{ fontWeight: "black", letterSpacing: "-0.01em", textTransform: "uppercase" }}>
+
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: "black",
+              letterSpacing: "-0.01em",
+              textTransform: "uppercase",
+            }}
+          >
             Trackit
           </Typography>
         </Stack>
 
-        {/* List of Navigation Links */}
         <List sx={{ px: 2, py: 3 }}>
           {navTabs.map((tab) => {
             const isActive = location.pathname === tab.path;
+
             return (
-              <ListItem key={tab.path} disablePadding sx={{ mb: 1 }}>
+              <ListItem
+                key={tab.path}
+                disablePadding
+                sx={{ mb: 1 }}
+              >
                 <ListItemButton
                   component={RouterLink}
                   to={tab.path}
                   onClick={() => setMobileOpen(false)}
                   sx={{
                     borderRadius: 3,
-                    bgcolor: isActive ? "action.hover" : "transparent",
-                    color: isActive ? "cyan.main" : "text.secondary",
+                    bgcolor: isActive
+                      ? "action.hover"
+                      : "transparent",
+                    color: isActive
+                      ? "cyan.main"
+                      : "text.secondary",
                     "&:hover": {
                       bgcolor: "action.hover",
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? "cyan.main" : "text.secondary" }}>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 40,
+                      color: isActive
+                        ? "cyan.main"
+                        : "text.secondary",
+                    }}
+                  >
                     {tab.icon}
                   </ListItemIcon>
+
                   <ListItemText
                     primary={tab.label}
                     primaryTypographyProps={{
@@ -146,8 +211,13 @@ export const UserDashboardLayout = () => {
         </List>
       </Box>
 
-      {/* Emergency Logout at bottom of drawer */}
-      <Box sx={{ p: 3, borderTop: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          p: 3,
+          borderTop: 1,
+          borderColor: "divider",
+        }}
+      >
         <Button
           fullWidth
           variant="outlined"
@@ -157,7 +227,11 @@ export const UserDashboardLayout = () => {
             setMobileOpen(false);
           }}
           startIcon={<FiLogOut />}
-          sx={{ borderRadius: 3, fontWeight: "bold", textTransform: "none" }}
+          sx={{
+            borderRadius: 3,
+            fontWeight: "bold",
+            textTransform: "none",
+          }}
         >
           Logout
         </Button>
@@ -166,14 +240,21 @@ export const UserDashboardLayout = () => {
   );
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
-      
-      {/* AppBar */}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+        color: "text.primary",
+      }}
+    >
       <AppBar
         position="sticky"
         elevation={2}
         sx={{
-          bgcolor: "rgba(var(--mui-palette-background-paperChannel), 0.8)",
+          bgcolor:
+            "rgba(var(--mui-palette-background-paperChannel), 0.8)",
           backdropFilter: "blur(8px)",
           borderBottom: 1,
           borderColor: "divider",
@@ -181,10 +262,19 @@ export const UserDashboardLayout = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between", height: 72 }}>
-            
-            {/* Logo & Brand */}
-            <Stack direction="row" alignItems="center" spacing={2}>
+          <Toolbar
+            disableGutters
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              height: 72,
+            }}
+          >
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+            >
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -199,11 +289,31 @@ export const UserDashboardLayout = () => {
                 component={RouterLink}
                 to="/private/userdashboard"
                 underline="none"
-                sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                }}
               >
-                <Avatar sx={{ bgcolor: "cyan.main", width: 36, height: 36, borderRadius: 2 }}>
-                  <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>T</Typography>
+                <Avatar
+                  sx={{
+                    bgcolor: "cyan.main",
+                    width: 36,
+                    height: 36,
+                    borderRadius: 2,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    T
+                  </Typography>
                 </Avatar>
+
                 <Typography
                   variant="subtitle1"
                   sx={{
@@ -211,7 +321,10 @@ export const UserDashboardLayout = () => {
                     color: "text.primary",
                     textTransform: "uppercase",
                     letterSpacing: "-0.01em",
-                    display: { xs: "none", sm: "block" },
+                    display: {
+                      xs: "none",
+                      sm: "block",
+                    },
                   }}
                 >
                   Trackit
@@ -219,25 +332,29 @@ export const UserDashboardLayout = () => {
               </Link>
             </Stack>
 
-            {/* Desktop Navigation Links (Grid Tabs) */}
             <Stack
               direction="row"
               spacing={1}
               sx={{
-                display: { xs: "none", lg: "flex" },
+                display: {
+                  xs: "none",
+                  lg: "flex",
+                },
                 bgcolor: "action.hover",
                 p: 0.75,
                 borderRadius: 4,
                 border: 1,
                 borderColor: "divider",
-            }}
-          >
-            {navTabs.map((tab) => {
-              const isActive = location.pathname === tab.path;
-              return (
-                <Button
-                  key={tab.path}
-                  component={RouterLink}
+              }}
+            >
+              {navTabs.map((tab) => {
+                const isActive =
+                  location.pathname === tab.path;
+
+                return (
+                  <Button
+                    key={tab.path}
+                    component={RouterLink}
                     to={tab.path}
                     startIcon={tab.icon}
                     sx={{
@@ -247,11 +364,19 @@ export const UserDashboardLayout = () => {
                       fontSize: "11px",
                       px: 2,
                       py: 1,
-                      bgcolor: isActive ? "cyan.main" : "transparent",
-                      color: isActive ? "white" : "text.secondary",
+                      bgcolor: isActive
+                        ? "cyan.main"
+                        : "transparent",
+                      color: isActive
+                        ? "white"
+                        : "text.secondary",
                       "&:hover": {
-                        bgcolor: isActive ? "cyan.main" : "action.hover",
-                        color: isActive ? "white" : "text.primary",
+                        bgcolor: isActive
+                          ? "cyan.main"
+                          : "action.hover",
+                        color: isActive
+                          ? "white"
+                          : "text.primary",
                       },
                     }}
                   >
@@ -261,9 +386,11 @@ export const UserDashboardLayout = () => {
               })}
             </Stack>
 
-            {/* Command Center */}
-            <Stack direction="row" spacing={1.5} alignItems="center">
-              {/* Theme Toggle */}
+            <Stack
+              direction="row"
+              spacing={1.5}
+              alignItems="center"
+            >
               <IconButton
                 onClick={toggleTheme}
                 sx={{
@@ -274,13 +401,17 @@ export const UserDashboardLayout = () => {
                   height: 40,
                 }}
               >
-                {theme === "dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
+                {theme === "dark" ? (
+                  <FiSun size={18} />
+                ) : (
+                  <FiMoon size={18} />
+                )}
               </IconButton>
 
-              {/* Profile Shortcut */}
               <Button
                 component={RouterLink}
-                to={`/private/account/${user?._id || user?.id || ""}`}
+                to={`/private/account/${user?._id || user?.id || ""
+                  }`}
                 startIcon={<FiUser />}
                 sx={{
                   borderRadius: 3,
@@ -288,7 +419,10 @@ export const UserDashboardLayout = () => {
                   fontWeight: "bold",
                   fontSize: "11px",
                   color: "text.secondary",
-                  display: { xs: "none", sm: "inline-flex" },
+                  display: {
+                    xs: "none",
+                    sm: "inline-flex",
+                  },
                   "&:hover": {
                     color: "cyan.main",
                   },
@@ -297,7 +431,6 @@ export const UserDashboardLayout = () => {
                 {user?.name?.split(" ")[0] || "User"}
               </Button>
 
-              {/* Logout Button */}
               <IconButton
                 onClick={logout}
                 sx={{
@@ -314,35 +447,44 @@ export const UserDashboardLayout = () => {
                 <FiLogOut size={18} />
               </IconButton>
             </Stack>
-
           </Toolbar>
         </Container>
       </AppBar>
 
-      {/* Drawer for responsive layout */}
       <Box component="nav">
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
-            display: { xs: "block", lg: "none" },
-            "& .MuiDrawer-paper": { boxSizing: "border-box", width: 260 },
+            display: {
+              xs: "block",
+              lg: "none",
+            },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: 260,
+            },
           }}
         >
           {drawerContent}
         </Drawer>
       </Box>
 
-      {/* Main Content Area */}
-      <Container component="main" maxWidth="lg" sx={{ flexGrow: 1, py: { xs: 4, md: 6 }, pb: 10 }}>
+      <Container
+        component="main"
+        maxWidth="lg"
+        sx={{
+          flexGrow: 1,
+          py: { xs: 4, md: 6 },
+          pb: 10,
+        }}
+      >
         <Outlet />
       </Container>
     </Box>
   );
 };
-
-

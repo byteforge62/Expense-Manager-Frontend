@@ -30,7 +30,7 @@ import { RecurringTransactions } from "./components/User/RecurringTransactions";
 import { Reports } from "./components/User/Reports";
 import { Transaction } from "./components/User/Transaction";
 import { PurchaseIntelligence } from "./features/purchase-intelligence/PurchaseIntelligence";
-
+import { FinancialForecast } from "./features/financial-forecasting/FinancialForecast";
 // =============== ADMIN COMPONENTS ===============
 // Management tools reserved for administrative accounts
 import { AdminDashboardLayout } from "./components/Admin/AdminDashboardLayout";
@@ -93,6 +93,7 @@ function App() {
             <Route path="reports" element={<Reports />} />
             <Route path="transactions" element={<Transaction />} />
             <Route path="purchases" element={<PurchaseIntelligence />} />
+            <Route path="forecast" element={<FinancialForecast />} />
             <Route path="userdashboard" element={<UserDashboard />} />
             <Route path="account/:userId" element={<Account />} />
           </Route>
