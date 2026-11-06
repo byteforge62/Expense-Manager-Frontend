@@ -81,6 +81,7 @@ export const RecurringTransactions = () => {
     title: "",
     amount: "",
     category: "",
+    type: "EXPENSE",
     frequency: "monthly",
     nextDate: "",
   });
@@ -136,6 +137,11 @@ export const RecurringTransactions = () => {
       return;
     }
 
+    if (!["INCOME", "EXPENSE"].includes(formData.type)) {
+      alert("Please select whether this is income or an expense.");
+      return;
+    }
+
     if (!formData.nextDate) {
       alert("Please select the next execution date.");
       return;
@@ -148,6 +154,7 @@ export const RecurringTransactions = () => {
         title: formData.title.trim(),
         amount,
         category: formData.category.trim(),
+        type: formData.type,
         frequency: formData.frequency,
         nextDate: formData.nextDate,
       };
@@ -183,7 +190,8 @@ export const RecurringTransactions = () => {
       amount: item.amount,
       category: item.category,
       frequency: item.frequency,
-      nextDate: item.nextDate.slice(0, 10),
+      type: ["INCOME", "EXPENSE"].includes(item.type) ? item.type : "",
+      nextDate: item.nextDate ? item.nextDate.slice(0, 10) : "",
     });
     setEditingId(item._id);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -194,6 +202,7 @@ export const RecurringTransactions = () => {
       title: "",
       amount: "",
       category: "",
+      type: "EXPENSE",
       frequency: "monthly",
       nextDate: "",
     });
@@ -209,7 +218,7 @@ export const RecurringTransactions = () => {
     const active = recurringList.filter((r) => r.isActive !== false);
     const paused = recurringList.length - active.length;
 
-    const totalBurn = active.reduce((sum, r) => {
+    const totalBurn = active.filter((r) => r.type === "EXPENSE").reduce((sum, r) => {
       if (r.frequency === "monthly") return sum + r.amount;
       if (r.frequency === "yearly") return sum + r.amount / 12;
       if (r.frequency === "weekly") return sum + r.amount * 4.33;
@@ -430,6 +439,23 @@ export const RecurringTransactions = () => {
                   </Field>
                 </div>
 
+                <Field label="Transaction Type" icon={<FiActivity size={14} />}>
+                  <select
+                    aria-label="Recurring transaction type"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    className={selectCls}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select transaction type
+                    </option>
+                    <option value="INCOME">Income</option>
+                    <option value="EXPENSE">Expense</option>
+                  </select>
+                </Field>
+
                 <Field label="Sector Category" icon={<FiTag size={14} />}>
                   <input
                     aria-label="Reccurring transaction category"
@@ -551,9 +577,14 @@ export const RecurringTransactions = () => {
                               </h4>
                               <div className="flex flex-wrap items-center gap-3">
                                 <span
-                                  className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg border ${freq.bg} ${freq.color}`}
+                                  className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg border ${item.type === "INCOME"
+                                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500"
+                                      : item.type === "EXPENSE"
+                                        ? "bg-rose-500/10 border-rose-500/20 text-rose-500"
+                                        : "bg-amber-500/10 border-amber-500/20 text-amber-500"
+                                    }`}
                                 >
-                                  {item.frequency}
+                                  {item.type || "UNCLASSIFIED"}
                                 </span>
                                 <div className="flex items-center gap-1.5 text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">
                                   <FiClock
@@ -571,7 +602,9 @@ export const RecurringTransactions = () => {
 
                           {/* Value + Actions */}
                           <div className="flex flex-col sm:items-end gap-4 w-full sm:w-auto">
-                            <p className="text-2xl font-black tracking-tighter text-emerald-500 group-hover:scale-105 transition-transform origin-right">
+                            <p className={`text-2xl font-black tracking-tighter group-hover:scale-105 transition-transform origin-right ${
+  item.type === "INCOME" ? "text-emerald-500" : "text-rose-500"
+}`}>
                               ₹{Number(item.amount).toLocaleString("en-IN")}
                             </p>
                             <div className="flex items-center gap-1.5 bg-[var(--surface-tertiary)]/50 p-1.5 rounded-2xl border border-[var(--border)] self-start sm:self-auto">
