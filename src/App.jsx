@@ -29,6 +29,7 @@ import { UserIncome } from "./components/User/Income/UserIncome";
 import { RecurringTransactions } from "./components/User/RecurringTransactions";
 import { Reports } from "./components/User/Reports";
 import { Transaction } from "./components/User/Transaction";
+import { Bills } from "./components/User/Bills";
 import { PurchaseIntelligence } from "./features/purchase-intelligence/PurchaseIntelligence";
 import { FinancialForecast } from "./features/financial-forecasting/FinancialForecast";
 // =============== ADMIN COMPONENTS ===============
@@ -43,15 +44,10 @@ import { Systemlog } from "./components/Admin/Systemlog";
 import { UserDetails } from "./components/Admin/UserDetails";
 import { Account } from "./components/Admin/Account";
 
-/**
- * --- MAIN APPLICATION COMPONENT ---
- * This is where we define the global structure and routing of the app.
- */
+
 function App() {
   const location = useLocation();
 
-  // SIDE EFFECT: Dynamically update the body class based on where the user is.
-  // This helps us apply specific background styles for different app sections.
   useEffect(() => {
     const path = location.pathname;
 
@@ -88,6 +84,7 @@ function App() {
           <Route path="/private" element={<UserDashboardLayout />}>
             <Route path="expenses" element={<UserExpenses />} />
             <Route path="budget" element={<UserBudget />} />
+            <Route path="bills" element={<Bills />} />
             <Route path="income" element={<UserIncome />} />
             <Route path="recurring" element={<RecurringTransactions />} />
             <Route path="reports" element={<Reports />} />

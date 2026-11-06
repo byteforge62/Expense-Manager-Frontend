@@ -36,6 +36,7 @@ import {
   FiTrendingDown,
   FiTrendingUp,
   FiUser,
+  FiFileText,
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
@@ -69,6 +70,11 @@ const navTabs = [
     label: "Budgets",
     path: "/private/budget",
     icon: <FiTarget size={16} />,
+  },
+  {
+    label: "Bills",
+    path: "/private/bills",
+    icon: <FiFileText size={16} />,
   },
   {
     label: "Reports",
