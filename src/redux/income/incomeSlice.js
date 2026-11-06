@@ -18,10 +18,19 @@ export const fetchIncomeData = createAsyncThunk(
 
 export const fetchRecurring = createAsyncThunk(
   "income/fetchRecurring",
-  async (userId) => {
-    if (!userId) return [];
-    const res = await axiosInstance.get(`/recurring/${userId}`);
-    return res.data.data || res.data || [];
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/recurring/me");
+
+      const recurringData = res.data?.data ?? res.data;
+
+      return Array.isArray(recurringData) ? recurringData : [];
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Failed to fetch recurring transactions.",
+      );
+    }
   },
 );
 

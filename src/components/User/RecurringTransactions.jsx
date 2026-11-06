@@ -89,7 +89,7 @@ export const RecurringTransactions = () => {
 
   const fetchRecurringList = useCallback(() => {
     if (userId) {
-      dispatch(fetchRecurring(userId));
+      dispatch(fetchRecurring());
     }
   }, [dispatch, userId]);
 
@@ -119,18 +119,59 @@ export const RecurringTransactions = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const amount = Number(formData.amount);
+
+    if (!formData.title.trim()) {
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      alert("Please enter a valid amount greater than zero.");
+      return;
+    }
+
+    if (!formData.category.trim()) {
+      alert("Please enter a category.");
+      return;
+    }
+
+    if (!formData.nextDate) {
+      alert("Please select the next execution date.");
+      return;
+    }
+
     try {
       setSubmitting(true);
-      const payload = { ...formData, amount: Number(formData.amount), userId };
+
+      const payload = {
+        title: formData.title.trim(),
+        amount,
+        category: formData.category.trim(),
+        frequency: formData.frequency,
+        nextDate: formData.nextDate,
+      };
+
       if (editingId) {
         await axiosInstance.put(`/recurring/${editingId}`, payload);
       } else {
         await axiosInstance.post("/recurring", payload);
       }
-      await fetchRecurringList();
+
+      await dispatch(fetchRecurring()).unwrap();
+
       handleCancelEdit();
     } catch (error) {
-      console.error("Error saving recurring transaction:", error);
+      console.error(
+        "Recurring transaction error:",
+        error.response?.data || error
+      );
+
+      alert(
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to save recurring transaction."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -180,10 +221,10 @@ export const RecurringTransactions = () => {
     const earliestDue =
       dueItems.length > 0
         ? dueItems.reduce((earliest, current) =>
-            new Date(current.nextDate) < new Date(earliest.nextDate)
-              ? current
-              : earliest,
-          )
+          new Date(current.nextDate) < new Date(earliest.nextDate)
+            ? current
+            : earliest,
+        )
         : null;
 
     return {
@@ -259,9 +300,9 @@ export const RecurringTransactions = () => {
               label: "Critical Marker",
               value: nextDue
                 ? new Date(nextDue.nextDate).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                  })
+                  day: "numeric",
+                  month: "short",
+                })
                 : "N/A",
               suffix: nextDue?.title || "NO PENDING",
               color: "text-amber-500",
@@ -551,11 +592,10 @@ export const RecurringTransactions = () => {
                                 }
                                 onClick={() => toggleRecurring(item._id)}
                                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all border border-transparent
-                              ${
-                                isActive
-                                  ? "text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/20"
-                                  : "text-emerald-500 hover:bg-emerald-500/10 hover:border-emerald-500/20"
-                              }`}
+                              ${isActive
+                                    ? "text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/20"
+                                    : "text-emerald-500 hover:bg-emerald-500/10 hover:border-emerald-500/20"
+                                  }`}
                               >
                                 {isActive ? (
                                   <FiPause size={16} />
