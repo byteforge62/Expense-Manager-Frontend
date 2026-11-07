@@ -1,40 +1,59 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../components/Utils/axiosInstance";
 
-/**
- * --- ASYNC ACTIONS (THUNKS) ---
- * These handle fetching data from the backend.
- */
-
-// Grab all available expense categories
 export const fetchCategories = createAsyncThunk(
   "expense/fetchCategories",
-  async () => {
-    const res = await axiosInstance.get("/categories");
-    return res.data.data || res.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/categories");
+      return res.data?.data ?? res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch categories",
+      );
+    }
   },
 );
 
-// Get a few of the most recent expenses for the dashboard
 export const fetchRecentExpenses = createAsyncThunk(
   "expense/fetchRecentExpenses",
-  async (userId) => {
-    if (!userId) return [];
-    const res = await axiosInstance.get(`/recent-expense/${userId}`);
-    return res.data.data || res.data || [];
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/expenses/recent");
+      return res.data?.data ?? res.data ?? [];
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch recent expenses",
+      );
+    }
   },
 );
 
-// Fetch the full history of expenses with optional filters (dates, etc.)
 export const fetchAllExpenses = createAsyncThunk(
   "expense/fetchAllExpenses",
-  async ({ userId, filters = {} }) => {
-    if (!userId) return [];
-    const params = new URLSearchParams(filters).toString();
-    const res = await axiosInstance.get(
-      `/expensesbyUserID/${userId}?${params}`,
-    );
-    return res.data.data || res.data || [];
+  async ({ filters = {} } = {}, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams();
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          if (key !== "datePreset") {
+            params.set(key, value);
+          }
+        }
+      });
+
+      const query = params.toString();
+      const url = query ? `/expenses/me?${query}` : "/expenses/me";
+
+      const res = await axiosInstance.get(url);
+      return res.data?.data ?? res.data ?? [];
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch expenses",
+      );
+    }
   },
 );
 
@@ -43,54 +62,60 @@ const initialState = {
   recentExpenses: [],
   expenses: [],
   loading: false,
+  error: null,
 };
 
-/**
- * --- EXPENSE SLICE ---
- */
 const expenseSlice = createSlice({
   name: "expense",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Categories
       .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.categories = Array.isArray(action.payload)
+          ? action.payload
+          : [];
       })
-      .addCase(fetchCategories.rejected, (state) => {
+      .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload || action.error.message;
       })
 
-      // Recent Expenses
       .addCase(fetchRecentExpenses.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchRecentExpenses.fulfilled, (state, action) => {
         state.loading = false;
-        state.recentExpenses = action.payload;
+        state.recentExpenses = Array.isArray(action.payload)
+          ? action.payload
+          : [];
       })
-      .addCase(fetchRecentExpenses.rejected, (state) => {
+      .addCase(fetchRecentExpenses.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload || action.error.message;
       })
 
-      // Full Expense History
       .addCase(fetchAllExpenses.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchAllExpenses.fulfilled, (state, action) => {
         state.loading = false;
-        state.expenses = action.payload;
+        state.expenses = Array.isArray(action.payload)
+          ? action.payload
+          : [];
       })
-      .addCase(fetchAllExpenses.rejected, (state) => {
+      .addCase(fetchAllExpenses.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload || action.error.message;
       });
   },
 });
 
 export default expenseSlice.reducer;
-
