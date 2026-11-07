@@ -52,18 +52,7 @@ const inputCls =
 const selectCls =
   "w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[var(--surface-secondary)]/50 border border-[var(--border)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/5 transition-all duration-300 appearance-none cursor-pointer";
 
-const freqConfig = {
-  daily: { color: "text-rose-500", bg: "bg-rose-500/10 border-rose-500/20" },
-  weekly: {
-    color: "text-amber-500",
-    bg: "bg-amber-500/10 border-amber-500/20",
-  },
-  monthly: { color: "text-cyan-500", bg: "bg-cyan-500/10 border-cyan-500/20" },
-  yearly: {
-    color: "text-violet-500",
-    bg: "bg-violet-500/10 border-violet-500/20",
-  },
-};
+  
 
 // --- MAIN COMPONENT ---
 export const RecurringTransactions = () => {
@@ -548,8 +537,6 @@ export const RecurringTransactions = () => {
                 <div className="divide-y divide-[var(--border)]">
                   <AnimatePresence>
                     {recurringList.map((item, i) => {
-                      const freq =
-                        freqConfig[item.frequency] || freqConfig.monthly;
                       const isActive = item.isActive !== false;
                       const isEditing = editingId === item._id;
                       return (

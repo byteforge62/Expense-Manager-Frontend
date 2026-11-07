@@ -124,7 +124,6 @@ export const UserExpenses = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm();
 
   // --- ACTIONS & HANDLERS ---
@@ -249,7 +248,7 @@ export const UserExpenses = () => {
   dispatch(fetchCategories());
   dispatch(fetchRecentExpenses());
   dispatch(fetchAllExpenses({ filters }));
-}, [dispatch, userId])
+}, [dispatch, userId,filters])
 
   const tabs = [
     { id: "overview", label: "Overview", icon: <FiAlignLeft size={14} /> },
