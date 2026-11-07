@@ -1,169 +1,129 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import {
-  FiAlertCircle,
+  Alert,
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {
   FiCalendar,
   FiCheckCircle,
   FiClock,
+  FiFileText,
   FiPlus,
   FiRefreshCw,
   FiTrash2,
-  FiFileText,
-  FiX,
+  FiLink,
 } from "react-icons/fi";
 import axiosInstance from "../Utils/axiosInstance";
 
-const styles = `
-.bills-page{--bill-accent:#06b6d4;--bill-border:var(--border,rgba(148,163,184,.18));--bill-muted:var(--text-muted,#94a3b8);--bill-primary:var(--text-primary,#e2e8f0);--bill-surface:var(--surface-primary,rgba(15,23,42,.72));color:var(--bill-primary);display:flex;flex-direction:column;gap:24px;min-width:0}
-.bills-header{display:flex;justify-content:space-between;align-items:flex-end;gap:18px}
-.bills-eyebrow{display:flex;align-items:center;gap:8px;color:var(--bill-accent);font-size:10px;font-weight:800;letter-spacing:.16em}
-.bills-header h1{margin:8px 0 4px;font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.045em}
-.bills-header p,.bills-list-heading p{margin:0;color:var(--bill-muted);font-size:13px}
-.bills-header-actions{display:flex;gap:10px;flex-wrap:wrap}
-.bills-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:11px;padding:11px 15px;font-size:12px;font-weight:750;cursor:pointer;transition:transform .18s ease}
-.bills-button:hover:not(:disabled){transform:translateY(-1px)}
-.bills-button:disabled{opacity:.55;cursor:not-allowed}
-.bills-button-primary{background:linear-gradient(120deg,#0891b2,#06b6d4);color:#fff;box-shadow:0 8px 22px rgba(6,182,212,.16)}
-.bills-button-ghost{background:var(--bill-surface);border-color:var(--bill-border);color:var(--bill-primary)}
-.bills-alert{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid;border-radius:12px;font-size:12px}
-.bills-alert span{flex:1}
-.bills-alert button{display:grid;place-items:center;border:0;background:transparent;color:inherit;cursor:pointer}
-.bills-alert-error{color:#fb7185;background:rgba(244,63,94,.08);border-color:rgba(244,63,94,.24)}
-.bills-alert-success{color:#34d399;background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.22)}
-.bills-stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.bills-stat-card{position:relative;overflow:hidden;padding:19px;border:1px solid var(--bill-border);border-radius:16px;background:var(--bill-surface);display:flex;flex-direction:column;gap:8px}
-.bills-stat-card:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;right:-45px;top:-55px;background:currentColor;opacity:.045}
-.bills-stat-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:currentColor;font-size:16px}
-.bills-stat-icon svg{filter:brightness(1.8)}
-.bills-stat-card>span{font-size:11px;color:var(--bill-muted);font-weight:650}
-.bills-stat-card strong{font-size:clamp(19px,2.4vw,25px);letter-spacing:-.04em;color:var(--bill-primary)}
-.bills-stat-card small{font-size:11px;color:var(--bill-muted)}
-.bills-stat-pending{color:#0ea5e9}
-.bills-stat-overdue{color:#f43f5e}
-.bills-stat-paid{color:#10b981}
-.bills-list-panel{border:1px solid var(--bill-border);border-radius:17px;background:var(--bill-surface);overflow:hidden}
-.bills-list-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:19px 20px;border-bottom:1px solid var(--bill-border)}
-.bills-list-heading h2{margin:0 0 4px;font-size:16px;font-weight:800}
-.bills-filters{display:flex;gap:4px;padding:4px;border:1px solid var(--bill-border);border-radius:10px;background:rgba(148,163,184,.055)}
-.bills-filters button{border:0;background:transparent;color:var(--bill-muted);padding:7px 11px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer}
-.bills-filters button.active{background:rgba(6,182,212,.15);color:var(--bill-accent)}
-.bills-table-wrap{overflow-x:auto}
-.bills-table{width:100%;border-collapse:collapse;min-width:590px}
-.bills-table th{padding:12px 20px;text-align:left;color:var(--bill-muted);font-size:9px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;background:rgba(148,163,184,.035)}
-.bills-table td{padding:14px 20px;border-top:1px solid var(--bill-border);font-size:12px}
-.bills-name-cell{display:flex;align-items:center;gap:11px}
-.bills-row-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(6,182,212,.1);color:var(--bill-accent)}
-.bills-name-cell strong{display:block;font-size:12px;font-weight:750}
-.bills-name-cell small{display:block;margin-top:4px;color:var(--bill-muted);font-size:10px}
-.bills-amount-cell{font-weight:800;font-variant-numeric:tabular-nums}
-.bills-status{display:inline-flex;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:800;text-transform:capitalize}
-.bills-status.pending{color:#38bdf8;background:rgba(14,165,233,.11)}
-.bills-status.overdue{color:#fb7185;background:rgba(244,63,94,.12)}
-.bills-status.paid{color:#34d399;background:rgba(16,185,129,.12)}
-.bills-due-overdue{color:#fb7185;font-weight:750}
-.bills-delete-button{width:30px;height:30px;display:grid;place-items:center;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--bill-muted);cursor:pointer}
-.bills-delete-button:hover:not(:disabled){color:#fb7185;background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.18)}
-.bills-delete-button:disabled{opacity:.5;cursor:wait}
-.bills-empty-state{min-height:220px;padding:35px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:9px;color:var(--bill-muted);font-size:12px}
-.bills-empty-state strong{color:var(--bill-primary);font-size:14px}
-.bills-empty-state p{margin:0 0 8px}
-.bills-empty-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(6,182,212,.1);color:var(--bill-accent);font-size:20px}
-.bills-loader,.bills-mini-loader{width:18px;height:18px;border:2px solid rgba(148,163,184,.25);border-top-color:var(--bill-accent);border-radius:50%;animation:bills-rotate .7s linear infinite}
-.bills-mini-loader{width:13px;height:13px}
-.bills-spin{animation:bills-rotate .8s linear infinite}
-@keyframes bills-rotate{to{transform:rotate(360deg)}}
-.bills-modal-backdrop{position:fixed;inset:0;z-index:1400;display:grid;place-items:center;padding:18px;background:rgba(2,6,23,.72);backdrop-filter:blur(7px)}
-.bills-modal{width:min(100%,490px);padding:23px;border:1px solid var(--bill-border);border-radius:18px;background:var(--surface-primary,#0f172a);box-shadow:0 24px 80px rgba(0,0,0,.35)}
-.bills-modal-heading{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
-.bills-modal-heading span{color:var(--bill-accent);font-size:9px;font-weight:850;letter-spacing:.16em}
-.bills-modal-heading h2{margin:5px 0 0;font-size:21px;font-weight:850}
-.bills-modal-heading>button{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--bill-border);border-radius:9px;background:transparent;color:var(--bill-muted);cursor:pointer}
-.bills-form{display:flex;flex-direction:column;gap:15px}
-.bills-form label{display:flex;flex-direction:column;gap:7px;color:var(--bill-muted);font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.bills-form input,.bills-form select{width:100%;min-width:0;padding:12px 13px;border:1px solid var(--bill-border);border-radius:10px;outline:none;background:var(--surface-secondary,rgba(148,163,184,.08));color:var(--bill-primary);font:500 13px inherit;letter-spacing:normal;text-transform:none}
-.bills-form input:focus,.bills-form select:focus{border-color:rgba(6,182,212,.7);box-shadow:0 0 0 3px rgba(6,182,212,.1)}
-.bills-form input::placeholder{color:var(--bill-muted);opacity:.7}
-.bills-form select option{background:#0f172a;color:#e2e8f0}
-.bills-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.bills-form-note{margin:0;padding:10px 12px;border-radius:9px;background:rgba(6,182,212,.07);color:var(--bill-muted);font-size:10px;line-height:1.5}
-.bills-form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:5px}
-@media(max-width:720px){
- .bills-header{align-items:flex-start;flex-direction:column}
- .bills-header-actions{width:100%}
- .bills-header-actions .bills-button{flex:1}
- .bills-stats-grid{grid-template-columns:1fr}
- .bills-stat-card{padding:15px}
- .bills-list-heading{align-items:flex-start;flex-direction:column}
- .bills-filters{width:100%;overflow-x:auto}
- .bills-filters button{flex:1;white-space:nowrap}
- .bills-form-row{grid-template-columns:1fr}
- .bills-modal{padding:18px}
-}
-`;
-
-const todayInputValue = () => {
-  const now = new Date();
-  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-  return local.toISOString().slice(0, 10);
+const getResponseData = (response) => {
+  const data = response?.data?.data ?? response?.data;
+  return Array.isArray(data) ? data : [];
 };
 
-const unwrap = (response) => response?.data?.data ?? response?.data ?? [];
+const getId = (item) => item?._id || item?.id || "";
 
-const formatCurrency = (value) =>
+const formatCurrency = (amount) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 2,
-  }).format(Number(value) || 0);
+  }).format(Number(amount) || 0);
 
 const formatDate = (value) => {
   if (!value) return "—";
-  const date = new Date(value);
 
-  return Number.isNaN(date.getTime())
-    ? "—"
-    : date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 };
 
-const getErrorMessage = (error) =>
-  error?.response?.data?.message ||
-  error?.response?.data?.error ||
-  error?.message ||
-  "Something went wrong. Please try again.";
+const isOverdue = (bill) =>
+  bill?.status === "pending" &&
+  bill?.dueDate &&
+  new Date(bill.dueDate).setHours(0, 0, 0, 0) <
+    new Date().setHours(0, 0, 0, 0);
 
-const initialForm = {
-  name: "",
-  amount: "",
-  dueDate: todayInputValue(),
-  status: "pending",
+const getExpenseLabel = (expense) => {
+  const description =
+    expense?.description ||
+    expense?.title ||
+    expense?.name ||
+    expense?.category ||
+    "Expense transaction";
+
+  return `${description} · ${formatCurrency(expense?.amount)} · ${formatDate(
+    expense?.date || expense?.createdAt,
+  )}`;
+};
+
+const panelSx = {
+  border: "1px solid",
+  borderColor: "divider",
+  borderRadius: 3,
+  bgcolor: "background.paper",
+  boxShadow: "none",
 };
 
 export const Bills = () => {
   const [bills, setBills] = useState([]);
-  const [form, setForm] = useState(initialForm);
-  const [filter, setFilter] = useState("all");
-  const [showForm, setShowForm] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [deletingId, setDeletingId] = useState("");
+  const [loadingExpenses, setLoadingExpenses] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [createOpen, setCreateOpen] = useState(false);
+  const [settleOpen, setSettleOpen] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
+
+  const [form, setForm] = useState({
+    name: "",
+    amount: "",
+    dueDate: "",
+  });
+
+  const [selectedExpenseId, setSelectedExpenseId] = useState("");
 
   const loadBills = useCallback(async () => {
     setLoading(true);
     setError("");
 
     try {
+      // Backend route: GET /api/bills/me
       const response = await axiosInstance.get("/bills/me");
-      const payload = unwrap(response);
-      setBills(Array.isArray(payload) ? payload : []);
-    } catch (requestError) {
-      setError(getErrorMessage(requestError));
+      setBills(getResponseData(response));
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Unable to load bills. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -173,476 +133,549 @@ export const Bills = () => {
     loadBills();
   }, [loadBills]);
 
-  const today = useMemo(() => {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    return date;
-  }, [bills]);
-
-  const normalizedBills = useMemo(
-    () =>
-      bills.map((bill) => {
-        const due = new Date(bill.dueDate);
-        due.setHours(0, 0, 0, 0);
-        const status = String(bill.status || "pending").toLowerCase();
-
-        return {
-          ...bill,
-          normalizedStatus: status,
-          isOverdue:
-            status === "pending" &&
-            !Number.isNaN(due.getTime()) &&
-            due < today,
-        };
-      }),
-    [bills, today],
-  );
-
-  const stats = useMemo(() => {
-    const pending = normalizedBills.filter(
-      (bill) => bill.normalizedStatus === "pending",
-    );
-    const paid = normalizedBills.filter(
-      (bill) => bill.normalizedStatus === "paid",
-    );
-    const overdue = pending.filter((bill) => bill.isOverdue);
+  const totals = useMemo(() => {
+    const pending = bills.filter((bill) => bill.status === "pending");
+    const paid = bills.filter((bill) => bill.status === "paid");
+    const overdue = pending.filter(isOverdue);
 
     return {
-      pendingCount: pending.length,
+      total: bills.length,
+      pending: pending.length,
+      paid: paid.length,
+      overdue: overdue.length,
       pendingAmount: pending.reduce(
         (sum, bill) => sum + Number(bill.amount || 0),
         0,
       ),
-      paidCount: paid.length,
-      paidAmount: paid.reduce(
-        (sum, bill) => sum + Number(bill.amount || 0),
-        0,
-      ),
-      overdueCount: overdue.length,
-      overdueAmount: overdue.reduce(
-        (sum, bill) => sum + Number(bill.amount || 0),
-        0,
-      ),
     };
-  }, [normalizedBills]);
+  }, [bills]);
 
-  const visibleBills = useMemo(() => {
-    const filtered = normalizedBills.filter((bill) => {
-      if (filter === "pending") return bill.normalizedStatus === "pending";
-      if (filter === "paid") return bill.normalizedStatus === "paid";
-      if (filter === "overdue") return bill.isOverdue;
-      return true;
-    });
+  const filteredBills = useMemo(() => {
+    if (activeFilter === "pending") {
+      return bills.filter((bill) => bill.status === "pending" && !isOverdue(bill));
+    }
 
-    return filtered.sort(
-      (a, b) => new Date(a.dueDate) - new Date(b.dueDate),
-    );
-  }, [filter, normalizedBills]);
+    if (activeFilter === "overdue") {
+      return bills.filter(isOverdue);
+    }
 
-  const updateForm = (event) => {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
-  };
+    if (activeFilter === "paid") {
+      return bills.filter((bill) => bill.status === "paid");
+    }
 
-  const submitBill = async (event) => {
+    return bills;
+  }, [activeFilter, bills]);
+
+  const handleCreate = async (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
 
-    const name = form.name.trim();
     const amount = Number(form.amount);
 
-    if (!name) return setError("Enter a bill name.");
-    if (name.length > 100) {
-      return setError("Bill name cannot exceed 100 characters.");
+    if (!form.name.trim()) {
+      setError("Enter a bill name.");
+      return;
     }
+
+    if (!form.dueDate) {
+      setError("Select a due date.");
+      return;
+    }
+
     if (!Number.isFinite(amount) || amount <= 0) {
-      return setError("Enter an amount greater than zero.");
+      setError("Enter an amount greater than zero.");
+      return;
     }
-    if (!form.dueDate || Number.isNaN(new Date(form.dueDate).getTime())) {
-      return setError("Select a valid due date.");
-    }
-    if (!["pending", "paid"].includes(form.status)) {
-      return setError("Select a valid bill status.");
-    }
+
+    // Use midday local time to avoid date shifting during timezone conversion.
+    const dueDate = new Date(`${form.dueDate}T12:00:00`).toISOString();
 
     setSaving(true);
 
     try {
+      // Backend route: POST /api/bill
       await axiosInstance.post("/bill", {
-        name,
+        name: form.name.trim(),
         amount,
-        dueDate: new Date(`${form.dueDate}T12:00:00`).toISOString(),
-        status: form.status,
+        dueDate,
       });
 
-      setForm({ ...initialForm, dueDate: todayInputValue() });
-      setShowForm(false);
+      setForm({ name: "", amount: "", dueDate: "" });
+      setCreateOpen(false);
       setSuccess("Bill created successfully.");
       await loadBills();
-    } catch (requestError) {
-      setError(getErrorMessage(requestError));
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Unable to create bill.",
+      );
     } finally {
       setSaving(false);
     }
   };
 
-  const deleteBill = async (bill) => {
-    const id = bill._id || bill.id;
+  const handleDelete = async (bill) => {
+    const billId = getId(bill);
+    if (!billId) return;
 
-    if (!id) {
-      setError("This bill does not have a valid identifier.");
-      return;
-    }
+    const confirmed = window.confirm(
+      `Delete "${bill.name}"? This action cannot be undone.`,
+    );
 
-    if (!window.confirm(`Delete "${bill.name}"? This action cannot be undone.`)) {
-      return;
-    }
+    if (!confirmed) return;
 
-    setDeletingId(id);
     setError("");
     setSuccess("");
 
     try {
-      await axiosInstance.delete(`/bill/${id}`);
-      setBills((current) =>
-        current.filter((item) => (item._id || item.id) !== id),
+      // Backend route: DELETE /api/bill/:id
+      await axiosInstance.delete(`/bill/${billId}`);
+      setSuccess("Bill deleted successfully.");
+      await loadBills();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Unable to delete this bill.",
       );
-      setSuccess("Bill deleted.");
-    } catch (requestError) {
-      setError(getErrorMessage(requestError));
-    } finally {
-      setDeletingId("");
     }
   };
 
+  const openSettleDialog = async (bill) => {
+    setSelectedBill(bill);
+    setSelectedExpenseId("");
+    setError("");
+    setSuccess("");
+    setSettleOpen(true);
+    setLoadingExpenses(true);
+
+    try {
+      // Backend route: GET /api/expenses/me
+      const response = await axiosInstance.get("/expenses/me");
+      setExpenses(getResponseData(response));
+    } catch (err) {
+      setExpenses([]);
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Unable to load expenses for settlement.",
+      );
+    } finally {
+      setLoadingExpenses(false);
+    }
+  };
+
+  const handleSettle = async () => {
+    const billId = getId(selectedBill);
+
+    if (!billId || !selectedExpenseId) {
+      setError("Select an expense transaction to continue.");
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // Backend route: PATCH /api/bill/:id/settle
+      await axiosInstance.patch(`/bill/${billId}/settle`, {
+        expenseId: selectedExpenseId,
+      });
+
+      setSettleOpen(false);
+      setSelectedBill(null);
+      setSelectedExpenseId("");
+      setSuccess("Bill settled and linked to the selected expense.");
+      await loadBills();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Unable to settle this bill. Check the selected expense and try again.",
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const statusFor = (bill) => {
+    if (bill.status === "paid") {
+      return { label: "Paid", color: "success" };
+    }
+
+    if (isOverdue(bill)) {
+      return { label: "Overdue", color: "error" };
+    }
+
+    return { label: "Pending", color: "warning" };
+  };
+
   return (
-    <>
-      <style>{styles}</style>
+    <Box sx={{ width: "100%", maxWidth: 1400, mx: "auto", p: { xs: 2, md: 3 } }}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "stretch", sm: "center" }}
+        spacing={2}
+        sx={{ mb: 3 }}
+      >
+        <Box>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <FiFileText size={22} />
+            <Typography variant="h5" fontWeight={800}>
+              Bills
+            </Typography>
+          </Stack>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Track upcoming payments and link settled bills to expense transactions.
+          </Typography>
+        </Box>
 
-      <section className="bills-page">
-        <header className="bills-header">
-          <div>
-            <div className="bills-eyebrow">
-              <FiFileText /> LIABILITY TRACKER
-            </div>
-            <h1>Bill Center</h1>
-            <p>Track upcoming obligations, overdue payments and settled bills.</p>
-          </div>
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            startIcon={<FiRefreshCw />}
+            onClick={loadBills}
+            disabled={loading}
+          >
+            Refresh
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<FiPlus />}
+            onClick={() => {
+              setError("");
+              setCreateOpen(true);
+            }}
+          >
+            Add bill
+          </Button>
+        </Stack>
+      </Stack>
 
-          <div className="bills-header-actions">
-            <button
-              className="bills-button bills-button-ghost"
-              type="button"
-              onClick={loadBills}
-              disabled={loading}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>
+          {error}
+        </Alert>
+      )}
+
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess("")}>
+          {success}
+        </Alert>
+      )}
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "repeat(2, minmax(0, 1fr))",
+            md: "repeat(4, minmax(0, 1fr))",
+          },
+          gap: 2,
+          mb: 3,
+        }}
+      >
+        {[
+          { label: "Total bills", value: totals.total, icon: <FiFileText /> },
+          { label: "Pending amount", value: formatCurrency(totals.pendingAmount), icon: <FiClock /> },
+          { label: "Overdue", value: totals.overdue, icon: <FiCalendar /> },
+          { label: "Paid", value: totals.paid, icon: <FiCheckCircle /> },
+        ].map((item) => (
+          <Paper key={item.label} sx={{ ...panelSx, p: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={1} color="text.secondary">
+              {item.icon}
+              <Typography variant="caption" fontWeight={700}>
+                {item.label}
+              </Typography>
+            </Stack>
+            <Typography
+              variant="h6"
+              fontWeight={800}
+              sx={{ mt: 1, overflowWrap: "anywhere" }}
             >
-              <FiRefreshCw className={loading ? "bills-spin" : ""} /> Refresh
-            </button>
+              {item.value}
+            </Typography>
+          </Paper>
+        ))}
+      </Box>
 
-            <button
-              className="bills-button bills-button-primary"
-              type="button"
-              onClick={() => {
-                setError("");
-                setSuccess("");
-                setShowForm(true);
-              }}
-            >
-              <FiPlus /> Add bill
-            </button>
-          </div>
-        </header>
+      <Paper sx={{ ...panelSx, p: { xs: 2, md: 3 } }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          alignItems={{ xs: "stretch", sm: "center" }}
+          justifyContent="space-between"
+          spacing={2}
+          sx={{ mb: 2 }}
+        >
+          <Box>
+            <Typography variant="h6" fontWeight={800}>
+              Your bills
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {filteredBills.length} record(s)
+            </Typography>
+          </Box>
 
-        {error && (
-          <div className="bills-alert bills-alert-error" role="alert">
-            <FiAlertCircle />
-            <span>{error}</span>
-            <button type="button" onClick={() => setError("")} aria-label="Dismiss error">
-              <FiX />
-            </button>
-          </div>
-        )}
-
-        {success && (
-          <div className="bills-alert bills-alert-success" role="status">
-            <FiCheckCircle />
-            <span>{success}</span>
-            <button type="button" onClick={() => setSuccess("")} aria-label="Dismiss message">
-              <FiX />
-            </button>
-          </div>
-        )}
-
-        <div className="bills-stats-grid">
-          <article className="bills-stat-card bills-stat-pending">
-            <div className="bills-stat-icon"><FiClock /></div>
-            <span>Pending amount</span>
-            <strong>{formatCurrency(stats.pendingAmount)}</strong>
-            <small>{stats.pendingCount} unpaid bills</small>
-          </article>
-
-          <article className="bills-stat-card bills-stat-overdue">
-            <div className="bills-stat-icon"><FiAlertCircle /></div>
-            <span>Overdue amount</span>
-            <strong>{formatCurrency(stats.overdueAmount)}</strong>
-            <small>{stats.overdueCount} overdue bills</small>
-          </article>
-
-          <article className="bills-stat-card bills-stat-paid">
-            <div className="bills-stat-icon"><FiCheckCircle /></div>
-            <span>Paid amount</span>
-            <strong>{formatCurrency(stats.paidAmount)}</strong>
-            <small>{stats.paidCount} settled bills</small>
-          </article>
-        </div>
-
-        <div className="bills-list-panel">
-          <div className="bills-list-heading">
-            <div>
-              <h2>Your bills</h2>
-              <p>{visibleBills.length} records</p>
-            </div>
-
-            <div className="bills-filters" role="group" aria-label="Filter bills">
-              {[
-                { value: "all", label: "All" },
-                { value: "pending", label: "Pending" },
-                { value: "overdue", label: "Overdue" },
-                { value: "paid", label: "Paid" },
-              ].map((item) => (
-                <button
-                  key={item.value}
-                  type="button"
-                  className={filter === item.value ? "active" : ""}
-                  onClick={() => setFilter(item.value)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="bills-empty-state">
-              <span className="bills-loader" /> Loading bills…
-            </div>
-          ) : visibleBills.length === 0 ? (
-            <div className="bills-empty-state">
-              <div className="bills-empty-icon"><FiCalendar /></div>
-              <strong>
-                {filter === "all" ? "No bills recorded" : `No ${filter} bills`}
-              </strong>
-              <p>
-                {filter === "all"
-                  ? "Add a bill to start tracking upcoming payments."
-                  : "There are no bills in this filter right now."}
-              </p>
-              {filter === "all" && (
-                <button
-                  type="button"
-                  className="bills-button bills-button-primary"
-                  onClick={() => setShowForm(true)}
-                >
-                  <FiPlus /> Add your first bill
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="bills-table-wrap">
-              <table className="bills-table">
-                <thead>
-                  <tr>
-                    <th>Bill</th>
-                    <th>Due date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th aria-label="Actions" />
-                  </tr>
-                </thead>
-                <tbody>
-                  <AnimatePresence initial={false}>
-                    {visibleBills.map((bill) => {
-                      const id = bill._id || bill.id;
-                      const overdue = bill.isOverdue;
-
-                      return (
-                        <motion.tr
-                          key={id}
-                          layout
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                        >
-                          <td>
-                            <div className="bills-name-cell">
-                              <span className="bills-row-icon"><FiFileText /></span>
-                              <div>
-                                <strong>{bill.name}</strong>
-                                <small>Added {formatDate(bill.createdAt)}</small>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span className={overdue ? "bills-due-overdue" : ""}>
-                              {formatDate(bill.dueDate)}
-                            </span>
-                          </td>
-                          <td className="bills-amount-cell">
-                            {formatCurrency(bill.amount)}
-                          </td>
-                          <td>
-                            <span
-                              className={`bills-status ${
-                                overdue ? "overdue" : bill.normalizedStatus
-                              }`}
-                            >
-                              {overdue
-                                ? "Overdue"
-                                : bill.normalizedStatus === "paid"
-                                  ? "Paid"
-                                  : "Pending"}
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className="bills-delete-button"
-                              onClick={() => deleteBill(bill)}
-                              disabled={deletingId === id}
-                              aria-label={`Delete ${bill.name}`}
-                              title="Delete bill"
-                            >
-                              {deletingId === id
-                                ? <span className="bills-mini-loader" />
-                                : <FiTrash2 />}
-                            </button>
-                          </td>
-                        </motion.tr>
-                      );
-                    })}
-                  </AnimatePresence>
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-
-        <AnimatePresence>
-          {showForm && (
-            <motion.div
-              className="bills-modal-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onMouseDown={(event) => {
-                if (event.target === event.currentTarget && !saving) {
-                  setShowForm(false);
-                }
-              }}
-            >
-              <motion.div
-                className="bills-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="bills-modal-title"
-                initial={{ opacity: 0, y: 16, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 12, scale: 0.98 }}
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {["all", "pending", "overdue", "paid"].map((filter) => (
+              <Button
+                key={filter}
+                size="small"
+                variant={activeFilter === filter ? "contained" : "outlined"}
+                onClick={() => setActiveFilter(filter)}
+                sx={{ textTransform: "capitalize" }}
               >
-                <div className="bills-modal-heading">
-                  <div>
-                    <span>NEW RECORD</span>
-                    <h2 id="bills-modal-title">Add a bill</h2>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    disabled={saving}
-                    aria-label="Close dialog"
+                {filter}
+              </Button>
+            ))}
+          </Stack>
+        </Stack>
+
+        <Divider sx={{ mb: 2 }} />
+
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 7 }}>
+            <CircularProgress />
+          </Box>
+        ) : filteredBills.length === 0 ? (
+          <Box sx={{ textAlign: "center", py: 7 }}>
+            <FiFileText size={34} />
+            <Typography fontWeight={700} sx={{ mt: 1 }}>
+              No bills found
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Add a bill or choose another filter.
+            </Typography>
+          </Box>
+        ) : (
+          <Stack spacing={1.5}>
+            {filteredBills
+              .slice()
+              .sort(
+                (a, b) =>
+                  new Date(a.dueDate).getTime() -
+                  new Date(b.dueDate).getTime(),
+              )
+              .map((bill) => {
+                const status = statusFor(bill);
+
+                return (
+                  <Box
+                    key={getId(bill)}
+                    sx={{
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2.5,
+                      p: 2,
+                      display: "flex",
+                      flexDirection: { xs: "column", md: "row" },
+                      alignItems: { xs: "stretch", md: "center" },
+                      justifyContent: "space-between",
+                      gap: 2,
+                    }}
                   >
-                    <FiX />
-                  </button>
-                </div>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        flexWrap="wrap"
+                      >
+                        <Typography fontWeight={800}>{bill.name}</Typography>
+                        <Chip
+                          size="small"
+                          label={status.label}
+                          color={status.color}
+                          variant="outlined"
+                        />
+                      </Stack>
 
-                <form onSubmit={submitBill} className="bills-form">
-                  <label>
-                    Bill name
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={updateForm}
-                      maxLength={100}
-                      placeholder="e.g. Electricity bill"
-                      required
-                      autoFocus
-                    />
-                  </label>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={0.75}
+                        sx={{ mt: 0.75 }}
+                      >
+                        <FiCalendar size={14} />
+                        <Typography variant="body2" color="text.secondary">
+                          Due {formatDate(bill.dueDate)}
+                        </Typography>
+                      </Stack>
 
-                  <div className="bills-form-row">
-                    <label>
-                      Amount (₹)
-                      <input
-                        name="amount"
-                        type="number"
-                        min="0.01"
-                        step="0.01"
-                        value={form.amount}
-                        onChange={updateForm}
-                        placeholder="8000"
-                        required
-                      />
-                    </label>
+                      {bill.settledExpenseId && (
+                        <Typography
+                          variant="caption"
+                          color="success.main"
+                          sx={{ display: "block", mt: 0.5 }}
+                        >
+                          Linked to an expense transaction
+                        </Typography>
+                      )}
+                    </Box>
 
-                    <label>
-                      Due date
-                      <input
-                        name="dueDate"
-                        type="date"
-                        value={form.dueDate}
-                        onChange={updateForm}
-                        required
-                      />
-                    </label>
-                  </div>
-
-                  <label>
-                    Status
-                    <select name="status" value={form.status} onChange={updateForm}>
-                      <option value="pending">Pending</option>
-                      <option value="paid">Paid</option>
-                    </select>
-                  </label>
-
-                  <p className="bills-form-note">
-                    Pending bills are included in the financial forecast.
-                    Paid bills are excluded.
-                  </p>
-
-                  <div className="bills-form-actions">
-                    <button
-                      type="button"
-                      className="bills-button bills-button-ghost"
-                      onClick={() => setShowForm(false)}
-                      disabled={saving}
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      alignItems={{ xs: "stretch", sm: "center" }}
+                      spacing={1.5}
                     >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="bills-button bills-button-primary"
-                      disabled={saving}
-                    >
-                      {saving ? "Saving…" : "Save bill"}
-                    </button>
-                  </div>
-                </form>
-              </motion.div>
-            </motion.div>
+                      <Typography variant="h6" fontWeight={800}>
+                        {formatCurrency(bill.amount)}
+                      </Typography>
+
+                      {bill.status === "pending" && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="success"
+                          startIcon={<FiLink />}
+                          onClick={() => openSettleDialog(bill)}
+                        >
+                          Settle
+                        </Button>
+                      )}
+
+                      <Button
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        startIcon={<FiTrash2 />}
+                        onClick={() => handleDelete(bill)}
+                      >
+                        Delete
+                      </Button>
+                    </Stack>
+                  </Box>
+                );
+              })}
+          </Stack>
+        )}
+      </Paper>
+
+      <Dialog
+        open={createOpen}
+        onClose={() => !saving && setCreateOpen(false)}
+        fullWidth
+        maxWidth="xs"
+      >
+        <Box component="form" onSubmit={handleCreate}>
+          <DialogTitle fontWeight={800}>Add a bill</DialogTitle>
+          <DialogContent>
+            <Stack spacing={2} sx={{ pt: 1 }}>
+              <TextField
+                label="Bill name"
+                value={form.name}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, name: event.target.value }))
+                }
+                required
+                fullWidth
+                inputProps={{ maxLength: 100 }}
+              />
+              <TextField
+                label="Amount (₹)"
+                type="number"
+                value={form.amount}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, amount: event.target.value }))
+                }
+                required
+                fullWidth
+                inputProps={{ min: 0.01, step: "0.01" }}
+              />
+              <TextField
+                label="Due date"
+                type="date"
+                value={form.dueDate}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, dueDate: event.target.value }))
+                }
+                required
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Stack>
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button onClick={() => setCreateOpen(false)} disabled={saving}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" disabled={saving}>
+              {saving ? "Saving..." : "Create bill"}
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
+
+      <Dialog
+        open={settleOpen}
+        onClose={() => !saving && setSettleOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle fontWeight={800}>Settle bill</DialogTitle>
+        <DialogContent>
+          {selectedBill && (
+            <Alert severity="info" sx={{ mb: 2 }}>
+              Linking <strong>{selectedBill.name}</strong> (
+              {formatCurrency(selectedBill.amount)}) to an existing expense will
+              mark this bill as paid. It will not create another expense.
+            </Alert>
           )}
-        </AnimatePresence>
-      </section>
-    </>
+
+          {loadingExpenses ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : expenses.length === 0 ? (
+            <Alert severity="warning">
+              No expense transactions were returned. Create the expense first,
+              then reopen this dialog.
+            </Alert>
+          ) : (
+            <FormControl fullWidth>
+              <InputLabel id="settlement-expense-label">
+                Expense transaction
+              </InputLabel>
+              <Select
+                labelId="settlement-expense-label"
+                value={selectedExpenseId}
+                label="Expense transaction"
+                onChange={(event) => setSelectedExpenseId(event.target.value)}
+              >
+                {expenses.map((expense) => (
+                  <MenuItem key={getId(expense)} value={getId(expense)}>
+                    {getExpenseLabel(expense)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+
+          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1.5 }}>
+            Select the expense that already represents this bill payment. The
+            backend validates ownership and prevents an expense from being linked
+            to multiple bills.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setSettleOpen(false)} disabled={saving}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleSettle}
+            disabled={saving || loadingExpenses || !selectedExpenseId}
+          >
+            {saving ? "Settling..." : "Confirm settlement"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
