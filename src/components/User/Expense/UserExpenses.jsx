@@ -206,10 +206,9 @@ export const UserExpenses = () => {
   const SubmitHandler = async (data) => {
     try {
       setIsSubmitting(true);
-      await axiosInstance.post("/expenses", {
-        userID: data.userID,
+      await axiosInstance.post("/expense", {
         categoryID: data.categoryID,
-        amount: data.amount,
+        amount: Number(data.amount),
         date: data.date,
         description: data.description,
       });
@@ -228,7 +227,7 @@ export const UserExpenses = () => {
   const deleteExpense = async (id) => {
     if (!window.confirm("Delete this expense permanently?")) return;
     try {
-      await axiosInstance.delete(`/expenses/${id}`);
+      await axiosInstance.delete(`/expense/${id}`);
       dispatch(fetchAllExpenses({ userId, filters }));
       dispatch(fetchRecentExpenses(userId));
     } catch (error) {

@@ -18,8 +18,8 @@ export const fetchBudgetData = createAsyncThunk(
   async (userId) => {
     if (!userId) return { budgets: [], expenses: [], summary: [] };
     const [bRes, eRes] = await Promise.all([
-      axiosInstance.get(`/budgetsbyUserID/${userId}`),
-      axiosInstance.get(`/expensesbyUserID/${userId}`),
+      axiosInstance.get("/budgets/me"),
+      axiosInstance.get("/expenses/me"),
     ]);
 
     const budgets = bRes.data.data || bRes.data || [];
@@ -63,8 +63,8 @@ export const fetchBudgetPlan = createAsyncThunk(
   "budget/fetchBudgetPlan",
   async (userId) => {
     if (!userId) return null;
-    const res = await axiosInstance.get(`/ai/budget-plan/${userId}`);
-    return res.data.budgetPlan || res.data;
+    const res = await axiosInstance.get("/ai/budget-plan");
+    return res.data.data;
   },
 );
 

@@ -5,11 +5,13 @@ import {
   FiMenu,
   FiTrendingUp,
   FiTrendingDown,
-  FiPieChart,
   FiRepeat,
   FiTarget,
   FiBarChart2,
   FiList,
+  FiShoppingBag,
+  FiCalendar,
+  FiFileText,
   FiSun,
   FiMoon,
   FiUser,
@@ -46,6 +48,11 @@ const navTabs = [
     icon: <FiBarChart2 size={16} />,
   },
   {
+    label: "Intelligence",
+    path: "/private/financial-intelligence",
+    icon: <FiBarChart2 size={16} />,
+  },
+  {
     label: "Inflow",
     path: "/private/income",
     icon: <FiTrendingUp size={16} />,
@@ -57,10 +64,13 @@ const navTabs = [
   },
   { label: "Flows", path: "/private/recurring", icon: <FiRepeat size={16} /> },
   { label: "Budgets", path: "/private/budget", icon: <FiTarget size={16} /> },
+  { label: "Bills", path: "/private/bills", icon: <FiCalendar size={16} /> },
+  { label: "Forecast", path: "/private/forecast", icon: <FiTrendingUp size={16} /> },
+  { label: "Purchases", path: "/private/purchases", icon: <FiShoppingBag size={16} /> },
   {
     label: "Reports",
     path: "/private/reports",
-    icon: <FiPieChart size={16} />,
+    icon: <FiFileText size={16} />,
   },
   {
     label: "History",
@@ -338,5 +348,3 @@ export const UserDashboardLayout = () => {
     </Box>
   );
 };
-
-

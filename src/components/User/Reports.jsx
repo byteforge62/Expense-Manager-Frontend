@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import axiosInstance from "../Utils/axiosInstance";
 import { motion } from "framer-motion";
 import {
@@ -24,9 +23,6 @@ import {
  */
 
 export const Reports = () => {
-  const user = useSelector((state) => state.auth.user);
-  const userId = user?._id;
-  
   // --- STATE ---
   const [loading, setLoading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
@@ -37,7 +33,7 @@ export const Reports = () => {
   const downloadReport = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/reports/${userId}`, {
+      const response = await axiosInstance.get("/reports/me", {
         responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -46,6 +42,8 @@ export const Reports = () => {
       link.setAttribute("download", "financial-report.pdf");
       document.body.appendChild(link);
       link.click();
+      link.remove();
+      window.setTimeout(() => window.URL.revokeObjectURL(url), 1000);
       
       // Visual feedback trigger
       setDownloaded(true);
@@ -305,4 +303,3 @@ export const Reports = () => {
     </motion.div>
   );
 };
-

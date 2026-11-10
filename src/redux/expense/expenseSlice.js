@@ -20,7 +20,7 @@ export const fetchRecentExpenses = createAsyncThunk(
   "expense/fetchRecentExpenses",
   async (userId) => {
     if (!userId) return [];
-    const res = await axiosInstance.get(`/recent-expense/${userId}`);
+    const res = await axiosInstance.get("/expenses/recent");
     return res.data.data || res.data || [];
   },
 );
@@ -30,10 +30,12 @@ export const fetchAllExpenses = createAsyncThunk(
   "expense/fetchAllExpenses",
   async ({ userId, filters = {} }) => {
     if (!userId) return [];
-    const params = new URLSearchParams(filters).toString();
-    const res = await axiosInstance.get(
-      `/expensesbyUserID/${userId}?${params}`,
+    const params = Object.fromEntries(
+      ["startDate", "endDate", "categoryID", "minAmount", "maxAmount"]
+        .filter((key) => filters[key] !== "" && filters[key] != null)
+        .map((key) => [key, filters[key]]),
     );
+    const res = await axiosInstance.get("/expenses/me", { params });
     return res.data.data || res.data || [];
   },
 );
@@ -93,4 +95,3 @@ const expenseSlice = createSlice({
 });
 
 export default expenseSlice.reducer;
-

@@ -157,7 +157,6 @@ export const UserIncome = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm();
@@ -167,7 +166,7 @@ export const UserIncome = () => {
   const [recurringForm, setRecurringForm] = useState({
     name: "",
     amount: "",
-    frequency: "Monthly",
+    frequency: "monthly",
     startDate: "",
     category: "",
   });
@@ -246,9 +245,10 @@ export const UserIncome = () => {
   const onSubmitIncome = async (data) => {
     try {
       setIsSubmitting(true);
-      const res = await axiosInstance.post("/incomes", {
-        ...data,
+      const res = await axiosInstance.post("/income", {
         amount: Number(data.amount),
+        source: data.source,
+        date: data.date || undefined,
       });
       if (res.status === 201) {
         setIsModalOpen(false);
@@ -265,7 +265,7 @@ export const UserIncome = () => {
   // Delete an income record from history
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/incomes/${id}`);
+      await axiosInstance.delete(`/income/${id}`);
       dispatch(fetchIncomeData(userId));
     } catch (error) {
       console.error("Failed to remove record:", error);
@@ -280,11 +280,18 @@ export const UserIncome = () => {
     e.preventDefault();
     try {
       setRecurringLoading(true);
-      await axiosInstance.post("/recurring", { ...recurringForm, userId });
+      await axiosInstance.post("/recurring", {
+        title: recurringForm.name,
+        amount: Number(recurringForm.amount),
+        category: recurringForm.category,
+        type: "INCOME",
+        frequency: recurringForm.frequency.toLowerCase(),
+        nextDate: recurringForm.startDate,
+      });
       setRecurringForm({
         name: "",
         amount: "",
-        frequency: "Monthly",
+        frequency: "monthly",
         startDate: "",
         category: "",
       });
@@ -309,10 +316,9 @@ export const UserIncome = () => {
   // --- LIFECYCLE ---
   useEffect(() => {
     if (!userId) return;
-    setValue("userID", userId);
     dispatch(fetchIncomeData(userId));
     dispatch(fetchRecurring(userId));
-  }, [dispatch, userId, setValue]);
+  }, [dispatch, userId]);
 
   useEffect(() => {
     if (!incomes.length && !expenses.length) return;
@@ -1070,7 +1076,6 @@ export const UserIncome = () => {
               />
             </Field>
 
-            <input type="hidden" {...register("userID")} />
 
             <button
               type="submit"
@@ -1098,4 +1103,3 @@ export const UserIncome = () => {
     </div>
   );
 };
-

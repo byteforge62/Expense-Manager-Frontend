@@ -15,8 +15,16 @@ export const injectStore = (_store) => {
   store = _store;
 };
 
+export const resolveApiBaseUrl = (baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api") => {
+  const rawBaseUrl = String(baseUrl || "http://localhost:3001/api").trim();
+  const cleanedBaseUrl = rawBaseUrl.replace(/\/+$/, "");
+  return cleanedBaseUrl.endsWith("/api") ? cleanedBaseUrl : `${cleanedBaseUrl}/api`;
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
+
 const axiosInstance = axios.create({
-  baseURL: "https://learn-25-node-1.onrender.com/api",
+  baseURL: API_BASE_URL,
   timeout: 120000,
   withCredentials: true, // Crucial for sending/receiving HttpOnly cookies
   headers: {
@@ -77,7 +85,7 @@ axiosInstance.interceptors.response.use(
       config._retry = true;
       try {
         const refreshRes = await axios.post(
-          "https://learn-25-node-1.onrender.com/api/user/refresh-token",
+          `${API_BASE_URL}/user/refresh-token`,
           {},
           { withCredentials: true },
         );

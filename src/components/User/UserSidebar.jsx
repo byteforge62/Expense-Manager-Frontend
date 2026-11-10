@@ -37,6 +37,11 @@ export const UserSidebar = ({ isOpen, toggleSidebar }) => {
       path: "/private/userdashboard",
       icon: <FaTachometerAlt />,
     },
+    {
+      label: "Financial Intelligence",
+      path: "/private/financial-intelligence",
+      icon: <FaChartPie />,
+    },
     { label: "Account", path: `/private/account/${userId}`, icon: <FaUser /> },
     {
       label: "Expenses",

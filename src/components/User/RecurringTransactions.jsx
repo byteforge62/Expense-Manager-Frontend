@@ -122,7 +122,11 @@ export const RecurringTransactions = () => {
     e.preventDefault();
     try {
       setSubmitting(true);
-      const payload = { ...formData, amount: Number(formData.amount), userId };
+      const payload = {
+        ...formData,
+        amount: Number(formData.amount),
+        type: "EXPENSE",
+      };
       if (editingId) {
         await axiosInstance.put(`/recurring/${editingId}`, payload);
       } else {
@@ -550,4 +554,3 @@ export const RecurringTransactions = () => {
     </motion.div>
   );
 };
-

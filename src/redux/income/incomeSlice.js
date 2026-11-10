@@ -6,8 +6,8 @@ export const fetchIncomeData = createAsyncThunk(
   async (userId) => {
     if (!userId) return { incomes: [], expenses: [] };
     const [incomeRes, expenseRes] = await Promise.all([
-      axiosInstance.get(`/incomesbyUserID/${userId}`),
-      axiosInstance.get(`/expensesbyUserID/${userId}`),
+      axiosInstance.get("/incomes/me"),
+      axiosInstance.get("/expenses/me"),
     ]);
     return {
       incomes: incomeRes.data.data || incomeRes.data || [],
@@ -20,7 +20,7 @@ export const fetchRecurring = createAsyncThunk(
   "income/fetchRecurring",
   async (userId) => {
     if (!userId) return [];
-    const res = await axiosInstance.get(`/recurring/${userId}`);
+    const res = await axiosInstance.get("/recurring/me");
     return res.data.data || res.data || [];
   },
 );

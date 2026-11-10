@@ -1,7 +1,7 @@
 // =============== CORE IMPORTS ===============
 // Standard React and Router hooks
 import { Route, Routes, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
 // =============== GLOBAL STYLES ===============
 // Our main CSS files that handle the theme and general layout
@@ -23,6 +23,16 @@ import { Signup } from "./Signup";
 // Everything a regular user needs to see and manage
 import { UserDashboardLayout } from "./components/User/UserDashboardLayout";
 import { UserDashboard } from "./components/User/UserDashboard";
+const FinancialIntelligencePage = lazy(
+  () => import("./components/User/FinancialIntelligencePage"),
+);
+const FinancialForecast = lazy(
+  () => import("./components/User/FinancialForecast"),
+);
+const PurchaseIntelligence = lazy(
+  () => import("./components/User/PurchaseIntelligence"),
+);
+const Bills = lazy(() => import("./components/User/Bills"));
 import { UserExpenses } from "./components/User/Expense/UserExpenses";
 import { UserBudget } from "./components/User/Budget/UserBudget";
 import { UserIncome } from "./components/User/Income/UserIncome";
@@ -91,7 +101,27 @@ function App() {
             <Route path="recurring" element={<RecurringTransactions />} />
             <Route path="reports" element={<Reports />} />
             <Route path="transactions" element={<Transaction />} />
+            <Route
+              path="forecast"
+              element={<Suspense fallback={<div role="status">Loading forecast…</div>}><FinancialForecast /></Suspense>}
+            />
+            <Route
+              path="purchases"
+              element={<Suspense fallback={<div role="status">Loading purchase intelligence…</div>}><PurchaseIntelligence /></Suspense>}
+            />
+            <Route
+              path="bills"
+              element={<Suspense fallback={<div role="status">Loading bills…</div>}><Bills /></Suspense>}
+            />
             <Route path="userdashboard" element={<UserDashboard />} />
+            <Route
+              path="financial-intelligence"
+              element={
+                <Suspense fallback={<div role="status">Loading financial intelligence…</div>}>
+                  <FinancialIntelligencePage />
+                </Suspense>
+              }
+            />
             <Route path="account/:userId" element={<Account />} />
           </Route>
         </Route>
@@ -116,4 +146,3 @@ function App() {
 }
 
 export default App;
-

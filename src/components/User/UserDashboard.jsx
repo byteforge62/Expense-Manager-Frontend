@@ -150,7 +150,6 @@ const AICard = memo(
     iconColor,
     iconBg,
     borderColor,
-    accentColor,
     children,
     isLoading,
     onRefresh,
@@ -395,9 +394,6 @@ export const UserDashboard = () => {
   const expenses = useSelector((state) => state.expense.expenses);
   const chatEndRef = useRef(null);
 
-  const [bills, setBills] = useState([]);
-  const [recurring, setRecurring] = useState([]);
-  const [transactions, setTransactions] = useState([]);
   const [expenseInsights, setExpenseInsights] = useState("");
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [forecast, setForecast] = useState("");
@@ -433,7 +429,7 @@ export const UserDashboard = () => {
         {
           role: "ai",
           text:
-            res.data?.reply ||
+            res.data?.data?.reply ||
             "I encountered an error processing your request.",
         },
       ]);
@@ -451,21 +447,24 @@ export const UserDashboard = () => {
   };
 
   const fetchUpcomingRecurring = async () => {
+    setloadingSecondary(true);
     try {
-      const res = await axiosInstance.get(`/recurring/upcoming/${userId}`);
+      const res = await axiosInstance.get("/recurring/upcoming");
       setUpcomingRecurring(res.data.data || []);
     } catch (err) {
       console.error(err);
+    } finally {
+      setloadingSecondary(false);
     }
   };
 
   const fetchExpenseInsights = async () => {
     try {
       setLoadingInsights(true);
-      const res = await axiosInstance.get(`/ai/expense-insights/${userId}`, {
+      const res = await axiosInstance.get("/ai/expense-insights", {
         skipGlobalLoader: true,
       });
-      setExpenseInsights(res.data.insights);
+      setExpenseInsights(res.data.data);
     } finally {
       setLoadingInsights(false);
     }
@@ -473,10 +472,10 @@ export const UserDashboard = () => {
   const fetchForecast = async () => {
     try {
       setLoadingForecast(true);
-      const res = await axiosInstance.get(`/ai/financial-forecast/${userId}`, {
+      const res = await axiosInstance.get("/ai/financial-forecast", {
         skipGlobalLoader: true,
       });
-      setForecast(res.data.forecast);
+      setForecast(res.data.data);
     } finally {
       setLoadingForecast(false);
     }
@@ -485,10 +484,10 @@ export const UserDashboard = () => {
     try {
       setLoadingSavings(true);
       const res = await axiosInstance.get(
-        `/ai/saving-opportunities/${userId}`,
+        "/ai/saving-opportunities",
         { skipGlobalLoader: true },
       );
-      setSavingOpportunities(res.data.opportunities);
+      setSavingOpportunities(res.data.data);
     } finally {
       setLoadingSavings(false);
     }
@@ -496,10 +495,10 @@ export const UserDashboard = () => {
   const fetchHealthScore = async () => {
     try {
       setLoadingHealth(true);
-      const res = await axiosInstance.get(`/ai/financial-health/${userId}`, {
+      const res = await axiosInstance.get("/ai/financial-health", {
         skipGlobalLoader: true,
       });
-      setHealthScore(res.data.healthScore);
+      setHealthScore(res.data.data);
     } finally {
       setLoadingHealth(false);
     }
@@ -507,10 +506,10 @@ export const UserDashboard = () => {
   const fetchRisk = async () => {
     try {
       setLoadingRisk(true);
-      const res = await axiosInstance.get(`/ai/spending-risk/${userId}`, {
+      const res = await axiosInstance.get("/ai/spending-risk", {
         skipGlobalLoader: true,
       });
-      setRiskData(res.data.risk);
+      setRiskData(res.data.data);
     } finally {
       setLoadingRisk(false);
     }
@@ -518,10 +517,10 @@ export const UserDashboard = () => {
   const fetchAllInsights = async () => {
     try {
       setLoadingHistory(true);
-      const res = await axiosInstance.get(`/ai/insights/${userId}`, {
+      const res = await axiosInstance.get("/ai/insights", {
         skipGlobalLoader: true,
       });
-      setAllInsights(res.data.insights);
+      setAllInsights(res.data.data);
     } finally {
       setLoadingHistory(false);
     }
@@ -531,27 +530,11 @@ export const UserDashboard = () => {
 
   useEffect(() => {
     if (!userId) return;
-    dispatch(fetchBudgetData(userId));
-    dispatch(fetchIncomeData(userId));
-    dispatch(fetchAllExpenses(userId));
-
-    const fetchSecondaryData = async () => {
-      try {
-        setloadingSecondary(true);
-        const [billsRes, recurringRes, txnRes] = await Promise.all([
-          axiosInstance.get(`/billByuserId/${userId}`),
-          axiosInstance.get(`/recurring/${userId}`),
-          axiosInstance.get(`/transactionsByUserId/${userId}`),
-        ]);
-        setBills(billsRes.data.data || []);
-        setRecurring(recurringRes.data.data || []);
-        setTransactions(txnRes.data.data || []);
-      } finally {
-        setloadingSecondary(false);
-        setloadingCharts(false);
-      }
-    };
-    fetchSecondaryData();
+    Promise.all([
+      dispatch(fetchBudgetData(userId)),
+      dispatch(fetchIncomeData(userId)),
+      dispatch(fetchAllExpenses({ userId })),
+    ]).finally(() => setloadingCharts(false));
     fetchUpcomingRecurring();
   }, [userId, dispatch]);
 

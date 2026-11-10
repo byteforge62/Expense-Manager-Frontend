@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../Utils/axiosInstance";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,32 +45,36 @@ export const UserDetails = () => {
   const [budget, setBudget] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [budgetRes, txRes, userRes] = await Promise.all([
-        axiosInstance.get(`/budgetsbyUserID/${userId}`),
-        axiosInstance.get(`/transactionsByUserId/${userId}`),
+        axiosInstance.get("/budgets"),
+        axiosInstance.get("/transactions"),
         axiosInstance.get(`/user/${userId}`),
       ]);
-      setBudget(budgetRes.data.data || []);
-      setTransactions(txRes.data.data || []);
+      const belongsToUser = (record) => {
+        const recordUserId = record.userID?._id || record.userID;
+        return String(recordUserId) === String(userId);
+      };
+      setBudget((budgetRes.data.data || []).filter(belongsToUser));
+      setTransactions((txRes.data.data || []).filter(belongsToUser));
       setUser(userRes.data.data || null);
     } catch (error) {
       console.log("Error loading data:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchData();
-  }, [userId]);
+  }, [fetchData]);
 
   const totalIncome = transactions
-    .filter((t) => t.type === "income")
+    .filter((t) => String(t.type).toLowerCase() === "income")
     .reduce((sum, i) => sum + (i.amount || 0), 0);
   const totalExpense = transactions
-    .filter((t) => t.type === "expense")
+    .filter((t) => String(t.type).toLowerCase() === "expense")
     .reduce((sum, e) => sum + (e.amount || 0), 0);
   const totalBudget = budget.reduce((sum, b) => sum + (b.amount || 0), 0);
 
@@ -80,7 +84,7 @@ export const UserDetails = () => {
       const date = new Date(t.date);
       const m = date.toLocaleString("default", { month: "short" });
       if (!grouped[m]) grouped[m] = { month: m, income: 0, expense: 0 };
-      if (t.type === "income") grouped[m].income += t.amount;
+      if (String(t.type).toLowerCase() === "income") grouped[m].income += t.amount;
       else grouped[m].expense += t.amount;
     });
     return Object.values(grouped);

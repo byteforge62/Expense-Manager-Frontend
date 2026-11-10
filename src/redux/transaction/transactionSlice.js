@@ -4,10 +4,17 @@ import axiosInstance from "../../components/Utils/axiosInstance";
 export const fetchTransactions = createAsyncThunk(
   "transaction/fetchTransactions",
   async (userId) => {
+    if (!userId) {
+      return {
+        transactions: [],
+        summary: { totalIncome: 0, totalExpense: 0, balance: 0 },
+      };
+    }
+
     const [expenseRes, incomeRes, budgetRes] = await Promise.all([
-      axiosInstance.get(`/expensesbyUserID/${userId}`),
-      axiosInstance.get(`/incomesbyUserID/${userId}`),
-      axiosInstance.get(`/budgetsbyUserID/${userId}`),
+      axiosInstance.get("/expenses/me"),
+      axiosInstance.get("/incomes/me"),
+      axiosInstance.get("/budgets/me"),
     ]);
 
     const expenses = (expenseRes.data.data || expenseRes.data || []).map(
@@ -22,21 +29,19 @@ export const fetchTransactions = createAsyncThunk(
       type: "Income",
     }));
 
-    const budgets = budgetRes?.data?.data || budgetRes?.data || [];
-
-    const merged = [...expenses, ...incomes].map((t) => {
-      if (t.type === "Expense") {
-        const hasBudget = budgets.some(
-          (b) => b.categoryID?._id === t.categoryID?._id,
-        );
-
-        return {
-          ...t,
-          hasBudget,
-        };
-      }
-
-      return t;
+    const budgets = budgetRes.data.data || budgetRes.data || [];
+    const merged = [...expenses, ...incomes].map((transaction) => {
+      if (transaction.type !== "Expense") return transaction;
+      const categoryId = typeof transaction.categoryID === "object"
+        ? transaction.categoryID?._id
+        : transaction.categoryID;
+      const hasBudget = budgets.some((budget) => {
+        const budgetCategoryId = typeof budget.categoryID === "object"
+          ? budget.categoryID?._id
+          : budget.categoryID;
+        return budgetCategoryId === categoryId;
+      });
+      return { ...transaction, hasBudget };
     });
 
     const totalIncome = incomes.reduce((acc, i) => acc + (i.amount || 0), 0);
