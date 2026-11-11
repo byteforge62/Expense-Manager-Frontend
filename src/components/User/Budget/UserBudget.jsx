@@ -128,13 +128,13 @@ const selectCls =
   "w-full pl-10 pr-10 py-3 rounded-xl bg-[var(--surface-secondary)] border border-[var(--border)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-emerald-500/60 focus:ring-4 focus:ring-emerald-500/10 hover:bg-[var(--surface-tertiary)] transition-all duration-200 appearance-none shadow-sm cursor-pointer";
 
 const COLORS = [
-  "#10b981",
-  "#ef4444",
-  "#3b82f6",
-  "#f59e0b",
-  "#a855f7",
-  "#ec4899",
-  "#8b5cf6",
+  "#45b889",
+  "#f07870",
+  "#3985ff",
+  "#e8b66b",
+  "#4d74ad",
+  "#a9c8f5",
+  "#8297b7",
 ];
 
 // --- MAIN COMPONENT ---
@@ -180,7 +180,6 @@ export const UserBudget = () => {
       setIsSubmitting(true);
       await axiosInstance.post("/budget", {
         ...newBudget,
-        userID: userId,
         amount: Number(newBudget.amount),
       });
       setIsModalOpen(false);
@@ -261,10 +260,10 @@ export const UserBudget = () => {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent">
-            Budget Center
+            Budgets
           </h1>
           <p className="text-[var(--text-muted)] mt-1 text-sm font-medium">
-            Plan, track, and optimize your spending by category.
+            Set category limits and keep an eye on how much is left.
           </p>
         </div>
         <button
@@ -607,10 +606,10 @@ export const UserBudget = () => {
                     />
                     <Bar
                       dataKey="allocated"
-                      fill="#10b981"
+                      fill="#45b889"
                       radius={[6, 6, 0, 0]}
                     />
-                    <Bar dataKey="spent" fill="#f43f5e" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="spent" fill="#f07870" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -638,10 +637,10 @@ export const UserBudget = () => {
                   </div>
                   <div>
                     <h2 className="text-lg font-bold text-[var(--text-primary)]">
-                      AI Budget Intelligence
+                      Budget planning
                     </h2>
                     <p className="text-[11px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-wider">
-                      Strategic allocations powered by your data
+                      Suggestions based on your recorded spending.
                     </p>
                   </div>
                 </div>
@@ -1081,4 +1080,3 @@ export const UserBudget = () => {
     </div>
   );
 };
-

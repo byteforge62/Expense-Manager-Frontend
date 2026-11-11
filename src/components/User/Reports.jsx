@@ -15,6 +15,7 @@ import {
   FiRefreshCw,
   FiCalendar,
 } from "react-icons/fi";
+import reportPreview from "../../assets/illustrations/report-preview.svg";
 
 /**
  * --- INTELLIGENCE REPORTS ---
@@ -26,13 +27,14 @@ export const Reports = () => {
   // --- STATE ---
   const [loading, setLoading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+  const [error, setError] = useState("");
 
   // --- ACTIONS & LOGIC ---
 
-  // Compile and fetch the report blob from the backend
   const downloadReport = async () => {
     try {
       setLoading(true);
+      setError("");
       const response = await axiosInstance.get("/reports/me", {
         responseType: "blob",
       });
@@ -49,7 +51,11 @@ export const Reports = () => {
       setDownloaded(true);
       setTimeout(() => setDownloaded(false), 3000);
     } catch (error) {
-      console.error("Report download error:", error);
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to download the report. Try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -60,42 +66,42 @@ export const Reports = () => {
     {
       icon: <FiTrendingUp size={16} />,
       label: "Income Summary",
-      desc: "Comprehensive inflow tracking & monthly velocity",
+      desc: "Income activity and monthly trends",
       color: "text-emerald-500",
       bg: "bg-emerald-500/10 border-emerald-500/20",
     },
     {
       icon: <FiTrendingDown size={16} />,
       label: "Expense Breakdown",
-      desc: "Granular sector allocation & spending heatmaps",
+      desc: "Expenses grouped by category",
       color: "text-rose-500",
       bg: "bg-rose-500/10 border-rose-500/20",
     },
     {
       icon: <FiTarget size={16} />,
       label: "Budget Performance",
-      desc: "Strategic deviation analysis vs allocated capital",
+      desc: "Spending against budget limits",
       color: "text-cyan-500",
       bg: "bg-cyan-500/10 border-cyan-500/20",
     },
     {
       icon: <FiPieChart size={16} />,
       label: "Savings Analysis",
-      desc: "Net surplus trajectory and efficiency metrics",
+      desc: "Income and spending comparison",
       color: "text-blue-500",
       bg: "bg-blue-500/10 border-blue-500/20",
     },
     {
       icon: <FiRepeat size={16} />,
       label: "Recurring Payments",
-      desc: "Automated subscription auditing & schedules",
+      desc: "Recurring payment schedules",
       color: "text-amber-500",
       bg: "bg-amber-500/10 border-amber-500/20",
     },
     {
       icon: <FiBarChart2 size={16} />,
       label: "Monthly Comparison",
-      desc: "Temporal performance delta & benchmarks",
+      desc: "Monthly financial comparisons",
       color: "text-violet-500",
       bg: "bg-violet-500/10 border-violet-500/20",
     },
@@ -110,60 +116,46 @@ export const Reports = () => {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent uppercase">
-            Intelligence Reports
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
+            Reports
           </h1>
-          <p className="text-sm font-bold text-[var(--text-muted)] mt-1 uppercase tracking-[0.2em]">
-            Comprehensive Financial Audit Ledger
+          <p className="mt-2 text-sm text-[var(--text-muted)]">
+            Download a PDF summary of your financial activity.
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border bg-violet-500/10 border-violet-500/20 text-violet-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-primary)] px-3 py-2 text-xs font-medium text-[var(--text-secondary)]">
           <FiFileText size={12} />
-          PDF DOCUMENTATION
+          PDF report
         </div>
       </div>
 
-      {/* ── CENTRAL ACTION HUB (Download Section) ── */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="relative overflow-hidden rounded-[2.5rem] bg-[var(--surface-primary)] border border-[var(--border)] shadow-2xl p-8 sm:p-12 group"
+        className="relative overflow-hidden rounded-2xl border border-[#354152] bg-[#171b23] p-6 text-[#e9e7e0] shadow-[var(--shadow-panel)] sm:p-9"
       >
-        {/* Ambient Glow Elements */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-violet-500/10 blur-[100px] pointer-events-none group-hover:scale-110 transition-transform duration-700" />
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-blue-500/10 blur-[100px] pointer-events-none group-hover:scale-110 transition-transform duration-700" />
-
         <div className="relative flex flex-col lg:flex-row items-center justify-between gap-10">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
-            {/* Visual Anchor Icon */}
-            <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-tr from-violet-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-2xl shadow-violet-500/30 transform group-hover:rotate-6 transition-transform duration-500">
-              <FiFileText size={32} className="text-white" />
+            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-[#42516a] bg-[#222a36] text-[#76aaff]">
+              <FiFileText size={27} />
             </div>
             <div className="space-y-3">
-              <h2 className="text-2xl font-black text-[var(--text-primary)] uppercase tracking-tight">
-                Full Spectrum Export
+              <h2 className="text-2xl font-semibold tracking-tight text-[#e9e7e0]">
+                Financial report
               </h2>
-              <p className="text-sm font-medium text-[var(--text-muted)] leading-relaxed max-w-lg">
-                Compile and synchronize your entire financial history into a
-                cryptographic, human-readable PDF document spanning all vectors:
-                Inflow, Outflow, Strategic Budgets, and Automated Protocols.
+              <p className="max-w-lg text-sm leading-relaxed text-[#b2bbc7]">
+                Generate a PDF with the sections listed below. The report is
+                created from your account data when you request it.
               </p>
-              
-              {/* Feature Badges */}
-              <div className="flex flex-wrap justify-center sm:justify-start gap-3 pt-3">
+              <div className="flex flex-wrap justify-center gap-2 pt-2 sm:justify-start">
                 {[
-                  { icon: <FiCalendar size={12} />, text: "REAL-TIME SYNC" },
-                  { icon: <FiShield size={12} />, text: "AES-256 SECURE" },
-                  {
-                    icon: <FiCheckCircle size={12} />,
-                    text: "INSTANT COMPILER",
-                  },
-                ].map((badge, i) => (
+                  { icon: <FiCalendar size={12} />, text: "Account activity" },
+                  { icon: <FiShield size={12} />, text: "Private to your account" },
+                ].map((badge) => (
                   <span
-                    key={i}
-                    className="inline-flex items-center gap-2 text-[9px] font-black
-                                           text-[var(--text-muted)] bg-[var(--surface-secondary)]/50 border border-[var(--border)] px-3 py-1.5 rounded-full uppercase tracking-widest"
+                    key={badge.text}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#354152] bg-[#222a36] px-3 py-1.5 text-xs text-[#b2bbc7]"
                   >
                     {badge.icon}
                     {badge.text}
@@ -173,133 +165,83 @@ export const Reports = () => {
             </div>
           </div>
 
-          {/* TRIGGER MODULE (The Download Button) */}
+          <img
+            src={reportPreview}
+            alt=""
+            aria-hidden="true"
+            className="hidden h-36 w-44 flex-shrink-0 lg:block"
+          />
+
           <motion.button
             onClick={downloadReport}
             disabled={loading}
-            whileHover={!loading ? { scale: 1.05 } : {}}
-            whileTap={!loading ? { scale: 0.95 } : {}}
-            className={`flex-shrink-0 inline-flex items-center gap-3 px-10 py-5 rounded-3xl
-                        font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-2xl text-white
+            whileHover={!loading ? { y: -1 } : {}}
+            whileTap={!loading ? { scale: 0.98 } : {}}
+            className={`inline-flex flex-shrink-0 items-center gap-3 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors disabled:cursor-wait disabled:opacity-70
                         ${
                           downloaded
-                            ? "bg-gradient-to-r from-emerald-500 to-teal-600 shadow-emerald-500/40"
+                            ? "bg-[#45b889] text-[#10271f]"
                             : loading
-                              ? "bg-[var(--surface-tertiary)] cursor-wait text-[var(--text-muted)]"
-                              : "bg-gradient-to-r from-violet-600 to-blue-700 shadow-violet-600/40 hover:shadow-violet-600/60"
+                              ? "bg-[#354152] text-[#e9e7e0]"
+                              : "bg-[#3985ff] text-[#101a2b] hover:bg-[#5b9aff]"
                         }`}
           >
             {loading ? (
               <>
-                <FiRefreshCw size={18} className="animate-spin" /> Compiling...
+                <FiRefreshCw size={18} className="animate-spin" /> Preparing…
               </>
             ) : downloaded ? (
               <>
-                <FiCheckCircle size={18} /> Sync Complete
+                <FiCheckCircle size={18} /> Downloaded
               </>
             ) : (
               <>
-                <FiDownload size={18} /> Initiate Download
+                <FiDownload size={18} /> Download report
               </>
             )}
           </motion.button>
         </div>
       </motion.div>
 
-      {/* ── TELEMETRY BREAKDOWN (Feature Grid) ── */}
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shadow-inner">
-            <FiFileText size={16} className="text-violet-500" />
-          </div>
-          <div>
-            <h3 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">
-              Data Matrix Components
-            </h3>
-            <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-1">
-              Included Intelligence Modules
-            </p>
-          </div>
-        </div>
+      {error && (
+        <p role="alert" className="rounded-xl border border-rose-500/25 bg-rose-500/5 p-4 text-sm text-rose-600">
+          {error}
+        </p>
+      )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section aria-labelledby="report-sections-heading" className="max-w-4xl">
+        <div className="mb-2 border-b border-[var(--border)] pb-4">
+          <h3 id="report-sections-heading" className="text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+            What’s included
+          </h3>
+          <p className="mt-1 text-sm text-[var(--text-muted)]">
+            The report covers these areas of your finances.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2">
           {reportSections.map((section, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 + i * 0.05 }}
-              className="flex items-start gap-4 p-6 rounded-[2rem] bg-[var(--surface-primary)] border border-[var(--border)] hover:bg-[var(--surface-secondary)]/50 transition-all group border-dashed"
+              key={section.label}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04 }}
+              className="flex items-start gap-4 border-b border-[var(--border)] py-5"
             >
-              <div
-                className={`w-11 h-11 rounded-2xl border flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform ${section.bg}`}
-              >
+              <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border ${section.bg}`}>
                 <span className={section.color}>{section.icon}</span>
               </div>
               <div className="space-y-1">
-                <p className="text-xs font-black text-[var(--text-primary)] uppercase tracking-tight">
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
                   {section.label}
                 </p>
-                <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest leading-loose mt-1">
+                <p className="text-sm leading-relaxed text-[var(--text-muted)]">
                   {section.desc}
                 </p>
               </div>
             </motion.div>
           ))}
         </div>
-      </div>
-
-      {/* ── OPERATIONAL FLOW (Instructional Grid) ── */}
-      <div className="rounded-[2.5rem] bg-[var(--surface-secondary)]/30 border border-[var(--border)] p-8 sm:p-10 backdrop-blur-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/5 blur-[80px] pointer-events-none" />
-        <h3 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-[0.2em] mb-8 px-2">
-          Operational Protocol
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {[
-            {
-              step: "01",
-              title: "VECTOR TRIGGER",
-              desc: "Initiate the download command via the primary interface module.",
-              color: "text-violet-500",
-              bg: "bg-violet-500/10 border-violet-500/20",
-            },
-            {
-              step: "02",
-              title: "DATA SYNTHESIS",
-              desc: "System compiles historical telemetry into a structured document ledger.",
-              color: "text-blue-500",
-              bg: "bg-blue-500/10 border-blue-500/20",
-            },
-            {
-              step: "03",
-              title: "HARDWARE SYNC",
-              desc: "The synthesized document is securely transferred to your local hardware storage.",
-              color: "text-emerald-500",
-              bg: "bg-emerald-500/10 border-emerald-500/20",
-            },
-          ].map((s, i) => (
-            <div
-              key={i}
-              className="flex flex-col gap-4 p-6 rounded-[2rem] bg-[var(--surface-primary)]/50 border border-[var(--border)] relative group"
-            >
-              <div
-                className={`w-10 h-10 rounded-xl border flex items-center justify-center text-xs font-black ${s.bg} ${s.color} shadow-inner`}
-              >
-                {s.step}
-              </div>
-              <div className="space-y-1">
-                <p className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest">
-                  {s.title}
-                </p>
-                <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest leading-loose mt-1">
-                  {s.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      </section>
     </motion.div>
   );
 };

@@ -22,35 +22,89 @@ import { Signup } from "./Signup";
 // =============== USER COMPONENTS ===============
 // Everything a regular user needs to see and manage
 import { UserDashboardLayout } from "./components/User/UserDashboardLayout";
-import { UserDashboard } from "./components/User/UserDashboard";
+const lazyNamed = (loader, exportName) =>
+  lazy(() => loader().then((module) => ({ default: module[exportName] })));
+
+const UserDashboard = lazyNamed(
+  () => import("./components/User/UserDashboard"),
+  "UserDashboard",
+);
 const FinancialIntelligencePage = lazy(
   () => import("./components/User/FinancialIntelligencePage"),
 );
-const FinancialForecast = lazy(
+const FinancialForecast = lazyNamed(
   () => import("./components/User/FinancialForecast"),
+  "FinancialForecast",
 );
-const PurchaseIntelligence = lazy(
+const PurchaseIntelligence = lazyNamed(
   () => import("./components/User/PurchaseIntelligence"),
+  "PurchaseIntelligence",
 );
-const Bills = lazy(() => import("./components/User/Bills"));
-import { UserExpenses } from "./components/User/Expense/UserExpenses";
-import { UserBudget } from "./components/User/Budget/UserBudget";
-import { UserIncome } from "./components/User/Income/UserIncome";
-import { RecurringTransactions } from "./components/User/RecurringTransactions";
-import { Reports } from "./components/User/Reports";
-import { Transaction } from "./components/User/Transaction";
+const Bills = lazyNamed(
+  () => import("./components/User/Bills"),
+  "Bills",
+);
+const UserExpenses = lazyNamed(
+  () => import("./components/User/Expense/UserExpenses"),
+  "UserExpenses",
+);
+const UserBudget = lazyNamed(
+  () => import("./components/User/Budget/UserBudget"),
+  "UserBudget",
+);
+const UserIncome = lazyNamed(
+  () => import("./components/User/Income/UserIncome"),
+  "UserIncome",
+);
+const RecurringTransactions = lazyNamed(
+  () => import("./components/User/RecurringTransactions"),
+  "RecurringTransactions",
+);
+const Reports = lazyNamed(
+  () => import("./components/User/Reports"),
+  "Reports",
+);
+const Transaction = lazyNamed(
+  () => import("./components/User/Transaction"),
+  "Transaction",
+);
+const Account = lazyNamed(
+  () => import("./components/Admin/Account"),
+  "Account",
+);
+
+const AdminDashboard = lazyNamed(
+  () => import("./components/Admin/AdminDashboard"),
+  "AdminDashboard",
+);
+const AccessControl = lazyNamed(
+  () => import("./components/Admin/AccessControl"),
+  "AccessControl",
+);
+const ManageCategories = lazyNamed(
+  () => import("./components/Admin/ManageCategories"),
+  "ManageCategories",
+);
+const ManageUsers = lazyNamed(
+  () => import("./components/Admin/ManageUsers"),
+  "ManageUsers",
+);
+const ReportAdmins = lazyNamed(
+  () => import("./components/Admin/ReportAdmins"),
+  "ReportAdmins",
+);
+const Systemlog = lazyNamed(
+  () => import("./components/Admin/Systemlog"),
+  "Systemlog",
+);
+const UserDetails = lazyNamed(
+  () => import("./components/Admin/UserDetails"),
+  "UserDetails",
+);
 
 // =============== ADMIN COMPONENTS ===============
 // Management tools reserved for administrative accounts
 import { AdminDashboardLayout } from "./components/Admin/AdminDashboardLayout";
-import { AdminDashboard } from "./components/Admin/AdminDashboard";
-import { AccessControl } from "./components/Admin/AccessControl";
-import { ManageCategories } from "./components/Admin/ManageCategories";
-import { ManageUsers } from "./components/Admin/ManageUsers";
-import { ReportAdmins } from "./components/Admin/ReportAdmins";
-import { Systemlog } from "./components/Admin/Systemlog";
-import { UserDetails } from "./components/Admin/UserDetails";
-import { Account } from "./components/Admin/Account";
 
 /**
  * --- MAIN APPLICATION COMPONENT ---
@@ -68,7 +122,7 @@ function App() {
       document.body.className = "auth-page";
     } else if (path.startsWith("/admin")) {
       document.body.className = "admin-layout";
-    } else if (path.startsWith("/user")) {
+    } else if (path.startsWith("/private")) {
       document.body.className = "user-layout";
     } else {
       document.body.className = "public-layout";
@@ -83,6 +137,7 @@ function App() {
       */}
       <GlobalLoader />
 
+      <Suspense fallback={<div role="status" className="p-6 text-sm text-[var(--text-muted)]">Loading page…</div>}>
       <Routes>
         {/* --- PUBLIC AREA --- */}
         <Route element={<PublicLayout />}>
@@ -141,6 +196,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      </Suspense>
     </>
   );
 }

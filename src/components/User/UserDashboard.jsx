@@ -26,6 +26,7 @@ import {
 } from "recharts";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import { fetchBudgetData } from "../../redux/budget/budgetSlice";
 import { fetchIncomeData } from "../../redux/income/incomeSlice";
 import { fetchAllExpenses } from "../../redux/expense/expenseSlice";
@@ -44,9 +45,10 @@ import {
   FiClock,
   FiRefreshCw,
   FiActivity,
-  FiDollarSign,
   FiShield,
   FiInbox,
+  FiPlus,
+  FiArrowUpRight,
 } from "react-icons/fi";
 import LoadingSpinner from "../Common/LoadingSpinner";
 
@@ -66,81 +68,16 @@ import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 
 const COLORS = [
-  "#06b6d4",
-  "#3b82f6",
-  "#10b981",
-  "#f59e0b",
-  "#ef4444",
-  "#8b5cf6",
-  "#ec4899",
+  "#3985ff",
+  "#45b889",
+  "#e8b66b",
+  "#f07870",
+  "#a9c8f5",
+  "#8297b7",
+  "#4d74ad",
 ];
 
 // --- SUB-COMPONENTS (ATOMIC UI) ---
-
-/* ─── Metric Card ─── */
-const MetricCard = memo(({ title, value, icon, color, bg, border, glow }) => (
-  <Card
-    component={motion.div}
-    whileHover={{ y: -4 }}
-    sx={{
-      position: "relative",
-      overflow: "hidden",
-      borderRadius: 4,
-      border: 1,
-      borderColor: border || "divider",
-      bgcolor: "background.paper",
-      boxShadow: 2,
-    }}
-  >
-    <Box
-      sx={{
-        position: "absolute",
-        top: -40,
-        right: -40,
-        width: 96,
-        height: 96,
-        borderRadius: "50%",
-        filter: "blur(48px)",
-        bgcolor: glow || "primary.main",
-        opacity: 0.1,
-      }}
-    />
-    <CardContent sx={{ p: 3 }}>
-      <Avatar
-        sx={{
-          width: 40,
-          height: 40,
-          borderRadius: 3,
-          bgcolor: bg || "action.hover",
-          color: color || "primary.main",
-          border: 1,
-          borderColor: border || "divider",
-          mb: 2,
-        }}
-      >
-        {icon}
-      </Avatar>
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-        }}
-      >
-        {title}
-      </Typography>
-      <Typography
-        variant="h5"
-        sx={{ fontWeight: "black", mt: 0.5, color: color }}
-      >
-        ₹{value.toLocaleString("en-IN")}
-      </Typography>
-    </CardContent>
-  </Card>
-));
-MetricCard.displayName = "MetricCard";
 
 /* ─── AI Card ─── */
 const AICard = memo(
@@ -149,18 +86,22 @@ const AICard = memo(
     icon,
     iconColor,
     iconBg,
-    borderColor,
     children,
     isLoading,
     onRefresh,
   }) => (
     <Card
       sx={{
-        borderRadius: 5,
+        borderRadius: 4,
         bgcolor: "background.paper",
         border: 1,
-        borderColor: borderColor || "divider",
-        boxShadow: 3,
+        borderColor: "divider",
+        boxShadow: "0 8px 26px rgba(26, 39, 57, 0.045)",
+        transition: "transform 180ms ease, box-shadow 180ms ease",
+        "&:hover": {
+          transform: "translateY(-2px)",
+          boxShadow: "0 14px 34px rgba(26, 39, 57, 0.085)",
+        },
       }}
     >
       <Stack
@@ -169,22 +110,20 @@ const AICard = memo(
         alignItems="center"
         sx={{
           px: 3,
-          py: 2,
+          py: 2.25,
           borderBottom: 1,
-          borderColor: borderColor || "divider",
-          bgcolor: "action.hover",
+          borderColor: "divider",
+          bgcolor: "transparent",
         }}
       >
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
             sx={{
-              width: 36,
-              height: 36,
-              borderRadius: 3,
+              width: 40,
+              height: 40,
+              borderRadius: 2.5,
               bgcolor: iconBg || "action.hover",
               color: iconColor || "primary.main",
-              border: 1,
-              borderColor: "divider",
             }}
           >
             {icon}
@@ -192,21 +131,9 @@ const AICard = memo(
           <Box>
             <Typography
               variant="subtitle2"
-              sx={{ fontWeight: "bold", color: "text.primary" }}
+              sx={{ fontWeight: 700, color: "text.primary" }}
             >
               {title}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{
-                fontSize: "9px",
-                fontWeight: "bold",
-                tracking: "0.1em",
-                textTransform: "uppercase",
-              }}
-            >
-              Automated Intelligence
             </Typography>
           </Box>
         </Stack>
@@ -215,11 +142,16 @@ const AICard = memo(
             size="small"
             onClick={onRefresh}
             disabled={isLoading}
+            aria-label={`Refresh ${title}`}
             sx={{
               color: "text.secondary",
+              border: 1,
+              borderColor: "divider",
+              width: 34,
+              height: 34,
               "&:hover": {
-                color: "cyan.main",
-                bgcolor: "rgba(6, 182, 212, 0.1)",
+                color: "primary.main",
+                bgcolor: "action.hover",
               },
             }}
           >
@@ -230,7 +162,9 @@ const AICard = memo(
           </IconButton>
         )}
       </Stack>
-      <CardContent sx={{ p: 3 }}>{children}</CardContent>
+      <CardContent sx={{ p: 3, minHeight: 132, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        {children}
+      </CardContent>
     </Card>
   ),
 );
@@ -244,22 +178,23 @@ const AIButton = ({ onClick, label, color, icon = <FiZap size={14} /> }) => (
     startIcon={icon}
     sx={{
       py: 1,
-      px: 3,
-      borderRadius: 3,
-      fontWeight: "bold",
+      px: 2.25,
+      borderRadius: 2.5,
+      fontWeight: 700,
       textTransform: "none",
-      boxShadow: 2,
-      background:
+      boxShadow: "none",
+      backgroundColor:
         color === "bg-rose-500 text-white hover:bg-rose-600"
-          ? "linear-gradient(to right, #f43f5e, #e11d48)"
+          ? "#f07870"
           : color === "bg-violet-500 text-white hover:bg-violet-600"
-            ? "linear-gradient(to right, #8b5cf6, #7c3aed)"
+            ? "#3985ff"
             : color === "bg-cyan-500 text-white hover:bg-cyan-600"
-              ? "linear-gradient(to right, #06b6d4, #0891b2)"
+              ? "#3985ff"
               : color === "bg-blue-500 text-white hover:bg-blue-600"
-                ? "linear-gradient(to right, #3b82f6, #2563eb)"
-                : "linear-gradient(to right, #10b981, #059669)",
-      color: "white",
+                ? "#3985ff"
+                : "#45b889",
+      color: "#fff",
+      "&:hover": { filter: "brightness(1.08)", boxShadow: "none" },
     }}
   >
     {label}
@@ -282,19 +217,6 @@ const AIResult = ({ content }) => (
       overflow: "hidden",
     }}
   >
-    <Box
-      sx={{
-        position: "absolute",
-        top: 0,
-        right: 0,
-        width: 128,
-        height: 128,
-        bgcolor: "cyan.main",
-        opacity: 0.05,
-        filter: "blur(48px)",
-        pointerEvents: "none",
-      }}
-    />
     <Box
       sx={{
         color: "text.secondary",
@@ -548,6 +470,10 @@ export const UserDashboard = () => {
   const netSavings = totalIncome - totalExpenses;
   const savingsRate =
     totalIncome > 0 ? Math.round((netSavings / totalIncome) * 100) : 0;
+  const hasActivity = income.length > 0 || expenses.length > 0;
+  const hasFinancialData = hasActivity || budget.length > 0;
+  const formatCurrency = (amount) =>
+    `₹${Number(amount || 0).toLocaleString("en-IN")}`;
 
   // --- ANALYTICS DATA PROCESSING ---
 
@@ -615,214 +541,284 @@ export const UserDashboard = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      sx={{ display: "flex", flexDirection: "column", gap: 5 }}
+      sx={{ display: "flex", flexDirection: "column", gap: { xs: 3, md: 4 } }}
     >
-      {/* ══ HEADER ══ */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "flex-end" }}
-        spacing={2}
+        alignItems={{ xs: "stretch", sm: "center" }}
+        spacing={2.5}
       >
         <Box>
           <Typography
-            variant="h4"
-            sx={{
-              fontWeight: "black",
-              background:
-                "linear-gradient(to right, var(--text-primary), var(--text-secondary))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+            variant="overline"
+            sx={{ color: "primary.main", fontWeight: 800, letterSpacing: "0.14em" }}
           >
-            Intelligence Hub
+            FINANCIAL WORKSPACE
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              mt: 0.5,
-              letterSpacing: "0.1em",
-            }}
-          >
+          <Typography component="h1" variant="h4" sx={{ fontWeight: 750, letterSpacing: "-0.045em", mt: 0.25 }}>
+            Overview
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
             {new Date().toLocaleDateString("en-IN", {
               weekday: "long",
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
+            {" · "}A clear view of your money, all in one place.
           </Typography>
         </Box>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={1}
-          sx={{
-            px: 2,
-            py: 1,
-            borderRadius: 4,
-            border: 1,
-            borderColor:
-              savingsRate >= 20
-                ? "rgba(16, 185, 129, 0.2)"
-                : "rgba(244, 63, 94, 0.2)",
-            bgcolor:
-              savingsRate >= 20
-                ? "rgba(16, 185, 129, 0.05)"
-                : "rgba(244, 63, 94, 0.05)",
-            color: savingsRate >= 20 ? "success.main" : "error.main",
-          }}
-        >
-          <FiActivity size={14} />
-          <Typography
-            variant="caption"
-            sx={{ fontWeight: "black", letterSpacing: "0.1em" }}
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25}>
+          <Button
+            component={RouterLink}
+            to="/private/income"
+            variant="contained"
+            startIcon={<FiPlus />}
+            sx={{
+              px: 2.25,
+              py: 1.15,
+              borderRadius: 2.5,
+              textTransform: "none",
+              fontWeight: 700,
+              boxShadow: "0 8px 18px rgba(57, 133, 255, 0.2)",
+            }}
           >
-            EFFICIENCY: {savingsRate}%
-          </Typography>
+            Add income
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/private/expenses"
+            variant="outlined"
+            startIcon={<FiPlus />}
+            sx={{
+              px: 2.25,
+              py: 1.15,
+              borderRadius: 2.5,
+              textTransform: "none",
+              fontWeight: 700,
+              borderColor: "divider",
+              bgcolor: "background.paper",
+            }}
+          >
+            Add expense
+          </Button>
         </Stack>
       </Stack>
 
-      {/* ══ METRIC CARDS ══ */}
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <MetricCard
-            title="Total Budget"
-            value={totalBudget}
-            icon={<FiTarget size={18} />}
-            color="cyan.main"
-            bg="rgba(6, 182, 212, 0.1)"
-            border="rgba(6, 182, 212, 0.2)"
-            glow="cyan.main"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <MetricCard
-            title="Total Income"
-            value={totalIncome}
-            icon={<FiTrendingUp size={18} />}
-            color="success.main"
-            bg="rgba(16, 185, 129, 0.1)"
-            border="rgba(16, 185, 129, 0.2)"
-            glow="success.main"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <MetricCard
-            title="Total Expenses"
-            value={totalExpenses}
-            icon={<FiTrendingDown size={18} />}
-            color="error.main"
-            bg="rgba(244, 63, 94, 0.1)"
-            border="rgba(244, 63, 94, 0.2)"
-            glow="error.main"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <Card
-            sx={{
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: 4,
-              border: 1,
-              borderColor:
-                netSavings >= 0
-                  ? "rgba(59, 130, 246, 0.2)"
-                  : "rgba(244, 63, 94, 0.2)",
-              bgcolor:
-                netSavings >= 0
-                  ? "rgba(59, 130, 246, 0.05)"
-                  : "rgba(244, 63, 94, 0.05)",
-              boxShadow: 2,
-            }}
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: -40,
-                right: -40,
-                width: 96,
-                height: 96,
-                borderRadius: "50%",
-                filter: "blur(48px)",
-                bgcolor: netSavings >= 0 ? "primary.main" : "error.main",
-                opacity: 0.1,
-              }}
-            />
-            <CardContent sx={{ p: 3 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-                sx={{ mb: 2 }}
-              >
-                <Avatar
+      <Card
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          borderRadius: 4,
+          border: "1px solid rgba(123, 164, 230, 0.22)",
+          background:
+            "radial-gradient(circle at 85% 12%, rgba(95, 151, 255, 0.22), transparent 30%), linear-gradient(116deg, #151d2a 0%, #1c2b41 56%, #263f64 100%)",
+          color: "#f5f8ff",
+          boxShadow: "0 22px 48px rgba(25, 42, 66, 0.16)",
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            width: 280,
+            height: 280,
+            right: -120,
+            bottom: -180,
+            borderRadius: "50%",
+            border: "1px solid rgba(194, 216, 255, 0.15)",
+            boxShadow: "0 0 0 28px rgba(194, 216, 255, 0.025), 0 0 0 58px rgba(194, 216, 255, 0.02)",
+            pointerEvents: "none",
+          },
+        }}
+      >
+        <CardContent sx={{ position: "relative", zIndex: 1, p: { xs: 2.5, sm: 4 } }}>
+          <Grid container spacing={{ xs: 3, md: 5 }} alignItems="center">
+            <Grid size={{ xs: 12, md: 7 }}>
+              <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2.5 }}>
+                <Box sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "#8bc2ff", boxShadow: "0 0 0 5px rgba(139, 194, 255, 0.13)" }} />
+                <Typography variant="overline" sx={{ color: "#b9d5ff", fontWeight: 700, letterSpacing: "0.13em" }}>
+                  YOUR FINANCIAL SNAPSHOT
+                </Typography>
+              </Stack>
+              <Typography variant="h5" sx={{ color: "#fff", fontWeight: 600, letterSpacing: "-0.025em" }}>
+                Your money, in focus.
+              </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(235, 242, 255, 0.68)", mt: 0.75, maxWidth: 430, lineHeight: 1.7 }}>
+                A thoughtful overview of income, spending and the plans you’re building.
+              </Typography>
+
+              <Box sx={{ mt: { xs: 3, sm: 4 } }}>
+                <Typography variant="caption" sx={{ color: "rgba(235, 242, 255, 0.65)", fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase" }}>
+                  Net cash flow
+                </Typography>
+                <Typography
+                  variant="h3"
                   sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 3,
-                    bgcolor:
-                      netSavings >= 0
-                        ? "rgba(59, 130, 246, 0.1)"
-                        : "rgba(244, 63, 94, 0.1)",
-                    color: netSavings >= 0 ? "primary.main" : "error.main",
-                    border: 1,
-                    borderColor: "divider",
+                    color: hasActivity ? (netSavings >= 0 ? "#a9d8c3" : "#ffaaa4") : "#f5f8ff",
+                    fontWeight: 700,
+                    letterSpacing: "-0.055em",
+                    fontVariantNumeric: "tabular-nums",
+                    fontSize: { xs: "2.5rem", sm: "3.2rem" },
+                    mt: 0.5,
                   }}
                 >
-                  <FiDollarSign size={18} />
-                </Avatar>
-                <Chip
-                  label={netSavings >= 0 ? "Surplus" : "Deficit"}
-                  size="small"
-                  sx={{
-                    fontSize: "9px",
-                    fontWeight: "black",
-                    textTransform: "uppercase",
-                    color: netSavings >= 0 ? "success.main" : "error.main",
-                    bgcolor:
-                      netSavings >= 0
-                        ? "rgba(16, 185, 129, 0.1)"
-                        : "rgba(244, 63, 94, 0.1)",
-                    border: 1,
-                    borderColor: "divider",
-                  }}
-                />
-              </Stack>
-              <Typography
-                variant="caption"
-                color="text.secondary"
+                  {hasActivity ? `${netSavings < 0 ? "−" : ""}${formatCurrency(Math.abs(netSavings))}` : "—"}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "rgba(235, 242, 255, 0.62)", mt: 0.75 }}>
+                  {hasActivity
+                    ? `${formatCurrency(totalIncome)} income · ${formatCurrency(totalExpenses)} expenses`
+                    : "Record your first transaction to see your cash flow here."}
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 5 }}>
+              <Box
+                role={hasActivity ? "img" : undefined}
+                aria-label={hasActivity ? `Recorded cash flow: income ${formatCurrency(totalIncome)}, expenses ${formatCurrency(totalExpenses)}` : undefined}
                 sx={{
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
+                  p: { xs: 2.25, sm: 2.75 },
+                  borderRadius: 3,
+                  border: "1px solid rgba(226, 237, 255, 0.12)",
+                  bgcolor: "rgba(9, 17, 29, 0.24)",
+                  backdropFilter: "blur(10px)",
                 }}
               >
-                Liquidity Position
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: "black",
-                  mt: 0.5,
-                  color: netSavings >= 0 ? "primary.main" : "error.main",
-                }}
-              >
-                ₹{Math.abs(netSavings).toLocaleString("en-IN")}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2.25 }}>
+                  <Typography variant="subtitle2" sx={{ color: "#f5f8ff", fontWeight: 700 }}>
+                    Cash flow
+                  </Typography>
+                  {hasActivity && (
+                    <Chip
+                      size="small"
+                      icon={<FiActivity size={13} />}
+                      label={`${savingsRate}% saved`}
+                      sx={{
+                        height: 27,
+                        color: "#c4e7d4",
+                        bgcolor: "rgba(94, 183, 135, 0.12)",
+                        border: "1px solid rgba(146, 218, 180, 0.2)",
+                        "& .MuiChip-icon": { color: "inherit", ml: 1 },
+                        "& .MuiChip-label": { px: 1, fontSize: 11, fontWeight: 700 },
+                      }}
+                    />
+                  )}
+                </Stack>
+                {hasActivity ? (
+                  <Stack spacing={2}>
+                    {[
+                      { label: "Income", value: totalIncome, color: "#70d5aa" },
+                      { label: "Expenses", value: totalExpenses, color: "#ff9289" },
+                    ].map((item) => (
+                      <Box key={item.label}>
+                        <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.8 }}>
+                          <Typography variant="caption" sx={{ color: "rgba(235, 242, 255, 0.72)", fontWeight: 600 }}>
+                            {item.label}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: "#f5f8ff", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
+                            {formatCurrency(item.value)}
+                          </Typography>
+                        </Stack>
+                        <Box sx={{ height: 7, borderRadius: 99, bgcolor: "rgba(238, 244, 255, 0.09)", overflow: "hidden" }}>
+                          <Box
+                            sx={{
+                              width: `${item.value > 0 ? Math.max((item.value / Math.max(totalIncome, totalExpenses)) * 100, 4) : 0}%`,
+                              height: "100%",
+                              borderRadius: "inherit",
+                              bgcolor: item.color,
+                              transition: "width 300ms ease",
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                    ))}
+                    <Typography variant="caption" sx={{ color: "rgba(235, 242, 255, 0.46)", pt: 0.25 }}>
+                      Totals across your recorded transactions
+                    </Typography>
+                  </Stack>
+                ) : (
+                  <Box sx={{ py: 1.5 }}>
+                    <Box aria-hidden="true" sx={{ display: "flex", alignItems: "flex-end", gap: 0.75, height: 38, mb: 1.5 }}>
+                      {[18, 30, 23, 38, 27, 34, 22].map((height, index) => (
+                        <Box key={index} sx={{ flex: 1, height, borderRadius: "4px 4px 2px 2px", bgcolor: "rgba(170, 202, 255, 0.22)" }} />
+                      ))}
+                    </Box>
+                    <Typography variant="body2" sx={{ color: "rgba(235, 242, 255, 0.75)", lineHeight: 1.6 }}>
+                      Your cash-flow view will take shape as you add activity.
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <Grid container spacing={2}>
+        {[
+          { label: "Income received", value: totalIncome, icon: <FiTrendingUp size={18} />, color: "#348e6b", bg: "rgba(69, 184, 137, 0.11)", note: "Across recorded entries" },
+          { label: "Expenses tracked", value: totalExpenses, icon: <FiTrendingDown size={18} />, color: "#d65f5a", bg: "rgba(240, 120, 112, 0.11)", note: "Across recorded entries" },
+          { label: "Budget planned", value: totalBudget, icon: <FiTarget size={18} />, color: "#3985ff", bg: "rgba(57, 133, 255, 0.11)", note: "Across your budgets" },
+        ].map((item) => (
+          <Grid size={{ xs: 12, sm: 4 }} key={item.label}>
+            <Card
+              sx={{
+                height: "100%",
+                borderRadius: 3,
+                border: 1,
+                borderColor: "divider",
+                boxShadow: "0 6px 20px rgba(26, 39, 57, 0.035)",
+                transition: "transform 180ms ease, box-shadow 180ms ease",
+                "&:hover": { transform: "translateY(-2px)", boxShadow: "0 12px 26px rgba(26, 39, 57, 0.07)" },
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+                      {item.label}
+                    </Typography>
+                    <Typography variant="h5" sx={{ mt: 1.1, fontWeight: 750, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums" }}>
+                      {hasFinancialData ? formatCurrency(item.value) : "—"}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.65 }}>
+                      {hasFinancialData ? item.note : "Add a record to get started"}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ width: 42, height: 42, display: "grid", placeItems: "center", borderRadius: 2.5, color: item.color, bgcolor: item.bg }}>
+                    {item.icon}
+                  </Box>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
 
-      {/* ══ AI ENGINE ══ */}
+      <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "flex-end" }} spacing={1}>
+        <Box>
+          <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: "-0.025em" }}>
+            Insights & planning
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.4 }}>
+            Helpful tools when you’re ready to take a closer look.
+          </Typography>
+        </Box>
+        <Button
+          component={RouterLink}
+          to="/private/financial-intelligence"
+          size="small"
+          endIcon={<FiArrowUpRight size={15} />}
+          sx={{ px: 1.25, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+        >
+          Explore intelligence
+        </Button>
+      </Stack>
+
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="Spending Risk Analysis"
+            title="Spending risk"
             icon={<FiAlertTriangle size={15} />}
             iconColor="error.main"
             iconBg="rgba(244, 63, 94, 0.1)"
@@ -834,7 +830,7 @@ export const UserDashboard = () => {
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
                 <LoadingSpinner
                   color="error"
-                  label="Scanning transactions..."
+                  label="Reviewing transactions..."
                 />
               </Box>
             ) : riskData ? (
@@ -864,7 +860,7 @@ export const UserDashboard = () => {
                     Behavior Assessment
                   </Typography>
                   <Chip
-                    label={`${riskData.riskLevel} Criticality`}
+                    label={`Risk: ${riskData.riskLevel}`}
                     size="small"
                     sx={{
                       fontWeight: "bold",
@@ -936,12 +932,11 @@ export const UserDashboard = () => {
                   color="text.secondary"
                   sx={{ maxW: "80%" }}
                 >
-                  Run the advanced risk engine to detect anomalies in your
-                  spending patterns.
+                  Review recent activity for unusual spending patterns.
                 </Typography>
                 <AIButton
                   onClick={fetchRisk}
-                  label="Initiate Scan"
+                  label="Review spending"
                   color="bg-rose-500 text-white hover:bg-rose-600"
                 />
               </Stack>
@@ -951,7 +946,7 @@ export const UserDashboard = () => {
 
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="Financial Health Quotient"
+            title="Financial health"
             icon={<FiShield size={16} />}
             iconColor="secondary.main"
             iconBg="rgba(139, 92, 246, 0.1)"
@@ -963,7 +958,7 @@ export const UserDashboard = () => {
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
                 <LoadingSpinner
                   color="secondary"
-                  label="Calculating health score..."
+                  label="Reviewing financial health..."
                 />
               </Box>
             ) : healthScore ? (
@@ -980,12 +975,11 @@ export const UserDashboard = () => {
                   color="text.secondary"
                   sx={{ maxW: "80%" }}
                 >
-                  Audit your wealth efficiency based on income vs outcome
-                  ratios.
+                  Review your income, expenses, and available budget data.
                 </Typography>
                 <AIButton
                   onClick={fetchHealthScore}
-                  label="Compute Quotient"
+                  label="Check health"
                   color="bg-violet-500 text-white hover:bg-violet-600"
                 />
               </Stack>
@@ -995,7 +989,7 @@ export const UserDashboard = () => {
 
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="Structural Insights"
+            title="Spending patterns"
             icon={<FiBarChart2 size={16} />}
             iconColor="cyan.main"
             iconBg="rgba(6, 182, 212, 0.1)"
@@ -1007,7 +1001,7 @@ export const UserDashboard = () => {
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
                 <LoadingSpinner
                   color="primary"
-                  label="Extracting patterns..."
+                  label="Analyzing spending..."
                 />
               </Box>
             ) : expenseInsights ? (
@@ -1024,12 +1018,11 @@ export const UserDashboard = () => {
                   color="text.secondary"
                   sx={{ maxW: "80%" }}
                 >
-                  Uncover hidden correlations and structural flaws in your
-                  financial data.
+                  Compare recent spending by category and over time.
                 </Typography>
                 <AIButton
                   onClick={fetchExpenseInsights}
-                  label="Uncover Insights"
+                  label="Analyze patterns"
                   color="bg-cyan-500 text-white hover:bg-cyan-600"
                 />
               </Stack>
@@ -1039,7 +1032,7 @@ export const UserDashboard = () => {
 
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="AI Predictive Projection"
+            title="Cash-flow forecast"
             icon={<FiTrendingUp size={16} />}
             iconColor="primary.main"
             iconBg="rgba(59, 130, 246, 0.1)"
@@ -1049,7 +1042,7 @@ export const UserDashboard = () => {
           >
             {loadingForecast ? (
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-                <LoadingSpinner color="primary" label="Modeling future..." />
+                <LoadingSpinner color="primary" label="Preparing forecast..." />
               </Box>
             ) : forecast ? (
               <AIResult content={forecast} />
@@ -1065,12 +1058,11 @@ export const UserDashboard = () => {
                   color="text.secondary"
                   sx={{ maxW: "80%" }}
                 >
-                  Generate a 3-month trajectory forecast using machine learning
-                  models.
+                  Estimate the next three months using your available financial data.
                 </Typography>
                 <AIButton
                   onClick={fetchForecast}
-                  label="Render Forecast"
+                  label="Generate forecast"
                   color="bg-blue-500 text-white hover:bg-blue-600"
                 />
               </Stack>
@@ -1080,7 +1072,7 @@ export const UserDashboard = () => {
 
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="Optimization Protocol"
+            title="Savings suggestions"
             icon={<FiZap size={16} />}
             iconColor="success.main"
             iconBg="rgba(16, 185, 129, 0.1)"
@@ -1090,7 +1082,7 @@ export const UserDashboard = () => {
           >
             {loadingSavings ? (
               <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-                <LoadingSpinner color="success" label="Optimizing surplus..." />
+                <LoadingSpinner color="success" label="Preparing suggestions..." />
               </Box>
             ) : savingOpportunities ? (
               <AIResult content={savingOpportunities} />
@@ -1111,7 +1103,7 @@ export const UserDashboard = () => {
                 </Typography>
                 <AIButton
                   onClick={fetchSavingOpportunities}
-                  label="Run Optimization"
+                  label="View suggestions"
                   color="bg-emerald-500 text-white hover:bg-emerald-600"
                 />
               </Stack>
@@ -1122,7 +1114,7 @@ export const UserDashboard = () => {
         {/* ── AI Chat Assistant ── */}
         <Grid size={{ xs: 12, md: 6 }}>
           <AICard
-            title="Cognitive Assistant"
+            title="Financial assistant"
             icon={<FiCpu size={16} />}
             iconColor="warning.main"
             iconBg="rgba(245, 158, 11, 0.1)"
@@ -1167,7 +1159,7 @@ export const UserDashboard = () => {
                       letterSpacing: "0.1em",
                     }}
                   >
-                    Awaiting telemetry...
+                    No conversation yet
                   </Typography>
                 </Stack>
               )}
@@ -1248,7 +1240,7 @@ export const UserDashboard = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Query financial state..."
+                placeholder="Ask a question about your finances…"
                 slotProps={{
                   input: {
                     sx: { borderRadius: 3, fontSize: "0.8rem" },
@@ -1343,7 +1335,7 @@ export const UserDashboard = () => {
                   </Avatar>
                   <Box>
                     <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                      Velocity Analytics
+                      Spending trend
                     </Typography>
                     <Typography
                       variant="caption"
@@ -1354,7 +1346,7 @@ export const UserDashboard = () => {
                         letterSpacing: "0.1em",
                       }}
                     >
-                      30-Day Outflow Trajectory
+                      Expenses over the last 30 days
                     </Typography>
                   </Box>
                 </Stack>
@@ -1798,7 +1790,7 @@ export const UserDashboard = () => {
             </Avatar>
             <Box>
               <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Intelligence Log
+                Recent insights
               </Typography>
               <Typography
                 variant="caption"
@@ -1809,7 +1801,7 @@ export const UserDashboard = () => {
                   letterSpacing: "0.1em",
                 }}
               >
-                Historical Telemetry
+                Analysis history
               </Typography>
             </Box>
           </Stack>
@@ -1824,7 +1816,7 @@ export const UserDashboard = () => {
                 borderRadius: 3,
               }}
             >
-              Sync Logs
+              Refresh history
             </Button>
           )}
         </Stack>
@@ -1869,15 +1861,14 @@ export const UserDashboard = () => {
                   letterSpacing: "0.1em",
                 }}
               >
-                No active telemetry available
+                No saved insights yet
               </Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
                 sx={{ maxW: 280, mx: "auto", mt: 0.5 }}
               >
-                Trigger AI modules to populate your historical intelligence
-                ledger.
+                Results from your analyses will appear here.
               </Typography>
             </Box>
           </Stack>

@@ -1,38 +1,28 @@
 :root {
-  --bg: #f8fafc; /* Slate 50 */
-
-  --surface-primary: #ffffff;
-  --surface-secondary: #f1f5f9; /* Slate 100 */
-  --surface-tertiary: #e2e8f0; /* Slate 200 */
-
-  --text-primary: #0f172a; /* Slate 900 */
-  --text-secondary: #334155; /* Slate 700 */
-
-  /* slightly darker for readability */
-  --text-muted: #64748b; /* Slate 500 */
-
-  --border: #e2e8f0; /* Slate 200 */
-
-  --primary: #06b6d4;
-
-  /* COMPATIBILITY (critical) */
+  --bg: var(--background);
   --text: var(--text-primary);
   --muted: var(--text-secondary);
   --card: var(--surface-primary);
+  --primary: var(--accent-lavender);
 }
 
-.dark {
-  --bg: #0f1115;
+html {
+  min-width: 320px;
+  background: var(--background);
+  color-scheme: light;
+}
 
-  --surface-primary: #111318;
-  --surface-secondary: #151922;
-  --surface-tertiary: #1c2230;
+html.dark {
+  color-scheme: dark;
+}
 
-  --text-primary: #ffffff;
-  --text-secondary: #cbd5f5;
-  --text-muted: #94a3b8;
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-primary);
+}
 
-  --border: rgba(255, 255, 255, 0.08);
-
-  --primary: #06b6d4;
+::selection {
+  background: color-mix(in srgb, var(--accent-lavender) 22%, transparent);
 }

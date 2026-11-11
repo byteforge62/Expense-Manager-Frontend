@@ -1,5 +1,5 @@
+import { Fragment, useState } from "react";
 import { useLocation, Outlet, Link as RouterLink } from "react-router-dom";
-import { useState } from "react";
 import {
   FiLogOut,
   FiMenu,
@@ -18,6 +18,7 @@ import {
 } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
+import fintrackMark from "../../assets/brand/fintrack-mark.svg";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -43,39 +44,45 @@ import ListItemText from "@mui/material/ListItemText";
  */
 const navTabs = [
   {
-    label: "Matrix",
+    label: "Overview",
+    section: "Workspace",
     path: "/private/userdashboard",
     icon: <FiBarChart2 size={16} />,
   },
   {
-    label: "Intelligence",
-    path: "/private/financial-intelligence",
-    icon: <FiBarChart2 size={16} />,
-  },
-  {
-    label: "Inflow",
+    label: "Income",
+    section: "Money",
     path: "/private/income",
     icon: <FiTrendingUp size={16} />,
   },
   {
-    label: "Outflow",
+    label: "Expenses",
+    section: "Money",
     path: "/private/expenses",
     icon: <FiTrendingDown size={16} />,
   },
-  { label: "Flows", path: "/private/recurring", icon: <FiRepeat size={16} /> },
-  { label: "Budgets", path: "/private/budget", icon: <FiTarget size={16} /> },
-  { label: "Bills", path: "/private/bills", icon: <FiCalendar size={16} /> },
-  { label: "Forecast", path: "/private/forecast", icon: <FiTrendingUp size={16} /> },
-  { label: "Purchases", path: "/private/purchases", icon: <FiShoppingBag size={16} /> },
   {
-    label: "Reports",
-    path: "/private/reports",
-    icon: <FiFileText size={16} />,
-  },
-  {
-    label: "History",
+    label: "Transactions",
+    section: "Money",
     path: "/private/transactions",
     icon: <FiList size={16} />,
+  },
+  { label: "Recurring", section: "Planning", path: "/private/recurring", icon: <FiRepeat size={16} /> },
+  { label: "Budgets", section: "Planning", path: "/private/budget", icon: <FiTarget size={16} /> },
+  { label: "Bills", section: "Planning", path: "/private/bills", icon: <FiCalendar size={16} /> },
+  { label: "Forecast", section: "Planning", path: "/private/forecast", icon: <FiTrendingUp size={16} /> },
+  { label: "Purchases", section: "Planning", path: "/private/purchases", icon: <FiShoppingBag size={16} /> },
+  {
+    label: "Intelligence",
+    section: "Analysis",
+    path: "/private/financial-intelligence",
+    icon: <FiBarChart2 size={16} />,
+  },
+  {
+    label: "Reports",
+    section: "Analysis",
+    path: "/private/reports",
+    icon: <FiFileText size={16} />,
   },
 ];
 
@@ -95,63 +102,69 @@ export const UserDashboardLayout = () => {
   };
 
   const drawerContent = (
-    <Box sx={{ width: 260, bgcolor: "background.paper", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+    <Box sx={{ width: "100%", bgcolor: "var(--sidebar)", color: "var(--sidebar-foreground)", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
       <Box>
         {/* Brand Header inside Drawer */}
         <Stack
           direction="row"
           alignItems="center"
           spacing={2}
-          sx={{ px: 3, py: 3, borderBottom: 1, borderColor: "divider" }}
+          sx={{ px: 3, py: 3, borderBottom: 1, borderColor: "var(--sidebar-border)" }}
         >
-          <Avatar sx={{ bgcolor: "cyan.main", width: 36, height: 36, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>T</Typography>
-          </Avatar>
-          <Typography variant="subtitle1" sx={{ fontWeight: "black", letterSpacing: "-0.01em", textTransform: "uppercase" }}>
-            Trackit
+          <Avatar src={fintrackMark} alt="Fintrack" variant="rounded" sx={{ width: 36, height: 36, borderRadius: 2 }} />
+          <Typography variant="subtitle1" sx={{ color: "var(--sidebar-foreground)", fontWeight: 700, letterSpacing: "-0.03em" }}>
+            Fintrack
           </Typography>
         </Stack>
 
         {/* List of Navigation Links */}
-        <List sx={{ px: 2, py: 3 }}>
+        <List sx={{ px: 2, py: 2.5 }}>
           {navTabs.map((tab, i) => {
             const isActive = location.pathname === tab.path;
             return (
-              <ListItem key={i} disablePadding sx={{ mb: 1 }}>
-                <ListItemButton
-                  component={RouterLink}
-                  to={tab.path}
-                  onClick={() => setMobileOpen(false)}
-                  sx={{
-                    borderRadius: 3,
-                    bgcolor: isActive ? "action.hover" : "transparent",
-                    color: isActive ? "cyan.main" : "text.secondary",
-                    "&:hover": {
-                      bgcolor: "action.hover",
-                    },
-                  }}
-                >
-                  <ListItemIcon sx={{ minWidth: 40, color: isActive ? "cyan.main" : "text.secondary" }}>
-                    {tab.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={tab.label}
-                    primaryTypographyProps={{
-                      fontSize: "11px",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
+              <Fragment key={tab.path}>
+                {tab.section !== navTabs[i - 1]?.section && (
+                  <Typography
+                    component="li"
+                    variant="overline"
+                    sx={{ display: "block", px: 1.5, pt: i === 0 ? 0 : 2, pb: 0.75, color: "rgba(233, 231, 224, 0.55)", fontSize: 10, fontWeight: 700, letterSpacing: "0.11em" }}
+                  >
+                    {tab.section}
+                  </Typography>
+                )}
+                <ListItem disablePadding sx={{ mb: 0.35 }}>
+                  <ListItemButton
+                    component={RouterLink}
+                    to={tab.path}
+                    selected={isActive}
+                    onClick={() => setMobileOpen(false)}
+                    sx={{
+                      minHeight: 42,
+                      borderRadius: 2,
+                      color: isActive ? "#a9c8f5" : "rgba(233, 231, 224, 0.78)",
+                      borderLeft: isActive ? "2px solid #76aaff" : "2px solid transparent",
+                      "&:hover": { bgcolor: "rgba(233, 231, 224, 0.06)" },
+                      "&.Mui-selected": { bgcolor: "rgba(118, 170, 255, 0.14)", color: "#a9c8f5", fontWeight: 700 },
+                      "&.Mui-selected:hover": { bgcolor: "rgba(118, 170, 255, 0.18)" },
                     }}
-                  />
-                </ListItemButton>
-              </ListItem>
+                  >
+                    <ListItemIcon sx={{ minWidth: 34, color: "inherit" }}>
+                      {tab.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={tab.label}
+                      primaryTypographyProps={{ fontSize: 13, fontWeight: isActive ? 700 : 500 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </Fragment>
             );
           })}
         </List>
       </Box>
 
       {/* Emergency Logout at bottom of drawer */}
-      <Box sx={{ p: 3, borderTop: 1, borderColor: "divider" }}>
+      <Box sx={{ p: 3, borderTop: 1, borderColor: "var(--sidebar-border)" }}>
         <Button
           fullWidth
           variant="outlined"
@@ -161,7 +174,7 @@ export const UserDashboardLayout = () => {
             setMobileOpen(false);
           }}
           startIcon={<FiLogOut />}
-          sx={{ borderRadius: 3, fontWeight: "bold", textTransform: "none" }}
+          sx={{ borderRadius: 2, borderColor: "rgba(240, 120, 112, 0.45)", color: "#f07870", fontWeight: 600, textTransform: "none" }}
         >
           Logout
         </Button>
@@ -169,23 +182,32 @@ export const UserDashboardLayout = () => {
     </Box>
   );
 
+  const activeTab = navTabs.find((tab) => tab.path === location.pathname);
+  const pageTitle = activeTab?.label || (location.pathname.includes("/account/") ? "Account" : "Fintrack");
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
-      
-      {/* AppBar */}
-      <AppBar
-        position="sticky"
-        elevation={2}
-        sx={{
-          bgcolor: "rgba(var(--mui-palette-background-paperChannel), 0.8)",
-          backdropFilter: "blur(8px)",
-          borderBottom: 1,
-          borderColor: "divider",
-          color: "text.primary",
-        }}
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
+      <Box
+        component="nav"
+        aria-label="Main navigation"
+        sx={{ display: { xs: "none", md: "flex" }, width: 232, flexShrink: 0, borderRight: 1, borderColor: "divider", bgcolor: "var(--sidebar)", position: "sticky", top: 0, height: "100vh" }}
       >
-        <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between", height: 72 }}>
+        {drawerContent}
+      </Box>
+
+      <Box sx={{ minWidth: 0, flex: 1 }}>
+        <AppBar
+          position="sticky"
+          elevation={0}
+          sx={{
+            bgcolor: "background.default",
+            borderBottom: 1,
+            borderColor: "divider",
+            color: "text.primary",
+          }}
+        >
+          <Container maxWidth={false} sx={{ px: { xs: 2, sm: 3, xl: 5 } }}>
+            <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between", minHeight: "64px !important" }}>
             
             {/* Logo & Brand */}
             <Stack direction="row" alignItems="center" spacing={2}>
@@ -194,75 +216,18 @@ export const UserDashboardLayout = () => {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ display: { lg: "none" } }}
+                sx={{ display: { md: "none" } }}
               >
                 <FiMenu />
               </IconButton>
 
-              <Link
-                component={RouterLink}
-                to="/private/userdashboard"
-                underline="none"
-                sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
-              >
-                <Avatar sx={{ bgcolor: "cyan.main", width: 36, height: 36, borderRadius: 2 }}>
-                  <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>T</Typography>
-                </Avatar>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: "black",
-                    color: "text.primary",
-                    textTransform: "uppercase",
-                    letterSpacing: "-0.01em",
-                    display: { xs: "none", sm: "block" },
-                  }}
-                >
-                  Trackit
-                </Typography>
+              <Link component={RouterLink} to="/private/userdashboard" underline="none" sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", gap: 1.25, color: "text.primary" }}>
+                <Avatar src={fintrackMark} alt="Fintrack" variant="rounded" sx={{ width: 30, height: 30, borderRadius: 2 }} />
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, letterSpacing: "-0.03em" }}>Fintrack</Typography>
               </Link>
-            </Stack>
-
-            {/* Desktop Navigation Links (Grid Tabs) */}
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{
-                display: { xs: "none", lg: "flex" },
-                bgcolor: "action.hover",
-                p: 0.75,
-                borderRadius: 4,
-                border: 1,
-                borderColor: "divider",
-              }}
-            >
-              {navTabs.map((tab, i) => {
-                const isActive = location.pathname === tab.path;
-                return (
-                  <Button
-                    key={i}
-                    component={RouterLink}
-                    to={tab.path}
-                    startIcon={tab.icon}
-                    sx={{
-                      borderRadius: 3,
-                      textTransform: "none",
-                      fontWeight: "bold",
-                      fontSize: "11px",
-                      px: 2,
-                      py: 1,
-                      bgcolor: isActive ? "cyan.main" : "transparent",
-                      color: isActive ? "white" : "text.secondary",
-                      "&:hover": {
-                        bgcolor: isActive ? "cyan.main" : "action.hover",
-                        color: isActive ? "white" : "text.primary",
-                      },
-                    }}
-                  >
-                    {tab.label}
-                  </Button>
-                );
-              })}
+              <Typography component="p" variant="subtitle1" sx={{ display: { xs: "none", md: "block" }, fontWeight: 700, letterSpacing: "-0.02em" }}>
+                {pageTitle}
+              </Typography>
             </Stack>
 
             {/* Command Center */}
@@ -270,6 +235,7 @@ export const UserDashboardLayout = () => {
               {/* Theme Toggle */}
               <IconButton
                 onClick={toggleTheme}
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
                 sx={{
                   border: 1,
                   borderColor: "divider",
@@ -294,7 +260,7 @@ export const UserDashboardLayout = () => {
                   color: "text.secondary",
                   display: { xs: "none", sm: "inline-flex" },
                   "&:hover": {
-                    color: "cyan.main",
+                    color: "primary.main",
                   },
                 }}
               >
@@ -333,7 +299,7 @@ export const UserDashboardLayout = () => {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", lg: "none" },
+            display: { xs: "block", md: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: 260 },
           }}
         >
@@ -342,9 +308,10 @@ export const UserDashboardLayout = () => {
       </Box>
 
       {/* Main Content Area */}
-      <Container component="main" maxWidth="lg" sx={{ flexGrow: 1, py: { xs: 4, md: 6 }, pb: 10 }}>
+      <Container component="main" maxWidth={false} sx={{ maxWidth: 1480, flexGrow: 1, py: { xs: 3, md: 4 }, pb: 8, px: { xs: 2, sm: 3, xl: 5 } }}>
         <Outlet />
       </Container>
+      </Box>
     </Box>
   );
 };

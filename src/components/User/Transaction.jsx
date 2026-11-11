@@ -11,8 +11,10 @@ import {
   FiList,
   FiArrowUpRight,
   FiArrowDownRight,
-  FiInbox,
 } from "react-icons/fi";
+import emptyActivity from "../../assets/illustrations/empty-activity.svg";
+
+const TAB_TYPES = { All: null, Expenses: "Expense", Incomes: "Income" };
 
 /**
  * --- TRANSACTION LEDGER ---
@@ -57,7 +59,6 @@ export const Transaction = () => {
   
   // --- STATE & CONFIG ---
   const [activeTab, setActiveTab] = useState("All");
-  const tabTypes = { All: null, Expenses: "Expense", Incomes: "Income" };
   const userId = useMemo(() => user?._id, [user]);
 
   // --- LIFECYCLE ---
@@ -70,8 +71,8 @@ export const Transaction = () => {
 
   // Filter based on selected tab and sort by date descending
   const filteredSorted = useMemo(() => {
-    const filtered = tabTypes[activeTab]
-      ? transactions.filter((t) => t.type === tabTypes[activeTab])
+    const filtered = TAB_TYPES[activeTab]
+      ? transactions.filter((t) => t.type === TAB_TYPES[activeTab])
       : transactions;
     return [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [activeTab, transactions]);
@@ -107,15 +108,15 @@ export const Transaction = () => {
       : 0;
 
   const tabs = [
-    { key: "All", label: "Omni", count: transactions.length },
+    { key: "All", label: "All", count: transactions.length },
     {
       key: "Expenses",
-      label: "Outflow",
+      label: "Expenses",
       count: transactions.filter((t) => t.type === "Expense").length,
     },
     {
       key: "Incomes",
-      label: "Inflow",
+      label: "Income",
       count: transactions.filter((t) => t.type === "Income").length,
     },
   ];
@@ -129,15 +130,11 @@ export const Transaction = () => {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent uppercase">
-            Transaction Ledger
-          </h1>
-          <p className="text-sm font-bold text-[var(--text-muted)] mt-1 uppercase tracking-[0.2em]">
-            Comprehensive Financial Audit Log
-          </p>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Transactions</h1>
+          <p className="mt-2 text-sm text-[var(--text-muted)]">Income and expenses, grouped by date.</p>
         </div>
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border bg-[var(--surface-primary)] border-[var(--border)] text-[var(--text-muted)] text-[10px] font-black uppercase tracking-widest shadow-sm">
-          <FiCalendar size={12} className="text-cyan-500" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-primary)] px-3 py-2 text-xs text-[var(--text-muted)]">
+          <FiCalendar size={14} className="text-[var(--accent-electric)]" />
           {new Date().toLocaleDateString("en-IN", {
             day: "numeric",
             month: "long",
@@ -146,29 +143,26 @@ export const Transaction = () => {
         </div>
       </div>
 
-      {/* ── STAT CARDS ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 divide-y divide-[var(--border)] border-y border-[var(--border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         {[
           {
-            title: "Aggregate Inflow",
+            title: "Income",
             value: summary.totalIncome,
             color: "text-emerald-500",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20",
-            glow: "bg-emerald-500",
             icon: <FiTrendingUp size={18} />,
           },
           {
-            title: "Aggregate Outflow",
+            title: "Expenses",
             value: summary.totalExpense,
             color: "text-rose-500",
             bg: "bg-rose-500/10",
             border: "border-rose-500/20",
-            glow: "bg-rose-500",
             icon: <FiTrendingDown size={18} />,
           },
           {
-            title: "Net Equilibrium",
+            title: "Net balance",
             value: summary.balance,
             color: summary.balance >= 0 ? "text-cyan-500" : "text-rose-500",
             bg: summary.balance >= 0 ? "bg-cyan-500/10" : "bg-rose-500/10",
@@ -176,43 +170,25 @@ export const Transaction = () => {
               summary.balance >= 0
                 ? "border-cyan-500/20"
                 : "border-rose-500/20",
-            glow: summary.balance >= 0 ? "bg-cyan-500" : "bg-rose-500",
             icon: <FiDollarSign size={18} />,
           },
         ].map((card, idx) => (
           <motion.div
             key={idx}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: idx * 0.1 }}
-            className={`relative overflow-hidden rounded-[2rem] border p-6 bg-[var(--surface-primary)] ${card.border} shadow-xl backdrop-blur-md group hover:-translate-y-1 transition-all duration-300`}
+            transition={{ duration: 0.25, delay: idx * 0.04 }}
+            className="flex items-center gap-3 px-4 py-4 first:pl-0"
           >
-            <div
-              className={`absolute -top-10 -right-10 w-24 h-24 rounded-full blur-3xl opacity-10 ${card.glow} transition-opacity group-hover:opacity-20`}
-            />
-            <div className="relative">
-              <div className="flex items-start justify-between mb-4">
-                <div
-                  className={`w-11 h-11 rounded-2xl flex items-center justify-center border shadow-inner ${card.bg} ${card.border}`}
-                >
-                  <span className={card.color}>{card.icon}</span>
-                </div>
-                {idx === 2 && (
-                  <span
-                    className={`text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border ${savingsRate >= 0 ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" : "bg-rose-500/10 border-rose-500/20 text-rose-500"}`}
-                  >
-                    {savingsRate}% SURPLUS
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-1">
-                {card.title}
-              </p>
-              <p
-                className={`text-3xl font-black tracking-tighter ${card.color}`}
-              >
+            <span className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-lg ${card.bg} ${card.color}`}>
+              {card.icon}
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs text-[var(--text-muted)]">{card.title}</p>
+              <p className={`mt-1 truncate text-xl font-semibold tabular-nums tracking-tight ${card.color}`}>
                 ₹{Math.abs(card.value).toLocaleString("en-IN")}
               </p>
+              {idx === 2 && <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">Savings rate · {savingsRate}%</p>}
             </div>
           </motion.div>
         ))}
@@ -224,22 +200,22 @@ export const Transaction = () => {
         {/* Central Feed */}
         <div className="lg:col-span-2 space-y-6">
           {/* Tab Selection */}
-          <div className="flex items-center gap-1.5 bg-[var(--surface-primary)] border border-[var(--border)] rounded-[1.5rem] p-2 w-fit shadow-lg backdrop-blur-md">
+          <div className="flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-[var(--border)] bg-[var(--surface-primary)] p-1">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-3 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 active:scale-95
+                className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors active:scale-[0.98]
                   ${
                     activeTab === tab.key
-                      ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
+                      ? "bg-[#3985ff] text-[#101a2b]"
                       : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-secondary)]"
                   }`}
               >
                 {tab.label}
                 <span
-                  className={`text-[9px] px-2 py-0.5 rounded-md font-black
-                  ${activeTab === tab.key ? "bg-white/20 text-white" : "bg-[var(--surface-tertiary)] text-[var(--text-muted)]"}`}
+                  className={`text-xs rounded-full px-1.5 py-0.5 font-medium
+                  ${activeTab === tab.key ? "bg-[#101a2b]/10 text-[#101a2b]" : "bg-[var(--surface-tertiary)] text-[var(--text-muted)]"}`}
                 >
                   {tab.count}
                 </span>
@@ -248,23 +224,18 @@ export const Transaction = () => {
           </div>
 
           {/* Activity List */}
-          <div className="rounded-[2.5rem] bg-[var(--surface-primary)] border border-[var(--border)] shadow-2xl overflow-hidden backdrop-blur-md">
+          <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-primary)]">
             {loading ? (
               <TransactionSkeleton />
             ) : filteredSorted.length === 0 ? (
-              <div className="flex flex-col items-center gap-4 py-24 text-center">
-                <div className="w-16 h-16 rounded-[2rem] bg-[var(--surface-secondary)] border border-[var(--border)] flex items-center justify-center shadow-inner">
-                  <FiInbox
-                    size={32}
-                    className="text-[var(--text-muted)] opacity-20"
-                  />
-                </div>
+              <div className="flex flex-col items-center gap-3 py-16 text-center">
+                <img src={emptyActivity} alt="" aria-hidden="true" className="h-24 w-28" />
                 <div className="space-y-1">
-                  <p className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest">
-                    No activity detected
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
+                    No transactions yet
                   </p>
-                  <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">
-                    In the current {activeTab.toLowerCase()} vector.
+                  <p className="text-sm text-[var(--text-muted)]">
+                    Transactions matching this view will appear here.
                   </p>
                 </div>
               </div>
@@ -503,4 +474,3 @@ export const Transaction = () => {
     </motion.div>
   );
 };
-

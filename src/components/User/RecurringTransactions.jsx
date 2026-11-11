@@ -21,8 +21,7 @@ import {
 
 /**
  * --- AUTOMATED FLOWS (RECURRING TRANSACTIONS) ---
- * Manages capital events that repeat on a fixed temporal cycle.
- * Includes status toggling (Pause/Play), frequency badges, and velocity tracking.
+ * Manages scheduled expense entries, including status and frequency updates.
  */
 
 // --- ATOMIC UI & STYLING ---
@@ -173,7 +172,7 @@ export const RecurringTransactions = () => {
   const activeCount = recurringList.filter((r) => r.isActive !== false).length;
   const pausedCount = recurringList.filter((r) => r.isActive === false).length;
   
-  // Calculate average monthly "Burn Velocity" from all active flows
+  // Normalize active schedules to an estimated monthly amount.
   const monthlyTotal = recurringList
     .filter((r) => r.isActive !== false)
     .reduce((sum, r) => {
@@ -198,10 +197,10 @@ export const RecurringTransactions = () => {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent uppercase">
-            Automated Flows
+            Recurring transactions
           </h1>
-          <p className="text-sm font-bold text-[var(--text-muted)] mt-1 uppercase tracking-[0.2em]">
-            Protocols for Recurring Capital Events
+          <p className="mt-2 text-sm text-[var(--text-muted)]">
+            Review upcoming scheduled expenses and update their status.
           </p>
         </div>
         <div
@@ -212,7 +211,7 @@ export const RecurringTransactions = () => {
             size={12}
             className={activeCount > 0 ? "animate-pulse" : ""}
           />
-          {activeCount} OPERATIONAL · {pausedCount} SUSPENDED
+          {activeCount} active · {pausedCount} paused
         </div>
       </div>
 
@@ -220,9 +219,9 @@ export const RecurringTransactions = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         {[
           {
-            label: "Total Vectors",
+            label: "Schedules",
             value: recurringList.length,
-            suffix: "PROTOCOLS",
+            suffix: "total",
             color: "text-cyan-500",
             bg: "bg-cyan-500/10",
             border: "border-cyan-500/20",
@@ -230,9 +229,9 @@ export const RecurringTransactions = () => {
             icon: <FiRepeat size={18} />,
           },
           {
-            label: "Active Nodes",
+            label: "Active",
             value: activeCount,
-            suffix: "EXECUTING",
+            suffix: "schedules",
             color: "text-emerald-500",
             bg: "bg-emerald-500/10",
             border: "border-emerald-500/20",
@@ -240,9 +239,9 @@ export const RecurringTransactions = () => {
             icon: <FiPlay size={18} />,
           },
           {
-            label: "Burn Velocity",
+            label: "Monthly total",
             value: `₹${Math.round(monthlyTotal).toLocaleString("en-IN")}`,
-            suffix: "PER CYCLE",
+            suffix: "estimated",
             color: "text-rose-500",
             bg: "bg-rose-500/10",
             border: "border-rose-500/20",
@@ -422,7 +421,7 @@ export const RecurringTransactions = () => {
               </div>
               <div>
                 <h2 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">
-                  Active Inventory
+                  Scheduled expenses
                 </h2>
                 <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">
                   Execution Registry

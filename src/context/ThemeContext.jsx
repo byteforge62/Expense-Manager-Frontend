@@ -27,25 +27,56 @@ export const ThemeProvider = ({ children }) => {
       createTheme({
         palette: {
           mode: theme,
+          primary: {
+            main: theme === "dark" ? "#76aaff" : "#3985ff",
+            contrastText: "#101a2b",
+          },
+          background: {
+            default: theme === "dark" ? "#171b23" : "#f1f0eb",
+            paper: theme === "dark" ? "#222a36" : "#faf9f5",
+          },
+          text: {
+            primary: theme === "dark" ? "#e9e7e0" : "#222a36",
+            secondary: theme === "dark" ? "#c1c8d1" : "#465160",
+          },
+          divider:
+            theme === "dark"
+              ? "rgba(233, 231, 224, 0.12)"
+              : "rgba(34, 42, 54, 0.12)",
+          action: {
+            selected:
+              theme === "dark"
+                ? "rgba(118, 170, 255, 0.13)"
+                : "rgba(57, 133, 255, 0.10)",
+          },
 
           cyan: {
-            main: "#06b6d4",
+            main: theme === "dark" ? "#76aaff" : "#3985ff",
           },
 
           emerald: {
-            main: "#10b981",
+            main: "#45b889",
           },
 
           rose: {
-            main: "#f43f5e",
+            main: "#f07870",
           },
 
           indigo: {
-            main: "#6366f1",
+            main: theme === "dark" ? "#a9c8f5" : "#4d74ad",
           },
 
           violet: {
-            main: "#8b5cf6",
+            main: theme === "dark" ? "#76aaff" : "#3985ff",
+          },
+          success: {
+            main: "#45b889",
+          },
+          error: {
+            main: "#f07870",
+          },
+          warning: {
+            main: "#e8b66b",
           },
         },
       }),

@@ -342,10 +342,10 @@ export const UserIncome = () => {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent">
-            Income Center
+            Income
           </h1>
           <p className="text-[var(--text-muted)] mt-1 text-sm font-medium">
-            Analyze revenue streams, track trends, and manage recurring wealth.
+            Review income sources and trends, and manage recurring income.
           </p>
         </div>
         <button
@@ -570,12 +570,12 @@ export const UserIncome = () => {
                     />
                     <Bar
                       dataKey="income"
-                      fill="#10b981"
+                      fill="#45b889"
                       radius={[6, 6, 0, 0]}
                     />
                     <Bar
                       dataKey="expense"
-                      fill="#f43f5e"
+                      fill="#f07870"
                       radius={[6, 6, 0, 0]}
                     />
                   </BarChart>
@@ -637,11 +637,11 @@ export const UserIncome = () => {
                     <Line
                       type="monotone"
                       dataKey="amount"
-                      stroke="#06b6d4"
+                      stroke="#3985ff"
                       strokeWidth={3}
                       dot={{
                         r: 4,
-                        fill: "#06b6d4",
+                        fill: "#3985ff",
                         strokeWidth: 2,
                         stroke: "var(--surface-primary)",
                       }}
@@ -759,10 +759,10 @@ export const UserIncome = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-[var(--text-primary)]">
-                    Wealth Management
+                    Recurring income
                   </h2>
                   <p className="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider">
-                    Configure recurring revenue & automation
+                    Manage scheduled income entries.
                   </p>
                 </div>
               </div>
@@ -1009,10 +1009,10 @@ export const UserIncome = () => {
             </div>
             <div>
               <h2 className="text-xl font-bold text-[var(--text-primary)]">
-                Wealth Creation
+                Record income
               </h2>
               <p className="text-[10px] font-extrabold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">
-                Record new liquidity
+                Add an income entry
               </p>
             </div>
           </div>

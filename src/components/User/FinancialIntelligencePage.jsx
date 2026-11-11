@@ -58,13 +58,13 @@ import {
 } from "./FinancialIntelligenceComponents";
 
 const colorPalette = [
-  "#8b5cf6",
-  "#06b6d4",
-  "#10b981",
-  "#f59e0b",
-  "#f43f5e",
-  "#ec4899",
-  "#3b82f6",
+  "#3985ff",
+  "#45b889",
+  "#e8b66b",
+  "#f07870",
+  "#a9c8f5",
+  "#8297b7",
+  "#4d74ad",
 ];
 
 const safeArray = (value) => (Array.isArray(value) ? value : []);
@@ -77,25 +77,53 @@ const kebabToTitle = (value) =>
 const getSeverityTone = (severity) => {
   const normalized = String(severity || "").toLowerCase();
   if (normalized.includes("high") || normalized.includes("critical")) {
-    return { bg: "rgba(244,63,94,0.08)", border: "rgba(244,63,94,0.2)", color: "#f43f5e" };
+    return {
+      bg: "color-mix(in srgb, var(--negative) 12%, transparent)",
+      border: "color-mix(in srgb, var(--negative) 28%, transparent)",
+      color: "var(--negative)",
+    };
   }
   if (normalized.includes("medium") || normalized.includes("warning")) {
-    return { bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.2)", color: "#f59e0b" };
+    return {
+      bg: "color-mix(in srgb, var(--warning) 14%, transparent)",
+      border: "color-mix(in srgb, var(--warning) 28%, transparent)",
+      color: "var(--warning)",
+    };
   }
-  return { bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.2)", color: "#10b981" };
+  return {
+    bg: "color-mix(in srgb, var(--positive) 12%, transparent)",
+    border: "color-mix(in srgb, var(--positive) 28%, transparent)",
+    color: "var(--positive)",
+  };
 };
 
 const getHealthTone = (score) => {
   if (score === null || Number.isNaN(Number(score))) {
-    return { abs: "rgba(148,163,184,0.12)", color: "#64748b", label: "Insufficient data" };
+    return {
+      abs: "color-mix(in srgb, var(--text-muted) 14%, transparent)",
+      color: "var(--text-muted)",
+      label: "Insufficient data",
+    };
   }
   if (score >= 75) {
-    return { abs: "rgba(16,185,129,0.12)", color: "#10b981", label: "Strong" };
+    return {
+      abs: "color-mix(in srgb, var(--positive) 14%, transparent)",
+      color: "var(--positive)",
+      label: "Strong",
+    };
   }
   if (score >= 50) {
-    return { abs: "rgba(245,158,11,0.12)", color: "#f59e0b", label: "Moderate" };
+    return {
+      abs: "color-mix(in srgb, var(--warning) 16%, transparent)",
+      color: "var(--warning)",
+      label: "Moderate",
+    };
   }
-  return { abs: "rgba(244,63,94,0.12)", color: "#f43f5e", label: "At risk" };
+  return {
+    abs: "color-mix(in srgb, var(--negative) 14%, transparent)",
+    color: "var(--negative)",
+    label: "At risk",
+  };
 };
 
 const ChartTooltip = ({ active, payload, label }) => {
@@ -107,9 +135,9 @@ const ChartTooltip = ({ active, payload, label }) => {
         px: 1.5,
         py: 1,
         borderRadius: 2,
-        border: "1px solid rgba(148,163,184,0.25)",
-        bgcolor: "rgba(15,23,42,0.92)",
-        color: "white",
+        border: "1px solid var(--border-medium)",
+        bgcolor: "background.paper",
+        color: "text.primary",
       }}
     >
       <Typography variant="caption" sx={{ opacity: 0.8, textTransform: "uppercase", letterSpacing: "0.06em" }}>
@@ -205,13 +233,13 @@ export default function FinancialIntelligencePage() {
         label: "Income",
         value: formatCurrency(totals.income),
         icon: FiTrendingUp,
-        tone: "rgba(16,185,129,0.08)",
+        tone: "color-mix(in srgb, var(--positive) 10%, transparent)",
       },
       {
         label: "Expenses",
         value: formatCurrency(totals.expenses),
         icon: FiTrendingDown,
-        tone: "rgba(244,63,94,0.08)",
+        tone: "color-mix(in srgb, var(--negative) 10%, transparent)",
       },
       {
         label: "Net cash flow",
@@ -220,13 +248,13 @@ export default function FinancialIntelligencePage() {
             ? MISSING_VALUE
             : `${cashFlow > 0 ? "+" : ""}${formatCurrency(cashFlow)}`,
         icon: FiDollarSign,
-        tone: "rgba(59,130,246,0.08)",
+        tone: "color-mix(in srgb, var(--accent-electric) 10%, transparent)",
       },
       {
         label: "Savings rate",
         value: formatPercentage(totals.savingsRate, { fraction: true }),
         icon: FiShield,
-        tone: "rgba(139,92,246,0.08)",
+        tone: "color-mix(in srgb, var(--accent-electric) 10%, transparent)",
       },
     ];
   }, [metrics]);
@@ -440,15 +468,15 @@ export default function FinancialIntelligencePage() {
                   <AreaChart data={trendData}>
                     <defs>
                       <linearGradient id="spendFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.5} />
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.04} />
+                        <stop offset="5%" stopColor="#3985ff" stopOpacity={0.34} />
+                        <stop offset="95%" stopColor="#3985ff" stopOpacity={0.03} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid stroke="rgba(148,163,184,0.15)" vertical={false} />
                     <XAxis dataKey="label" stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} />
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
-                    <Area type="monotone" dataKey="value" stroke="#8b5cf6" strokeWidth={3} fill="url(#spendFill)" />
+                    <Area type="monotone" dataKey="value" stroke="#3985ff" strokeWidth={2.5} fill="url(#spendFill)" />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -503,8 +531,8 @@ export default function FinancialIntelligencePage() {
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
                     <Legend />
-                    <Bar dataKey="income" fill="#10b981" radius={[8, 8, 0, 0]} />
-                    <Bar dataKey="expenses" fill="#f43f5e" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="income" fill="#45b889" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="expenses" fill="#f07870" radius={[5, 5, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -571,7 +599,7 @@ export default function FinancialIntelligencePage() {
                     <Box key={`${item.id || item.title || "recommendation"}-${index}`} sx={{ p: 2.2, borderRadius: 3, border: "1px solid rgba(139,92,246,0.18)", bgcolor: "rgba(139,92,246,0.04)" }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(139,92,246,0.12)", color: "#8b5cf6" }}><FiTrendingUp size={14} /></Avatar>
+                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(57,133,255,0.12)", color: "#3985ff" }}><FiTrendingUp size={14} /></Avatar>
                           <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{item.title || "Recommendation"}</Typography>
                         </Stack>
                         <StatusBadge status={item.priority || "medium"} />

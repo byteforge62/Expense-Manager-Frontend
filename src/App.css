@@ -46,112 +46,130 @@
 }
 
 /* ============================================================
-   LIGHT MODE VARIABLES  (active when .dark is NOT on <html>)
+   LIGHT MODE VARIABLES
    ============================================================ */
 :root {
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 
-  /* Page & surface backgrounds */
-  --background: oklch(0.985 0.005 235); /* Very soft slate-tinted white */
-  --foreground: oklch(0.15 0.02 240); /* Dark slate */
-  --card: oklch(1 0 0); /* Pure white */
-  --card-foreground: oklch(0.15 0.02 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 240);
-  --primary: oklch(0.6 0.2 240); /* Vibrant blue */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0.01 240); /* Light slate */
-  --secondary-foreground: oklch(0.15 0.02 240);
-  --muted: oklch(0.96 0.01 240);
-  --muted-foreground: oklch(0.55 0.02 240);
-  --accent: oklch(0.96 0.01 240);
-  --accent-foreground: oklch(0.15 0.02 240);
-  --destructive: oklch(0.6 0.2 25);
-  --border: oklch(0.92 0.01 240); /* Subtle border */
-  --input: oklch(0.94 0.01 240);
-  --ring: oklch(0.6 0.2 240 / 0.5);
-  --chart-1: oklch(0.6 0.2 240);
-  --chart-2: oklch(0.65 0.18 190);
-  --chart-3: oklch(0.75 0.15 150);
-  --chart-4: oklch(0.85 0.12 80);
-  --chart-5: oklch(0.8 0.18 40);
-  --sidebar: oklch(0.99 0 0);
-  --sidebar-foreground: oklch(0.15 0.02 240);
-  --sidebar-primary: oklch(0.15 0.02 240);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0.01 240);
-  --sidebar-accent-foreground: oklch(0.15 0.02 240);
-  --sidebar-border: oklch(0.94 0.01 240);
-  --sidebar-ring: oklch(0.6 0.2 240 / 0.5);
+  --background: #f1f0eb;
+  --foreground: #222a36;
+  --card: #faf9f5;
+  --card-foreground: #222a36;
+  --popover: #faf9f5;
+  --popover-foreground: #222a36;
+  --primary: #3985ff;
+  --primary-foreground: #101a2b;
+  --secondary: #e9e7e0;
+  --secondary-foreground: #222a36;
+  --muted: #e9e7e0;
+  --muted-foreground: #687281;
+  --accent: #e5edf9;
+  --accent-foreground: #245ba8;
+  --destructive: #d65f5a;
+  --border: #d9d9d4;
+  --input: #d9d9d4;
+  --ring: rgb(57 133 255 / 45%);
+  --chart-1: #3985ff;
+  --chart-2: #45b889;
+  --chart-3: #e8b66b;
+  --chart-4: #f07870;
+  --chart-5: #8297b7;
+  --sidebar: #222a36;
+  --sidebar-foreground: #e9e7e0;
+  --sidebar-primary: #76aaff;
+  --sidebar-primary-foreground: #101a2b;
+  --sidebar-accent: #2d394b;
+  --sidebar-accent-foreground: #e9e7e0;
+  --sidebar-border: rgb(233 231 224 / 12%);
+  --sidebar-ring: rgb(118 170 255 / 48%);
 
-  /* ── Custom vars: map hardcoded dark hex → light equivalents ── */
-  --surface-primary: #ffffff;
-  --surface-secondary: #f8fafc;
-  --surface-tertiary: #f1f5f9;
-  --surface-overlay: rgba(0, 0, 0, 0.02);
-  --surface-subtle: rgba(0, 0, 0, 0.03);
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-medium: rgba(0, 0, 0, 0.1);
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-tertiary: #64748b;
-  --text-muted: #94a3b8;
+  --surface-primary: #faf9f5;
+  --surface-secondary: #f1f0eb;
+  --surface-tertiary: #e9e7e0;
+  --surface-overlay: rgb(34 42 54 / 3%);
+  --surface-subtle: rgb(34 42 54 / 5%);
+  --border-subtle: rgb(34 42 54 / 9%);
+  --border-medium: rgb(34 42 54 / 15%);
+  --text-primary: #222a36;
+  --text-secondary: #465160;
+  --text-tertiary: #65707e;
+  --text-muted: #737e8b;
+  --accent-electric: #3985ff;
+  --accent-electric-soft: #e5edf9;
+  --accent-lavender: #3985ff;
+  --accent-lavender-soft: #e5edf9;
+  --accent-sage: #e4f2eb;
+  --accent-peach: #fae9e6;
+  --positive: #348e6b;
+  --negative: #d65f5a;
+  --warning: #a87527;
+  --radius-control: 0.625rem;
+  --radius-panel: 0.875rem;
+  --shadow-panel: 0 8px 24px rgb(34 42 54 / 6%);
 }
 
 /* ============================================================
-   DARK MODE VARIABLES  (active when .dark IS on <html>)
+   DARK MODE VARIABLES
    ============================================================ */
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  --background: #171b23;
+  --foreground: #e9e7e0;
+  --card: #222a36;
+  --card-foreground: #e9e7e0;
+  --popover: #222a36;
+  --popover-foreground: #e9e7e0;
+  --primary: #5b9aff;
+  --primary-foreground: #101a2b;
+  --secondary: #2d3644;
+  --secondary-foreground: #e9e7e0;
+  --muted: #2d3644;
+  --muted-foreground: #aab3bf;
+  --accent: #26364e;
+  --accent-foreground: #b6d1ff;
+  --destructive: #f07870;
+  --border: rgb(233 231 224 / 12%);
+  --input: rgb(233 231 224 / 16%);
+  --ring: rgb(91 154 255 / 48%);
+  --chart-1: #76aaff;
+  --chart-2: #45b889;
+  --chart-3: #e8b66b;
+  --chart-4: #f07870;
+  --chart-5: #a9c8f5;
+  --sidebar: #171b23;
+  --sidebar-foreground: #e9e7e0;
+  --sidebar-primary: #76aaff;
+  --sidebar-primary-foreground: #101a2b;
+  --sidebar-accent: #222a36;
+  --sidebar-accent-foreground: #e9e7e0;
+  --sidebar-border: rgb(233 231 224 / 12%);
+  --sidebar-ring: rgb(118 170 255 / 48%);
 
-  /* ── Custom vars: keep original dark hex values in dark mode ── */
-  --surface-primary: #111318;
-  --surface-secondary: #0d0f14;
-  --surface-tertiary: #0c0e12;
-  --surface-overlay: rgba(0, 0, 0, 0.4);
-  --surface-subtle: rgba(255, 255, 255, 0.05);
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --text-primary: #ffffff;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #9ca3af;
-  --text-muted: #6b7280;
+  --surface-primary: #222a36;
+  --surface-secondary: #1c232e;
+  --surface-tertiary: #2d3644;
+  --surface-overlay: rgb(0 0 0 / 25%);
+  --surface-subtle: rgb(233 231 224 / 5%);
+  --border-subtle: rgb(233 231 224 / 10%);
+  --border-medium: rgb(233 231 224 / 16%);
+  --text-primary: #e9e7e0;
+  --text-secondary: #c1c8d1;
+  --text-tertiary: #aab3bf;
+  --text-muted: #929baa;
+  --accent-electric: #76aaff;
+  --accent-electric-soft: #26364e;
+  --accent-lavender: #76aaff;
+  --accent-lavender-soft: #26364e;
+  --accent-sage: #20372f;
+  --accent-peach: #3b2b30;
+  --positive: #45b889;
+  --negative: #f07870;
+  --warning: #e8b66b;
+  --shadow-panel: 0 10px 28px rgb(0 0 0 / 20%);
 }
 
 /* ============================================================
    GLOBAL OVERRIDES
-   Maps every hardcoded dark hex used in components to CSS vars.
-   This means components don't need to be changed at all.
+   Theme-aware application foundations and legacy utility alignment.
    ============================================================ */
 @layer base {
   * {
@@ -160,18 +178,59 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Roboto", "Inter", "Segoe UI", sans-serif;
     transition:
       background-color 0.2s ease,
       color 0.2s ease;
   }
 
-  /* Smooth theme transition on all elements */
-  *,
-  *::before,
-  *::after {
-    transition-property: background-color, border-color, color;
-    transition-duration: 0.15s;
-    transition-timing-function: ease;
+  :where(button, a, input, select, textarea) {
+    transition:
+      color 140ms ease,
+      background-color 140ms ease,
+      border-color 140ms ease,
+      box-shadow 140ms ease,
+      transform 140ms ease;
+  }
+
+  :where(button, a, input, select, textarea):focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent-electric) 65%, transparent);
+    outline-offset: 2px;
+  }
+
+  .user-layout {
+    background: var(--background);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .user-layout main h1 {
+    background: none !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: currentColor;
+    font-family: "Roboto", "Segoe UI", sans-serif;
+    font-size: clamp(1.7rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1.12;
+    text-transform: none;
+  }
+
+  .user-layout main h2 {
+    letter-spacing: -0.025em;
+  }
+
+  .user-layout main input,
+  .user-layout main select,
+  .user-layout main textarea {
+    color: var(--text-primary);
+    color-scheme: light;
+  }
+
+  .dark .user-layout main input,
+  .dark .user-layout main select,
+  .dark .user-layout main textarea {
+    color-scheme: dark;
   }
 
   /* ── Override hardcoded dark backgrounds ── */
@@ -179,6 +238,17 @@
   /* bg-[var(--card)] and bg-[var(--card)]/80 */
   [class*="bg-\[#111318\]"] {
     background-color: var(--surface-primary) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   /* bg-[#0d0f14] and bg-[#0d0f14]/80 */
@@ -239,6 +309,47 @@
     border-color: var(--border-subtle) !important;
     color: var(--text-primary) !important;
   }
+}
+
+.user-layout .recharts-cartesian-grid line {
+  stroke: var(--border-subtle);
+}
+
+.user-layout .recharts-cartesian-axis-tick text,
+.user-layout .recharts-legend-item-text {
+  fill: var(--text-muted);
+  color: var(--text-muted);
+}
+
+.user-layout .recharts-default-tooltip {
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-panel);
+}
+
+.user-layout [class~="text-violet-500"],
+.user-layout [class~="text-violet-600"],
+.user-layout [class~="text-cyan-500"],
+.user-layout [class~="text-cyan-600"] {
+  color: var(--accent-electric) !important;
+}
+
+.user-layout [class~="bg-violet-500/10"],
+.user-layout [class~="bg-violet-500/5"],
+.user-layout [class~="bg-cyan-500/10"],
+.user-layout [class~="bg-cyan-500/5"] {
+  background-color: color-mix(in srgb, var(--accent-electric) 11%, transparent) !important;
+}
+
+.user-layout [class~="bg-violet-600"] {
+  background-color: #3985ff !important;
+  color: #101a2b !important;
+}
+
+.user-layout [class~="border-violet-500/20"],
+.user-layout [class~="border-violet-500/30"],
+.user-layout [class~="border-cyan-500/20"],
+.user-layout [class~="border-cyan-500/30"] {
+  border-color: color-mix(in srgb, var(--accent-electric) 28%, transparent) !important;
 }
 
 /* ============================================================

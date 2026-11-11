@@ -116,13 +116,13 @@ export const UserExpenses = () => {
 
   const userId = useMemo(() => user?._id, [user]);
   const COLORS = [
-    "#ef4444",
-    "#06b6d4",
-    "#10b981",
-    "#f59e0b",
-    "#6366f1",
-    "#ec4899",
-    "#8b5cf6",
+    "#f07870",
+    "#3985ff",
+    "#45b889",
+    "#e8b66b",
+    "#4d74ad",
+    "#a9c8f5",
+    "#8297b7",
   ];
 
   const {
@@ -275,10 +275,10 @@ export const UserExpenses = () => {
       >
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent">
-            Expense Center
+            Expenses
           </h1>
           <p className="text-[var(--text-muted)] mt-1 text-sm font-medium">
-            Analyze patterns and optimize your spending.
+            Review spending by category, date, and amount.
           </p>
         </div>
         <button
@@ -526,7 +526,7 @@ export const UserExpenses = () => {
                     content={<ChartTooltip />}
                     cursor={{ fill: "var(--surface-tertiary)", opacity: 0.1 }}
                   />
-                  <Bar dataKey="amount" fill="#f43f5e" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="amount" fill="#f07870" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
