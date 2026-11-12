@@ -78,18 +78,19 @@ export const Login = () => {
       if (wakingUpToast) toast.dismiss(wakingUpToast);
 
       if (res.status === 200) {
-        // Extract user data regardless of API response nesting
+        const responseData = res.data?.data || res.data;
         const user =
-          res.data.data && res.data.data._id
-            ? res.data.data
-            : res.data.user || null;
-        const role = user?.role || res.data.role;
-        const token = res.data.token;
+          responseData?.user ||
+          (responseData?._id ? responseData : null) ||
+          res.data?.user ||
+          null;
+        const role = user?.role || responseData?.role || res.data?.role;
+        const token = responseData?.token || res.data?.token;
 
         const loginData = { user, role, token };
 
-        // Safety check to ensure we actually got a user object back
-        if (!loginData.user || !loginData.user._id) {
+        // Do not mark the session authenticated without the account and token.
+        if (!loginData.user?._id || !loginData.token) {
           console.error("Incomplete user data from API:", res.data);
           toast.error("Login failed: Missing user details.", {
             position: "top-center",
@@ -510,4 +511,3 @@ export const Login = () => {
     </Box>
   );
 };
-
