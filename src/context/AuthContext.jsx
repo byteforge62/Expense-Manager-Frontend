@@ -1,76 +1,42 @@
-import { useState, useContext, createContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser as updateUserAction } from "../redux/slices/authSlice";
+import { logout } from "../components/Utils/Logout";
 
-const AuthContext = createContext();
+/**
+ * --- AUTH COMPATIBILITY LAYER ---
+ * Redux (`state.auth`) is the single source of truth for the session: the
+ * Axios instance reads its token, and `PrivateRoutes` reads its user.
+ *
+ * This context remains only so existing consumers can keep calling `useAuth()`.
+ * It owns no state of its own, which means a login updates every consumer
+ * immediately and a logout cannot leave a stale user behind.
+ */
+
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
 
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (
-      storedToken &&
-      storedToken !== "undefined" &&
-      storedUser &&
-      storedUser !== "undefined"
-    ) {
-      try {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-      } catch{
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-      }
-    }
-
-    setLoading(false);
-  }, []);
-
-  const login = (loginReponse) => {
-    const { token, data } = loginReponse;
-
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(data));
-
-    setToken(token);
-    setUser(data);
-
-    if (data.role === "Admin") {
-      navigate("/admin/admindashboard");
-    } else {
-      navigate("/private/userdashboard");
-    }
-  };
-
-  const updateUser = (updatedData) => {
-    const merged = { ...user, ...updatedData };
-    setUser(merged);
-    localStorage.setItem("user", JSON.stringify(merged));
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    setToken(null);
-    setUser(null);
-
-    navigate("/login");
-  };
+  const updateUser = (updatedData) => dispatch(updateUserAction(updatedData));
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{ user, token, loading: false, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
 };

@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
-import { PrivateRoutes } from "../components/Hooks/PrivateRoutes";
+import { PrivateRoutes } from "../components/Layouts/Layouts";
 import { expect } from "vitest";
 import { AuthProvider } from "../context/AuthContext";
 import { renderWithProviders as render } from "./test-utils";

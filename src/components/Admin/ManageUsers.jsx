@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchUsers, deleteUser } from "../../redux/user/userSlice";
+import { fetchUsers, deleteUser } from "../../redux/slices/userSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";

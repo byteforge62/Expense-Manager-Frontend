@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchLogs } from "../../redux/log/logSlice";
+import { fetchLogs } from "../../redux/slices/logSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -34,14 +34,16 @@ import {
 
 export const Systemlog = () => {
   const dispatch = useDispatch();
-  const { logs, loading } = useSelector((state) => state.log);
+  const { logs, loading, error } = useSelector((state) => state.log);
+  // Defensive: a malformed payload must never break the audit table.
+  const safeLogs = Array.isArray(logs) ? logs : [];
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch(fetchLogs());
   }, [dispatch]);
 
-  const filteredLogs = logs.filter(
+  const filteredLogs = safeLogs.filter(
     (log) =>
       log.user?.toLowerCase().includes(search.toLowerCase()) ||
       log.action?.toLowerCase().includes(search.toLowerCase()) ||
@@ -109,7 +111,7 @@ export const Systemlog = () => {
 
         <Chip
           icon={<FiShield size={12} style={{ animation: "pulse 2s infinite" }} />}
-          label={`${logs.length} AUDIT NODES`}
+          label={`${safeLogs.length} AUDIT NODES`}
           sx={{
             px: 1.5,
             py: 2,
@@ -230,6 +232,19 @@ export const Systemlog = () => {
                 Compiling Historical Telemetry
               </Typography>
             </Box>
+          </Stack>
+        ) : error ? (
+          /* FETCH FAILURE STATE */
+          <Stack alignItems="center" justifyContent="center" sx={{ py: 16 }} spacing={2}>
+            <Avatar variant="rounded" sx={{ bgcolor: "rgba(244, 63, 94, 0.1)", color: "#f43f5e", width: 56, height: 56 }}>
+              <FiShield size={24} />
+            </Avatar>
+            <Typography variant="h6" sx={{ fontWeight: 900, color: "text.primary" }}>
+              Audit stream unavailable
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 420, textAlign: "center" }}>
+              {error}
+            </Typography>
           </Stack>
         ) : filteredLogs.length === 0 ? (
           /* REGISTRY NULL EXCEPTION */

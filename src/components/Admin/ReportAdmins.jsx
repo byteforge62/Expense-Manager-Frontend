@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAdminReport } from "../../redux/adminReport/adminReportSlice";
+import { fetchAdminReport } from "../../redux/slices/adminReportSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";

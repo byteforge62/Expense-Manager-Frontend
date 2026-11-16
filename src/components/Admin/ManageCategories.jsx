@@ -9,7 +9,7 @@ import {
   updateCategory,
   // Ensure this is correctly imported or managed in your slice:
   // deleteCategory as deleteCategoryAction 
-} from "../../redux/category/categorySlice";
+} from "../../redux/slices/categorySlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";

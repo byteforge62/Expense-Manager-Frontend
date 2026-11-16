@@ -2,18 +2,18 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // =============== REDUCER IMPORTS ===============
 // Domain specific slices
-import authReducer from "./auth/authSlice";
-import expenseReducer from "./expense/expenseSlice";
-import transactionReducer from "./transaction/transactionSlice";
-import budgetReducer from "./budget/budgetSlice";
-import incomeReducer from "./income/incomeSlice";
-import userReducer from "./user/userSlice";
-import categoryReducer from "./category/categorySlice";
-import logReducer from "./log/logSlice";
-import adminReportReducer from "./adminReport/adminReportSlice";
+import authReducer from "./slices/authSlice";
+import expenseReducer from "./slices/expenseSlice";
+import transactionReducer from "./slices/transactionSlice";
+import budgetReducer from "./slices/budgetSlice";
+import incomeReducer from "./slices/incomeSlice";
+import userReducer from "./slices/userSlice";
+import categoryReducer from "./slices/categorySlice";
+import logReducer from "./slices/logSlice";
+import adminReportReducer from "./slices/adminReportSlice";
 
 // Global UI state (loading, modals, etc.)
-import uiReducer from "./ui/uiSlice";
+import uiReducer from "./slices/uiSlice";
 
 /**
  * --- CENTRAL REDUX STORE ---

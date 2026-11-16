@@ -24,7 +24,7 @@ import { FaSearch } from "react-icons/fa";
 import { FiShield } from "react-icons/fi";
 
 // ================ Redux Actions ================
-import { fetchUsers, deleteUser } from "../../redux/user/userSlice";
+import { fetchUsers, deleteUser } from "../../redux/slices/userSlice";
 
 export const AccessControl = () => {
   const dispatch = useDispatch();

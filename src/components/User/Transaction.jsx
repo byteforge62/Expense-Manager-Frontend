@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactions } from "../../redux/transaction/transactionSlice";
+import { fetchTransactions } from "../../redux/slices/transactionSlice";
 import {
   FiTrendingUp,
   FiTrendingDown,

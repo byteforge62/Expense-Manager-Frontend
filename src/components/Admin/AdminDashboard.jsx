@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from "../../redux/user/userSlice";
-import { fetchAllTransactions } from "../../redux/transaction/transactionSlice";
+import { fetchUsers } from "../../redux/slices/userSlice";
+import { fetchAllTransactions } from "../../redux/slices/transactionSlice";
 import {
   BarChart,
   Bar,

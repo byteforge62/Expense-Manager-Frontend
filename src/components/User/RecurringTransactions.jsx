@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../Utils/axiosInstance";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchRecurring } from "../../redux/income/incomeSlice";
+import { fetchRecurring } from "../../redux/slices/incomeSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiRepeat,

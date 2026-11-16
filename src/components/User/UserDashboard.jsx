@@ -27,9 +27,9 @@ import {
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-import { fetchBudgetData } from "../../redux/budget/budgetSlice";
-import { fetchIncomeData } from "../../redux/income/incomeSlice";
-import { fetchAllExpenses } from "../../redux/expense/expenseSlice";
+import { fetchBudgetData } from "../../redux/slices/budgetSlice";
+import { fetchIncomeData } from "../../redux/slices/incomeSlice";
+import { fetchAllExpenses } from "../../redux/slices/expenseSlice";
 import {
   FiTrendingUp,
   FiTrendingDown,
@@ -50,7 +50,7 @@ import {
   FiPlus,
   FiArrowUpRight,
 } from "react-icons/fi";
-import LoadingSpinner from "../Common/LoadingSpinner";
+import { LoadingSpinner } from "../Common/Loaders";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";

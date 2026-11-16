@@ -5,7 +5,7 @@ import axiosInstance from "../../Utils/axiosInstance";
 import {
   fetchIncomeData,
   fetchRecurring,
-} from "../../../redux/income/incomeSlice";
+} from "../../../redux/slices/incomeSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import {

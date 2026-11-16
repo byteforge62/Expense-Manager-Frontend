@@ -6,7 +6,7 @@ import {
   fetchBudgetPlan,
   fetchBudgetData,
   fetchCategories,
-} from "../../../redux/budget/budgetSlice";
+} from "../../../redux/slices/budgetSlice";
 import {
   PieChart,
   Pie,

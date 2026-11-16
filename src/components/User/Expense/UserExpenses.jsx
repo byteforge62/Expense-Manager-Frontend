@@ -6,7 +6,7 @@ import {
   fetchAllExpenses,
   fetchRecentExpenses,
   fetchCategories,
-} from "../../../redux/expense/expenseSlice";
+} from "../../../redux/slices/expenseSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart,

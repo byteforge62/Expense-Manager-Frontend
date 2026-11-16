@@ -10,11 +10,19 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 
 /**
+ * --- LOADING INDICATORS ---
+ * Two shapes of one concern, kept in one place so they cannot drift apart:
+ *
+ * - GlobalLoader: app-wide overlay driven by Redux request state.
+ * - LoadingSpinner: local indicator for a card, panel or button-sized area.
+ */
+
+/**
  * --- GLOBAL APPLICATION LOADER ---
  * This overlay appears whenever a global API request is in progress.
  * It uses Redux to know when to show itself and what text to display.
  */
-const GlobalLoader = () => {
+export const GlobalLoader = () => {
   const { isLoading, loadingText } = useSelector((state) => state.ui);
 
   return (
@@ -68,4 +76,56 @@ const GlobalLoader = () => {
   );
 };
 
-export default GlobalLoader;
+/**
+ * --- REUSABLE LOADING SPINNER ---
+ * A lightweight spinner for localized loading states (e.g., inside a button or small card).
+ */
+export const LoadingSpinner = ({
+  size = 24,
+  label = "Loading...",
+  color = "cyan.main", // Standardized to accept a theme token pathway
+  sx = {}, // Standardized override hook matching standard MUI best practices
+}) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 1.5, // Equivalent to gap-3 (3 * 4px = 12px)
+        ...sx,
+      }}
+    >
+      {/* ── SPINNER ELEMENT ── */}
+      <Box sx={{ color: color, display: "flex" }}>
+        <CircularProgress
+          size={size}
+          color="inherit" // Inherits the wrapper's text token context
+          thickness={4.5}
+          sx={{
+            animationDuration: "1.5s", // Maintains the original customized linear cadence
+          }}
+        />
+      </Box>
+
+      {/* ── TEXT LABEL ── */}
+      {label && (
+        <Typography
+          variant="caption"
+          sx={{
+            fontSize: "10px",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            letterSpacing: "0.15em", // Equivalent to tracking-widest
+            color: color,
+            opacity: 0.8,
+            animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite", // Recreates Tailwind's animate-pulse inline
+          }}
+        >
+          {label}
+        </Typography>
+      )}
+    </Box>
+  );
+};

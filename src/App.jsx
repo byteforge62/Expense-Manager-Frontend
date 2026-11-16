@@ -10,10 +10,9 @@ import "./index.css";
 
 // =============== COMMON COMPONENTS ===============
 // Shared UI elements like the loader and layouts
-import GlobalLoader from "./components/Common/GlobalLoader";
+import { GlobalLoader } from "./components/Common/Loaders";
 import { Content } from "./components/Common/Content";
-import { PublicLayout } from "./components/Layouts/PublicLayout";
-import { PrivateRoutes } from "./components/Hooks/PrivateRoutes";
+import { PrivateRoutes, PublicLayout } from "./components/Layouts/Layouts";
 
 // =============== AUTH PAGES ===============
 import { Login } from "./Login";

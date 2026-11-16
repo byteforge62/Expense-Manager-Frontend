@@ -1,7 +1,33 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
-import { Navbar } from "../Common/Navbar";
 import Box from "@mui/material/Box";
+import { Navbar } from "../Common/Navbar";
+
+/**
+ * --- ROUTE LAYOUTS ---
+ * The two route-level wrappers the router needs: the authenticated guard and
+ * the public shell. They are small, share the same concern (what surrounds a
+ * page, not the page itself) and are read together in App.jsx, so they live in
+ * one module instead of two near-empty files.
+ */
+
+/**
+ * --- PRIVATE ROUTE GUARD ---
+ * Prevents unauthenticated users from accessing protected pages.
+ * If no user is found in Redux, it redirects them to the Login page.
+ */
+export const PrivateRoutes = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  // If the user isn't logged in, send them back to the login screen
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If they are logged in, let them through to the requested page
+  return <Outlet />;
+};
 
 /**
  * --- PUBLIC FACING LAYOUT ---
@@ -53,5 +79,3 @@ export const PublicLayout = () => {
     </Box>
   );
 };
-
-

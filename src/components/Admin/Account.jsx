@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../Utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { updateUser as updateAuthUser } from "../../redux/auth/authSlice";
+import { updateUser as updateAuthUser } from "../../redux/slices/authSlice";
 import { useAuth } from "../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 

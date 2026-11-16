@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../components/Utils/axiosInstance";
+import { resetRedirectGuard } from "../../components/Utils/session";
 
 /**
  * --- ASYNC ACTIONS ---
@@ -38,6 +39,33 @@ const initialState = {
 /**
  * --- AUTH SLICE ---
  */
+/**
+ * --- SINGLE LOGOUT PATH ---
+ * Clears the local session immediately (so private routes stop rendering
+ * and the interceptor stops attaching a token), then revokes the refresh
+ * token server-side using the httpOnly cookie.
+ *
+ * The revoke call is shared: repeated clicks reuse one in-flight request
+ * instead of firing duplicate logout calls.
+ */
+let revokePromise = null;
+
+export const logoutSession = () => (dispatch) => {
+  dispatch(logout());
+
+  if (!revokePromise) {
+    revokePromise = axiosInstance
+      .post("/user/logout")
+      .catch(() => {
+        // Offline or already-expired session: local state is already gone.
+      })
+      .finally(() => {
+        revokePromise = null;
+      });
+  }
+
+  return revokePromise;
+};
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -50,6 +78,7 @@ const authSlice = createSlice({
       state.token = token || null;
       state.isAuthenticated = !!user;
       state.loading = false;
+      resetRedirectGuard();
 
       // Persist to local storage so session survives refresh
       if (user) localStorage.setItem("user", JSON.stringify(user));
@@ -59,6 +88,7 @@ const authSlice = createSlice({
 
     // Used if we need to manually update the JWT
     updateToken: (state, action) => {
+      resetRedirectGuard();
       state.token = action.payload;
       localStorage.setItem("token", action.payload);
     },

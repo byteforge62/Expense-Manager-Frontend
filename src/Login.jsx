@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "./redux/auth/authSlice";
+import { loginSuccess } from "./redux/slices/authSlice";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
