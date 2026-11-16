@@ -17,24 +17,34 @@ import Stack from "@mui/material/Stack";
 import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
 
+/**
+ * The wording is deliberately the same whether or not the address belongs to an
+ * account, so the UI cannot be used to discover registered emails.
+ */
+const GENERIC_CONFIRMATION =
+  "If an account exists for that email, a password reset link has been sent. Check your inbox and spam folder.";
+
 export const ForgotPassword = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const submitHandler = async (data) => {
+    // Guard against a double submit while the request is in flight.
+    if (loading) return;
+
     setLoading(true);
+
     try {
-      const res = await axiosInstance.post("/user/forgotpassword", data);
-      if (res.status === 200) {
-        toast.success("Reset password link sent to your email!", {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "colored",
-        });
-      }
+      await axiosInstance.post("/user/forgotpassword", {
+        email: data.email.trim().toLowerCase(),
+      });
+
+      setSent(true);
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to send reset link",
+        error.response?.data?.message ||
+          "We could not process that request. Please try again later.",
         { position: "top-center", autoClose: 3000, theme: "colored" },
       );
     } finally {
@@ -117,6 +127,26 @@ export const ForgotPassword = () => {
               </Typography>
             </Box>
 
+            {sent && (
+              <Box
+                role="status"
+                sx={{
+                  p: 2,
+                  borderRadius: 3,
+                  border: 1,
+                  borderColor: "success.main",
+                  bgcolor: "rgba(16, 185, 129, 0.08)",
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Request received
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                  {GENERIC_CONFIRMATION}
+                </Typography>
+              </Box>
+            )}
+
             <Box component="form" onSubmit={handleSubmit(submitHandler)} noValidate>
               <Stack spacing={3}>
                 <TextField
@@ -184,4 +214,3 @@ export const ForgotPassword = () => {
     </Box>
   );
 };
-

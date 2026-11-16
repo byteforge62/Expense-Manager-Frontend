@@ -17,6 +17,8 @@ import { PrivateRoutes, PublicLayout } from "./components/Layouts/Layouts";
 // =============== AUTH PAGES ===============
 import { Login } from "./Login";
 import { Signup } from "./Signup";
+import { ForgotPassword } from "./ForgotPassword";
+import { ResetPassword } from "./ResetPassword";
 
 // =============== USER COMPONENTS ===============
 // Everything a regular user needs to see and manage
@@ -143,6 +145,8 @@ function App() {
           <Route path="/" element={<Content />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         {/* --- PRIVATE USER AREA --- */}

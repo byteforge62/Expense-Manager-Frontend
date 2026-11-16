@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "./components/Utils/axiosInstance";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 
@@ -18,34 +18,50 @@ import Stack from "@mui/material/Stack";
 import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
 
+const INVALID_LINK_MESSAGE =
+  "This password reset link is invalid or has expired. Request a new link to continue.";
+
+/**
+ * The raw token lives only in the URL and in this component's props. It is
+ * never written to localStorage, Redux or any other persistent browser store.
+ */
 export const ResetPassword = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm();
   const { token } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const submitHandler = async (data) => {
+    if (loading) return;
+
+    setFormError("");
+
+    if (!token) {
+      setFormError(INVALID_LINK_MESSAGE);
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const res = await axiosInstance.post("/user/resetpassword", {
+      await axiosInstance.post("/user/resetpassword", {
         token,
         password: data.password,
       });
 
-      if (res.status === 200) {
-        toast.success("Password updated successfully!", {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "colored",
-        });
-        setTimeout(() => navigate("/login"), 2000);
-      }
+      setSucceeded(true);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to reset password", {
-        position: "top-center",
-        autoClose: 3000,
-        theme: "colored",
-      });
+      setFormError(
+        error.response?.data?.message ||
+          "We could not reset your password. Please try again later.",
+      );
     } finally {
       setLoading(false);
     }
@@ -122,35 +138,37 @@ export const ResetPassword = () => {
                 Reset Password
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Enter your new password below.
+                {succeeded
+                  ? "Your password has been updated."
+                  : "Enter your new password below."}
               </Typography>
             </Box>
 
-            <Box component="form" onSubmit={handleSubmit(submitHandler)} noValidate>
+            {succeeded ? (
               <Stack spacing={3}>
-                <TextField
-                  fullWidth
-                  label="New Password"
-                  type="password"
-                  placeholder="Enter new password"
-                  variant="outlined"
-                  required
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                  {...register("password", {
-                    required: "Password is required",
-                    minLength: { value: 8, message: "Minimum 8 characters" },
-                  })}
-                  slotProps={{
-                    inputLabel: { shrink: true }
+                <Box
+                  role="status"
+                  sx={{
+                    p: 2,
+                    borderRadius: 3,
+                    border: 1,
+                    borderColor: "success.main",
+                    bgcolor: "rgba(16, 185, 129, 0.08)",
                   }}
-                />
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    Password updated
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    You can now sign in with your new password. Any other active
+                    sessions have been signed out.
+                  </Typography>
+                </Box>
 
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={loading}
+                  onClick={() => navigate("/login")}
                   sx={{
                     py: 1.5,
                     borderRadius: 3,
@@ -163,31 +181,131 @@ export const ResetPassword = () => {
                     },
                   }}
                 >
-                  {loading ? (
-                    <CircularProgress size={24} sx={{ color: "white" }} />
-                  ) : (
-                    "Reset Password"
-                  )}
+                  Continue to Sign In
                 </Button>
-
-                <Box sx={{ textAlign: "center" }}>
-                  <Link
-                    component={RouterLink}
-                    to="/login"
-                    variant="body2"
-                    color="cyan.main"
-                    underline="hover"
-                    sx={{ fontWeight: "bold" }}
-                  >
-                    Back to Sign In
-                  </Link>
-                </Box>
               </Stack>
-            </Box>
+            ) : (
+              <Box component="form" onSubmit={handleSubmit(submitHandler)} noValidate>
+                <Stack spacing={3}>
+                  {formError && (
+                    <Box
+                      role="alert"
+                      sx={{
+                        p: 2,
+                        borderRadius: 3,
+                        border: 1,
+                        borderColor: "error.main",
+                        bgcolor: "rgba(239, 68, 68, 0.08)",
+                      }}
+                    >
+                      <Typography variant="body2" color="error.main">
+                        {formError}
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <TextField
+                    fullWidth
+                    label="New Password"
+                    type="password"
+                    placeholder="Enter new password"
+                    variant="outlined"
+                    required
+                    error={!!errors.password}
+                    helperText={
+                      errors.password?.message ||
+                      "At least 8 characters with upper case, lower case and a number."
+                    }
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: { value: 8, message: "Minimum 8 characters" },
+                      maxLength: { value: 100, message: "Maximum 100 characters" },
+                      pattern: {
+                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                        message:
+                          "Password must contain uppercase, lowercase and a number",
+                      },
+                    })}
+                    slotProps={{
+                      inputLabel: { shrink: true }
+                    }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="Confirm New Password"
+                    type="password"
+                    placeholder="Re-enter new password"
+                    variant="outlined"
+                    required
+                    error={!!errors.confirmPassword}
+                    helperText={errors.confirmPassword?.message}
+                    {...register("confirmPassword", {
+                      required: "Please confirm your password",
+                      validate: (value) =>
+                        value === getValues("password") ||
+                        "Passwords do not match",
+                    })}
+                    slotProps={{
+                      inputLabel: { shrink: true }
+                    }}
+                  />
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={loading}
+                    sx={{
+                      py: 1.5,
+                      borderRadius: 3,
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      background: "linear-gradient(to right, var(--mui-palette-cyan-main, #00acc1), var(--mui-palette-primary-main, #1976d2))",
+                      color: "white",
+                      "&:hover": {
+                        opacity: 0.9,
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} sx={{ color: "white" }} />
+                    ) : (
+                      "Reset Password"
+                    )}
+                  </Button>
+
+                  <Box sx={{ textAlign: "center" }}>
+                    <Link
+                      component={RouterLink}
+                      to="/forgot-password"
+                      variant="body2"
+                      color="cyan.main"
+                      underline="hover"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Request a new link
+                    </Link>
+                  </Box>
+
+                  <Box sx={{ textAlign: "center" }}>
+                    <Link
+                      component={RouterLink}
+                      to="/login"
+                      variant="body2"
+                      color="cyan.main"
+                      underline="hover"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Back to Sign In
+                    </Link>
+                  </Box>
+                </Stack>
+              </Box>
+            )}
           </Stack>
         </Paper>
       </Container>
     </Box>
   );
 };
-
