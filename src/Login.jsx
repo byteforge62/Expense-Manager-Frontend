@@ -149,9 +149,9 @@ export const Login = () => {
                 sx={{
                   fontFamily: "var(--font-display)",
                   fontSize: { xs: "2.15rem", sm: "2.8rem" },
-                  fontWeight: 600,
-                  lineHeight: 1.06,
-                  letterSpacing: "-0.035em",
+                  fontWeight: 700,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.045em",
                 }}
               >
                 Keep the book.
@@ -204,7 +204,7 @@ export const Login = () => {
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
-                borderRadius: 3,
+                borderRadius: "12px",
                 boxShadow: "var(--shadow-panel)",
                 p: { xs: 3, sm: 4.5 },
               }}
@@ -215,8 +215,8 @@ export const Login = () => {
                   sx={{
                     fontFamily: "var(--font-display)",
                     fontSize: "1.85rem",
-                    fontWeight: 500,
-                    letterSpacing: "-0.02em",
+                    fontWeight: 700,
+                    letterSpacing: "-0.04em",
                     lineHeight: 1.15,
                   }}
                 >

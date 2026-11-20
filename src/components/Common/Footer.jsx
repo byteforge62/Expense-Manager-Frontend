@@ -91,11 +91,11 @@ export const Footer = () => {
             <Box key={column.heading}>
               <Typography
                 sx={{
-                  fontSize: 10.5,
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--pub-quiet)",
+                  fontFamily: "var(--font-display)",
+                  fontSize: 12.5,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                  color: "var(--pub-fg)",
                 }}
               >
                 {column.heading}

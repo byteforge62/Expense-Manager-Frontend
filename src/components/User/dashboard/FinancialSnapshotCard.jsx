@@ -3,6 +3,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
 import { FiArrowUpRight, FiArrowDownRight, FiActivity } from "react-icons/fi";
 
 /* ── Hero card: net cash flow and the income/expense split ── */
@@ -22,23 +23,11 @@ export const FinancialSnapshotCard = ({
       sx={{
         position: "relative",
         overflow: "hidden",
-        borderRadius: 4,
+        borderRadius: "12px",
         border: 1,
         borderColor: "divider",
         bgcolor: "background.paper",
         boxShadow: "var(--shadow-panel)",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          width: 420,
-          height: 420,
-          right: -180,
-          top: -220,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(103, 53, 200, 0.10) 0%, transparent 68%)",
-          pointerEvents: "none",
-        },
       }}
     >
       <Box sx={{ position: "relative", p: { xs: 2.5, sm: 3.5 } }}>
@@ -52,31 +41,86 @@ export const FinancialSnapshotCard = ({
           }}
         >
           <Box>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Box
-                sx={{
-                  width: 26,
-                  height: 26,
-                  borderRadius: "8px",
-                  display: "grid",
-                  placeItems: "center",
-                  bgcolor: "var(--accent-electric-soft)",
-                  color: "primary.main",
-                }}
-              >
-                <FiActivity size={14} />
-              </Box>
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: "0.09em",
-                  textTransform: "uppercase",
-                  color: "text.secondary",
-                }}
-              >
-                This month
-              </Typography>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={1}
+            >
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Box
+                  sx={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: "8px",
+                    display: "grid",
+                    placeItems: "center",
+                    bgcolor: "var(--accent-electric-soft)",
+                    color: "primary.main",
+                  }}
+                >
+                  <FiActivity size={14} />
+                </Box>
+                <Typography
+                  sx={{
+                    fontSize: 12.5,
+                    fontWeight: 600,
+                    letterSpacing: "-0.005em",
+                    textTransform: "none",
+                    color: "text.secondary",
+                  }}
+                >
+                  This month
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" alignItems="center" spacing={1.1}>
+                <Box sx={{ position: "relative", display: "inline-flex" }}>
+                  <CircularProgress
+                    variant="determinate"
+                    value={
+                      hasActivity
+                        ? Math.min(100, Math.max(0, savingsRate))
+                        : 0
+                    }
+                    size={38}
+                    thickness={5}
+                    sx={{
+                      color:
+                        hasActivity && savingsRate < 0
+                          ? "error.main"
+                          : "primary.main",
+                      "& .MuiCircularProgress-circle": {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "grid",
+                      placeItems: "center",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: 9.5, fontWeight: 700, lineHeight: 1 }}
+                    >
+                      {hasActivity ? `${Math.round(savingsRate)}%` : "—"}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Typography
+                    sx={{ fontSize: 10.5, fontWeight: 600, lineHeight: 1.2 }}
+                  >
+                    Savings rate
+                  </Typography>
+                  <Typography sx={{ fontSize: 10, color: "text.secondary" }}>
+                    of income
+                  </Typography>
+                </Box>
+              </Stack>
             </Stack>
 
             <Typography sx={{ mt: 2, fontSize: 13, color: "text.secondary" }}>
@@ -86,9 +130,9 @@ export const FinancialSnapshotCard = ({
               sx={{
                 mt: 0.25,
                 fontFamily: "var(--font-display)",
-                fontSize: { xs: "2.5rem", sm: "3.1rem" },
-                fontWeight: 600,
-                letterSpacing: "-0.055em",
+                fontSize: { xs: "2.5rem", sm: "3.05rem" },
+                fontWeight: 700,
+                letterSpacing: "-0.05em",
                 lineHeight: 1.02,
                 fontVariantNumeric: "tabular-nums",
                 color: hasActivity
@@ -133,10 +177,10 @@ export const FinancialSnapshotCard = ({
             }
             sx={{
               p: 2.25,
-              borderRadius: 3,
+              borderRadius: "12px",
               border: 1,
               borderColor: "divider",
-              bgcolor: "background.default",
+              bgcolor: "var(--surface-secondary)",
             }}
           >
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.75 }}>

@@ -155,7 +155,7 @@ export const AccessControl = () => {
           bgcolor: 'background.paper',
           border: 1,
           borderColor: 'divider',
-          borderRadius: 2,
+          borderRadius: 1,
           boxShadow: 3
         }}
       >
@@ -215,7 +215,7 @@ export const AccessControl = () => {
                 elevation={1}
                 sx={{
                   height: '100%',
-                  borderRadius: 2,
+                  borderRadius: 1,
                   border: 1,
                   borderColor: 'divider',
                   position: 'relative',

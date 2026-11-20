@@ -98,7 +98,7 @@ export const UserDetails = () => {
           variant="body2"
           sx={{
             fontWeight: "semibold",
-            color: "rgba(74, 47, 203, 0.6)",
+            color: "rgba(79,70,229, 0.6)",
             letterSpacing: "0.15em",
             animation: "pulse 2s infinite",
           }}
@@ -133,7 +133,7 @@ export const UserDetails = () => {
           <Typography variant="body2" sx={{ fontWeight: "bold", color: "text.disabled", letterSpacing: "0.3em", fontSize: "12px" }}>
             Subject Analysis
           </Typography>
-          <Typography variant="caption" sx={{ color: "rgba(74, 47, 203, 0.6)", fontFamily: "monospace" }}>
+          <Typography variant="caption" sx={{ color: "rgba(79,70,229, 0.6)", fontFamily: "monospace" }}>
             ID: {userId}
           </Typography>
         </Box>
@@ -190,8 +190,8 @@ export const UserDetails = () => {
                     sx={{
                       width: 128,
                       height: 128,
-                      borderRadius: 6,
-                      border: "2px solid rgba(74, 47, 203, 0.3)",
+                      borderRadius: 1,
+                      border: "2px solid rgba(79,70,229, 0.3)",
                       objectFit: "cover",
                       boxShadow: 5,
                       p: 0.5,
@@ -204,11 +204,11 @@ export const UserDetails = () => {
                     sx={{
                       width: 128,
                       height: 128,
-                      borderRadius: 6,
+                      borderRadius: 1,
                       bgcolor: "action.hover",
                       border: 1,
                       borderColor: "divider",
-                      boxShadow: "0 0 20px rgba(74, 47, 203, 0.1)",
+                      boxShadow: "0 0 20px rgba(79,70,229, 0.1)",
                     }}
                   >
                     <FiUser size={64} style={{ color: "var(--text-muted)" }} />
@@ -258,7 +258,7 @@ export const UserDetails = () => {
                       borderRadius: 1.5,
                       border: 1,
                       ...(user?.role === "Admin"
-                        ? { bgcolor: "rgba(74, 47, 203, 0.1)", borderColor: "rgba(74, 47, 203, 0.3)", color: "cyan" }
+                        ? { bgcolor: "rgba(79,70,229, 0.1)", borderColor: "rgba(79,70,229, 0.3)", color: "cyan" }
                         : { bgcolor: "action.hover", borderColor: "divider", color: "text.disabled" }),
                     }}
                   />
@@ -276,7 +276,7 @@ export const UserDetails = () => {
                   sx={{
                     px: 3,
                     py: 1.5,
-                    borderRadius: 2,
+                    borderRadius: 1,
                     bgcolor: "action.hover",
                     borderColor: "divider",
                     color: "text.secondary",
@@ -299,14 +299,14 @@ export const UserDetails = () => {
                 label: "Gross Inflow",
                 value: totalIncome,
                 icon: <FiArrowUpRight size={20} />,
-                gradient: "linear-gradient(135deg, rgba(46, 122, 89, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%)",
+                gradient: "linear-gradient(135deg, rgba(16,185,129, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%)",
                 accent: "rgb(52, 211, 153)",
               },
               {
                 label: "Operational Outflow",
                 value: totalExpense,
                 icon: <FiArrowDownLeft size={20} />,
-                gradient: "linear-gradient(135deg, rgba(169, 75, 63, 0.2) 0%, rgba(249, 115, 22) 100%)",
+                gradient: "linear-gradient(135deg, rgba(239,68,68, 0.2) 0%, rgba(249, 115, 22) 100%)",
                 accent: "rgb(251, 113, 133)",
               },
               {
@@ -323,7 +323,7 @@ export const UserDetails = () => {
                   whileHover={{ y: -5 }}
                   sx={{
                     p: 3,
-                    borderRadius: 6,
+                    borderRadius: 1,
                     background: card.gradient,
                     border: 1,
                     borderColor: "divider",
@@ -346,7 +346,7 @@ export const UserDetails = () => {
                     className="icon-box"
                     sx={{
                       p: 2,
-                      borderRadius: 2,
+                      borderRadius: 1,
                       bgcolor: "rgba(255, 255, 255, 0.03)",
                       color: card.accent,
                       boxShadow: "inset 0px 1px 3px rgba(0,0,0,0.4)",
@@ -372,7 +372,7 @@ export const UserDetails = () => {
                   <BarChart data={[{ name: "Inflow", amount: totalIncome }, { name: "Outflow", amount: totalExpense }]}>
                     <defs>
                       <linearGradient id="distGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#6735c8" stopOpacity={0.8} />
+                        <stop offset="0%" stopColor="#6366f1" stopOpacity={0.8} />
                         <stop offset="100%" stopColor="#4A5F55" stopOpacity={0.1} />
                       </linearGradient>
                     </defs>
@@ -395,19 +395,19 @@ export const UserDetails = () => {
                   <AreaChart data={monthlyData}>
                     <defs>
                       <linearGradient id="areaIn" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#1f9d6b" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#1f9d6b" stopOpacity={0} />
+                        <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="areaOut" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#e0564b" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#e0564b" stopOpacity={0} />
+                        <stop offset="0%" stopColor="#ef4444" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#ef4444" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: "var(--text-muted)", fontSize: 10, fontWeight: 700 }} />
                     <YAxis hide />
                     <Tooltip contentStyle={{ background: "var(--surface-primary)", border: "1px solid var(--border)", borderRadius: "15px", color: "var(--text-primary)" }} />
-                    <Area type="monotone" dataKey="income" stroke="#1f9d6b" fill="url(#areaIn)" strokeWidth={3} />
-                    <Area type="monotone" dataKey="expense" stroke="#e0564b" fill="url(#areaOut)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="income" stroke="#10b981" fill="url(#areaIn)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="expense" stroke="#ef4444" fill="url(#areaOut)" strokeWidth={3} />
                   </AreaChart>
                 </ResponsiveContainer>
               </Card>
@@ -462,7 +462,7 @@ export const UserDetails = () => {
                     sx={{
                       flexGrow: 1,
                       p: 2.5,
-                      borderRadius: 2,
+                      borderRadius: 1,
                       bgcolor: "rgba(255,255,255,0.01)",
                       border: 1,
                       borderColor: "divider",
@@ -486,7 +486,7 @@ export const UserDetails = () => {
                         sx={{
                           fontSize: "10px",
                           fontWeight: "bold",
-                          borderRadius: 2,
+                          borderRadius: 1,
                           border: 1,
                           ...(tx.type === "income"
                             ? { bgcolor: "rgba(16,185,129,0.05)", borderColor: "rgba(16,185,129,0.2)", color: "rgb(52, 211, 153)" }

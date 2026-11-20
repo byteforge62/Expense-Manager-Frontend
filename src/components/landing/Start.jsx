@@ -72,17 +72,17 @@ export const Start = () => (
         }}
       >
         <Box>
-          <Stack direction="row" spacing={1.1} alignItems="center">
-            <Box component="span" sx={{ color: "#e9d5a1", fontSize: 17, lineHeight: 1 }}>
-              ✦
-            </Box>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Box
+              aria-hidden="true"
+              sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "#a5b4fc" }}
+            />
             <Typography
               sx={{
-                fontSize: 11,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                opacity: 0.62,
-                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.01em",
+                color: "rgba(248,250,252,0.72)",
+                fontWeight: 500,
               }}
             >
               One plan. It costs nothing.
@@ -111,7 +111,7 @@ export const Start = () => (
               maxWidth: 470,
               fontSize: 14,
               lineHeight: 1.7,
-              color: "rgba(246, 243, 255, 0.68)",
+              color: "rgba(248, 250, 252, 0.68)",
             }}
           >
             Open a ledger, record this month, and let the balance answer the
@@ -129,9 +129,9 @@ export const Start = () => (
               px: 3,
               minHeight: 48,
               bgcolor: "#ffffff",
-              color: "#4922a8",
+              color: "#0f172a",
               whiteSpace: "nowrap",
-              "&:hover": { bgcolor: "#f2ecff", color: "#3d1c8a" },
+              "&:hover": { bgcolor: "#eef2ff", color: "#0f172a" },
             }}
           >
             Get started free
@@ -144,11 +144,11 @@ export const Start = () => (
               px: 3,
               minHeight: 48,
               color: "var(--pub-violet-field-fg)",
-              border: "1px solid rgba(246, 243, 255, 0.26)",
+              border: "1px solid rgba(248, 250, 252, 0.24)",
               whiteSpace: "nowrap",
               "&:hover": {
-                bgcolor: "rgba(246, 243, 255, 0.08)",
-                borderColor: "rgba(246, 243, 255, 0.5)",
+                bgcolor: "rgba(248, 250, 252, 0.08)",
+                borderColor: "rgba(248, 250, 252, 0.46)",
               },
             }}
           >

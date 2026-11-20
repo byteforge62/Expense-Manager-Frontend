@@ -10,22 +10,22 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import { FiMenu, FiX, FiMoon, FiSun, FiArrowRight } from "react-icons/fi";
+import { FiMenu, FiX, FiMoon, FiSun } from "react-icons/fi";
 import { useTheme } from "../../context/ThemeContext";
 import fintrackMark from "../../assets/brand/fintrack-mark.svg";
 
 const links = [
-  { label: "How it works", id: "how" },
-  { label: "Features", id: "features" },
-  { label: "Forecasting", id: "forecast" },
-  { label: "FAQ", id: "questions" },
+  { label: "Home", href: "/" },
+  { label: "About us", id: "how" },
+  { label: "Resources", id: "features" },
+  { label: "Solutions", id: "forecast" },
+  { label: "Pricing", id: "start" },
 ];
 
 /**
  * --- PUBLIC NAVIGATION ---
- * A single clean bar on the page canvas. It gains a hairline and a
- * translucent surface once the page moves, and opens a light mobile sheet
- * below `md`.
+ * White bar, brand left, product links centred, a borderless log in and a
+ * dark pill next to it. On mobile the same links open as a full sheet.
  */
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -72,6 +72,17 @@ export const Navbar = () => {
     if (target) target.scrollIntoView({ block: "start", behavior: "smooth" });
   };
 
+  const linkSx = {
+    px: 1.35,
+    py: 0.9,
+    fontSize: 13.5,
+    fontWeight: 500,
+    color: "var(--pub-muted)",
+    textDecoration: "none",
+    borderRadius: 999,
+    "&:hover": { color: "var(--pub-fg)", bgcolor: "var(--pub-surface-alt)" },
+  };
+
   return (
     <>
       <AppBar
@@ -82,9 +93,9 @@ export const Navbar = () => {
           zIndex: (t) => t.zIndex.appBar,
           color: "var(--pub-fg)",
           bgcolor: scrolled
-            ? "color-mix(in srgb, var(--pub-bg) 88%, transparent)"
-            : "var(--pub-bg)",
-          backdropFilter: scrolled ? "saturate(140%) blur(14px)" : "none",
+            ? "color-mix(in srgb, var(--pub-surface) 90%, transparent)"
+            : "var(--pub-surface)",
+          backdropFilter: scrolled ? "saturate(150%) blur(14px)" : "none",
           backgroundImage: "none",
           borderBottom: "1px solid",
           borderColor: scrolled ? "var(--pub-hair)" : "transparent",
@@ -94,12 +105,12 @@ export const Navbar = () => {
         <Toolbar
           disableGutters
           sx={{
-            minHeight: { xs: "64px !important", md: "74px !important" },
+            minHeight: { xs: "66px !important", md: "78px !important" },
             maxWidth: "var(--pub-max)",
             width: "100%",
             mx: "auto",
             px: "var(--pub-gutter) !important",
-            gap: { xs: 1.5, md: 4 },
+            gap: { xs: 1.5, md: 3 },
           }}
         >
           <Stack
@@ -110,15 +121,21 @@ export const Navbar = () => {
             alignItems="center"
             sx={{ textDecoration: "none", color: "inherit", flexShrink: 0 }}
           >
-            <Box component="img" src={fintrackMark} alt="" sx={{ width: 28, height: 28, display: "block" }} />
+            <Box
+              component="img"
+              src={fintrackMark}
+              alt=""
+              sx={{ width: 30, height: 30, display: "block" }}
+            />
             <Typography
               component="span"
               sx={{
                 fontFamily: "var(--font-display)",
-                fontSize: "1.35rem",
-                fontWeight: 600,
+                fontSize: "1.32rem",
+                fontWeight: 700,
                 letterSpacing: "-0.045em",
                 lineHeight: 1,
+                color: "var(--pub-fg)",
               }}
             >
               FinTrack
@@ -127,34 +144,36 @@ export const Navbar = () => {
 
           <Stack
             direction="row"
-            spacing={0.5}
-            sx={{ display: { xs: "none", md: "flex" }, ml: 1 }}
+            spacing={0.25}
+            sx={{ display: { xs: "none", md: "flex" }, ml: { md: 3, lg: 5 } }}
           >
-            {links.map((link) => (
-              <Box
-                key={link.id}
-                component="a"
-                href={`#${link.id}`}
-                onClick={(event) => goTo(event, link.id)}
-                sx={{
-                  px: 1.5,
-                  py: 0.85,
-                  borderRadius: 999,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: "var(--pub-muted)",
-                  textDecoration: "none",
-                  "&:hover": { color: "var(--pub-accent)", bgcolor: "var(--pub-lavender-soft)" },
-                }}
-              >
-                {link.label}
-              </Box>
-            ))}
+            {links.map((link) =>
+              link.href ? (
+                <Box
+                  key={link.label}
+                  component={RouterLink}
+                  to={link.href}
+                  sx={linkSx}
+                >
+                  {link.label}
+                </Box>
+              ) : (
+                <Box
+                  key={link.label}
+                  component="a"
+                  href={`#${link.id}`}
+                  onClick={(event) => goTo(event, link.id)}
+                  sx={linkSx}
+                >
+                  {link.label}
+                </Box>
+              ),
+            )}
           </Stack>
 
           <Stack
             direction="row"
-            spacing={1}
+            spacing={0.75}
             alignItems="center"
             sx={{ ml: "auto", display: { xs: "none", md: "flex" } }}
           >
@@ -162,12 +181,11 @@ export const Navbar = () => {
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
               sx={{
-                width: 36,
-                height: 36,
+                width: 38,
+                height: 38,
                 color: "var(--pub-muted)",
-                border: "1px solid var(--pub-hair)",
-                bgcolor: "var(--pub-surface)",
-                "&:hover": { color: "var(--pub-accent)" },
+                border: "1px solid transparent",
+                "&:hover": { bgcolor: "var(--pub-surface-alt)", color: "var(--pub-fg)" },
               }}
             >
               {theme === "dark" ? <FiSun size={16} /> : <FiMoon size={16} />}
@@ -177,36 +195,47 @@ export const Navbar = () => {
               to="/login"
               sx={{
                 px: 2,
-                minHeight: 38,
+                minHeight: 40,
                 color: "var(--pub-fg)",
                 fontWeight: 600,
-                fontSize: 13,
-                "&:hover": { bgcolor: "var(--pub-lavender-soft)" },
+                fontSize: 13.5,
+                border: "1px solid transparent",
+                bgcolor: "transparent",
+                "&:hover": { bgcolor: "var(--pub-surface-alt)" },
               }}
             >
-              Sign in
+              Log in
             </Button>
             <Button
               component={RouterLink}
               to="/signup"
               variant="contained"
-              endIcon={<FiArrowRight size={15} />}
-              sx={{ px: 2.25, minHeight: 40, fontSize: 13 }}
+              sx={{
+                px: 2.5,
+                minHeight: 42,
+                bgcolor: "var(--pub-action)",
+                color: "var(--pub-action-fg)",
+                fontSize: 13.5,
+                fontWeight: 600,
+                "&:hover": {
+                  bgcolor: "color-mix(in srgb, var(--pub-action) 86%, var(--pub-action-fg))",
+                },
+              }}
             >
-              Get started
+              Sign up
             </Button>
           </Stack>
 
           <Stack
             direction="row"
-            spacing={0.75}
+            spacing={0.5}
             alignItems="center"
             sx={{ ml: "auto", display: { xs: "flex", md: "none" } }}
           >
             <IconButton
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-              sx={{ width: 36, height: 36, color: "var(--pub-muted)" }}
+              sx={{ width: 38, height: 38, color: "var(--pub-muted)" }}
             >
               {theme === "dark" ? <FiSun size={17} /> : <FiMoon size={17} />}
             </IconButton>
@@ -214,9 +243,15 @@ export const Navbar = () => {
               onClick={() => setOpen((value) => !value)}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
-              sx={{ width: 38, height: 38, color: "var(--pub-fg)" }}
+              sx={{
+                width: 40,
+                height: 40,
+                color: "var(--pub-fg)",
+                border: "1px solid var(--pub-hair)",
+                bgcolor: "var(--pub-surface)",
+              }}
             >
-              {open ? <FiX size={20} /> : <FiMenu size={20} />}
+              {open ? <FiX size={19} /> : <FiMenu size={19} />}
             </IconButton>
           </Stack>
         </Toolbar>
@@ -232,16 +267,16 @@ export const Navbar = () => {
             transition={{ duration: 0.18 }}
             sx={{
               position: "fixed",
-              top: 64,
+              top: 66,
               left: 0,
               right: 0,
               bottom: 0,
               zIndex: (t) => t.zIndex.appBar - 1,
-              bgcolor: "var(--pub-bg)",
+              bgcolor: "var(--pub-surface)",
               borderTop: "1px solid var(--pub-hair)",
               display: { md: "none" },
               px: "var(--pub-gutter)",
-              pt: 2,
+              pt: 1.5,
               pb: 4,
               overflowY: "auto",
             }}
@@ -249,18 +284,19 @@ export const Navbar = () => {
             <Stack>
               {links.map((link) => (
                 <Box
-                  key={link.id}
-                  component="a"
-                  href={`#${link.id}`}
-                  onClick={(event) => goTo(event, link.id)}
+                  key={link.label}
+                  component={link.href ? RouterLink : "a"}
+                  {...(link.href
+                    ? { to: link.href }
+                    : { href: `#${link.id}`, onClick: (event) => goTo(event, link.id) })}
                   sx={{
-                    py: 2.1,
+                    py: 2,
                     borderBottom: "1px solid var(--pub-hair)",
                     textDecoration: "none",
                     color: "var(--pub-fg)",
                     fontFamily: "var(--font-display)",
-                    fontSize: "1.3rem",
-                    fontWeight: 600,
+                    fontSize: "1.24rem",
+                    fontWeight: 700,
                     letterSpacing: "-0.03em",
                   }}
                 >
@@ -276,9 +312,15 @@ export const Navbar = () => {
                 size="large"
                 fullWidth
                 variant="contained"
-                endIcon={<FiArrowRight size={16} />}
+                sx={{
+                  bgcolor: "var(--pub-action)",
+                  color: "var(--pub-action-fg)",
+                  "&:hover": {
+                    bgcolor: "color-mix(in srgb, var(--pub-action) 86%, var(--pub-action-fg))",
+                  },
+                }}
               >
-                Get started free
+                Sign up free
               </Button>
               <Button
                 component={RouterLink}
@@ -286,12 +328,12 @@ export const Navbar = () => {
                 size="large"
                 fullWidth
                 variant="outlined"
-                sx={{ borderColor: "var(--pub-hair)" }}
+                sx={{ borderColor: "var(--pub-hair)", color: "var(--pub-fg)" }}
               >
-                Sign in
+                Log in
               </Button>
               <Typography sx={{ pt: 1, fontSize: 11.5, color: "var(--pub-quiet)", textAlign: "center" }}>
-                Free to use · Reports download as PDF
+                Free to use · No card details
               </Typography>
             </Stack>
           </Box>

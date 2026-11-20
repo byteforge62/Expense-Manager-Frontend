@@ -36,7 +36,7 @@ import {
   FiFileText,
 } from "react-icons/fi";
 
-const COLORS = ["#a78bfa", "#1f9d6b", "#b07c26", "#e0564b", "#3E6BB5"];
+const COLORS = ["#a78bfa", "#10b981", "#f59e0b", "#ef4444", "#3E6BB5"];
 
 export const ReportAdmins = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export const ReportAdmins = () => {
         justifyContent="center"
         sx={{ h: "70vh", color: "text.disabled" }}
       >
-        <CircularProgress size={40} sx={{ mb: 2, color: "#1f9d6b" }} />
+        <CircularProgress size={40} sx={{ mb: 2, color: "#10b981" }} />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           Loading system intelligence report...
         </Typography>
@@ -73,31 +73,31 @@ export const ReportAdmins = () => {
       label: "Active Users",
       value: stats.activeUsers,
       trend: "Enabled",
-      color: "linear-gradient(to bottom right, #1f9d6b, #1f9d6b)",
+      color: "linear-gradient(to bottom right, #10b981, #10b981)",
     },
     {
       label: "Deactivated Users",
       value: stats.deactivatedUsers,
       trend: "Disabled",
-      color: "linear-gradient(to bottom right, #e0564b, #ef4444)",
+      color: "linear-gradient(to bottom right, #ef4444, #ef4444)",
     },
     {
       label: "Total Income",
       value: `₹${stats.totalIncome?.toLocaleString("en-IN") || 0}`,
       trend: "Recorded",
-      color: "linear-gradient(to bottom right, #6735c8, #6735c8)",
+      color: "linear-gradient(to bottom right, #6366f1, #6366f1)",
     },
     {
       label: "Total Expense",
       value: `₹${stats.totalExpense?.toLocaleString("en-IN") || 0}`,
       trend: "Recorded",
-      color: "linear-gradient(to bottom right, #b07c26, #f97316)",
+      color: "linear-gradient(to bottom right, #f59e0b, #f97316)",
     },
     {
       label: "Most Active User",
       value: stats.mostActiveUser || "N/A",
       trend: "Most entries",
-      color: "linear-gradient(to bottom right, #a78bfa, #e0564b)",
+      color: "linear-gradient(to bottom right, #a78bfa, #ef4444)",
     },
   ];
 
@@ -149,7 +149,7 @@ export const ReportAdmins = () => {
                 w: 8,
                 h: 8,
                 borderRadius: "50%",
-                bgcolor: "#1f9d6b",
+                bgcolor: "#10b981",
                 animation: "pulse 2s infinite",
               }}
             />
@@ -158,7 +158,7 @@ export const ReportAdmins = () => {
           sx={{
             px: 1.5,
             py: 2,
-            borderRadius: 2,
+            borderRadius: 1,
             bgcolor: "background.paper",
             border: 1,
             borderColor: "divider",
@@ -183,7 +183,7 @@ export const ReportAdmins = () => {
               transition={{ delay: index * 0.05 }}
               sx={{
                 p: 2.5,
-                borderRadius: 3,
+                borderRadius: 1,
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
@@ -242,7 +242,7 @@ export const ReportAdmins = () => {
                     sx={{
                       w: 32,
                       h: 32,
-                      borderRadius: 2,
+                      borderRadius: 1,
                       background: kpi.color,
                       opacity: 0.2,
                       filter: "blur(4px)",
@@ -295,11 +295,11 @@ export const ReportAdmins = () => {
                 sx={{
                   width: 40,
                   height: 40,
-                  borderRadius: 2,
+                  borderRadius: 1,
                   bgcolor: "action.hover",
                   border: 1,
                   borderColor: "divider",
-                  color: "#1f9d6b",
+                  color: "#10b981",
                 }}
               >
                 <FiActivity size={18} />
@@ -313,7 +313,7 @@ export const ReportAdmins = () => {
               >
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#1f9d6b" stopOpacity={0.8} />
+                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#4A5F55" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
@@ -384,7 +384,7 @@ export const ReportAdmins = () => {
                 sx={{
                   width: 40,
                   height: 40,
-                  borderRadius: 2,
+                  borderRadius: 1,
                   bgcolor: "action.hover",
                   border: 1,
                   borderColor: "divider",
@@ -463,7 +463,7 @@ export const ReportAdmins = () => {
                   height: 280,
                   border: "1px dashed",
                   borderColor: "divider",
-                  borderRadius: 6,
+                  borderRadius: 1,
                 }}
               >
                 <Typography
@@ -528,9 +528,9 @@ export const ReportAdmins = () => {
                     sx={{
                       p: 1,
                       borderRadius: 1.5,
-                      bgcolor: "rgba(74, 47, 203, 0.1)",
-                      border: "1px solid rgba(74, 47, 203, 0.2)",
-                      color: "#1f9d6b",
+                      bgcolor: "rgba(79,70,229, 0.1)",
+                      border: "1px solid rgba(79,70,229, 0.2)",
+                      color: "#10b981",
                     }}
                   >
                     <FiActivity size={18} />
@@ -578,9 +578,9 @@ export const ReportAdmins = () => {
                     sx={{
                       p: 1,
                       borderRadius: 1.5,
-                      bgcolor: "rgba(169, 75, 63, 0.1)",
-                      border: "1px solid rgba(169, 75, 63, 0.2)",
-                      color: "#e0564b",
+                      bgcolor: "rgba(239,68,68, 0.1)",
+                      border: "1px solid rgba(239,68,68, 0.2)",
+                      color: "#ef4444",
                     }}
                   >
                     <FiXCircle size={18} />
@@ -603,7 +603,7 @@ export const ReportAdmins = () => {
                       borderRadius: 1.5,
                       bgcolor: "rgba(245, 158, 11, 0.1)",
                       border: "1px solid rgba(245, 158, 11, 0.2)",
-                      color: "#b07c26",
+                      color: "#f59e0b",
                     }}
                   >
                     <FiFileText size={18} />

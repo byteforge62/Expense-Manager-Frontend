@@ -254,7 +254,7 @@ export const Transaction = () => {
                       <div
                         className={`flex items-center gap-4 px-8 py-5 bg-[var(--surface-secondary)]/30`}
                       >
-                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(74,47,203,0.4)]" />
+                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(79,70,229,0.4)]" />
                         <span className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.3em]">
                           {date}
                         </span>

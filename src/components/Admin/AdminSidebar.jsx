@@ -29,9 +29,9 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import fintrackMark from "../../assets/brand/fintrack-mark.svg";
 
-const activeColor = "#191922";
+const activeColor = "#0f172a";
 const mutedColor = "#5b5b69";
-const markColor = "#6735c8";
+const markColor = "#6366f1";
 
 /**
  * --- ADMIN RAIL ---
@@ -179,13 +179,13 @@ export const AdminSidebar = ({ isOpen, toggleSidebar }) => {
                     py: 1,
                     minHeight: 38,
                     justifyContent: isOpen ? "flex-start" : "center",
-                    color: isActive ? "#4922a8" : mutedColor,
-                    bgcolor: isActive ? "#f4efff" : "transparent",
+                    color: isActive ? "#4338ca" : mutedColor,
+                    bgcolor: isActive ? "#f5f3ff" : "transparent",
                     borderRadius: 2.5,
-                    "&:hover": { bgcolor: "#f4efff", color: "#4922a8" },
+                    "&:hover": { bgcolor: "#f5f3ff", color: "#4338ca" },
                     "&.Mui-selected": {
-                      bgcolor: "#f4efff",
-                      color: "#4922a8",
+                      bgcolor: "#f5f3ff",
+                      color: "#4338ca",
                     },
                   }}
                 >
@@ -233,9 +233,9 @@ export const AdminSidebar = ({ isOpen, toggleSidebar }) => {
               sx={{
                 width: 30,
                 height: 30,
-                borderRadius: 2,
-                bgcolor: "#f4efff",
-                color: "#4922a8",
+                borderRadius: 1,
+                bgcolor: "#f5f3ff",
+                color: "#4338ca",
                 fontSize: "0.8rem",
               }}
             >

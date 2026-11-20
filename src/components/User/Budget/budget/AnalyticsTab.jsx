@@ -148,10 +148,10 @@ const AnalyticsTab = ({ summary }) => (
             />
             <Bar
               dataKey="allocated"
-              fill="#1f9d6b"
+              fill="#10b981"
               radius={[6, 6, 0, 0]}
             />
-            <Bar dataKey="spent" fill="#e0564b" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="spent" fill="#ef4444" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       )}

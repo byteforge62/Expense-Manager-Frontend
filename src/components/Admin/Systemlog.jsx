@@ -57,13 +57,13 @@ export const Systemlog = () => {
     
     const act = action.toLowerCase();
     if (act.includes("delete"))
-      return { ...base, bgcolor: "rgba(169, 75, 63, 0.1)", borderColor: "rgba(169, 75, 63, 0.2)", color: "#e0564b" };
+      return { ...base, bgcolor: "rgba(239,68,68, 0.1)", borderColor: "rgba(239,68,68, 0.2)", color: "#ef4444" };
     if (act.includes("update"))
-      return { ...base, bgcolor: "rgba(74, 47, 203, 0.1)", borderColor: "rgba(74, 47, 203, 0.2)", color: "#6735c8" };
+      return { ...base, bgcolor: "rgba(79,70,229, 0.1)", borderColor: "rgba(79,70,229, 0.2)", color: "#6366f1" };
     if (act.includes("create"))
-      return { ...base, bgcolor: "rgba(46, 122, 89, 0.1)", borderColor: "rgba(46, 122, 89, 0.2)", color: "#1f9d6b" };
+      return { ...base, bgcolor: "rgba(16,185,129, 0.1)", borderColor: "rgba(16,185,129, 0.2)", color: "#10b981" };
       
-    return { ...base, bgcolor: "rgba(163, 119, 58, 0.1)", borderColor: "rgba(163, 119, 58, 0.2)", color: "#6735c8" };
+    return { ...base, bgcolor: "rgba(245,158,11, 0.1)", borderColor: "rgba(245,158,11, 0.2)", color: "#6366f1" };
   };
 
   return (
@@ -111,10 +111,10 @@ export const Systemlog = () => {
           sx={{
             px: 1.5,
             py: 2,
-            borderRadius: 2,
-            bgcolor: "rgba(163, 119, 58, 0.1)",
-            border: "1px solid rgba(163, 119, 58, 0.2)",
-            color: "#6735c8",
+            borderRadius: 1,
+            bgcolor: "rgba(245,158,11, 0.1)",
+            border: "1px solid rgba(245,158,11, 0.2)",
+            color: "#6366f1",
             fontSize: "10px",
             fontWeight: 600,
             letterSpacing: 1,
@@ -137,8 +137,8 @@ export const Systemlog = () => {
         }}
       >
         {/* Synthetic background ambient blurs */}
-        <Box sx={{ position: "absolute", top: 0, right: 0, w: 256, h: 256, bgcolor: "rgba(163, 119, 58, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
-        <Box sx={{ position: "absolute", bottom: 0, left: 0, w: 256, h: 256, bgcolor: "rgba(74, 47, 203, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
+        <Box sx={{ position: "absolute", top: 0, right: 0, w: 256, h: 256, bgcolor: "rgba(245,158,11, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
+        <Box sx={{ position: "absolute", bottom: 0, left: 0, w: 256, h: 256, bgcolor: "rgba(79,70,229, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
 
         <Stack
           direction={{ xs: "column", lg: "row" }}
@@ -162,14 +162,14 @@ export const Systemlog = () => {
             sx={{
               "& .MuiOutlinedInput-root": {
                 bgcolor: "action.hover",
-                borderRadius: 2,
+                borderRadius: 1,
                 color: "text.primary",
                 fontWeight: "bold",
                 letterSpacing: "-0.01em",
                 "& fieldset": { borderColor: "divider" },
                 "&:hover fieldset": { borderColor: "action.active" },
-                "&.Mui-focused fieldset": { borderColor: "rgba(163, 119, 58, 0.5)", borderWidth: "1px" },
-                "&.Mui-focused": { boxShadow: "0 0 0 4px rgba(163, 119, 58, 0.05)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(245,158,11, 0.5)", borderWidth: "1px" },
+                "&.Mui-focused": { boxShadow: "0 0 0 4px rgba(245,158,11, 0.05)" },
               },
               "& .MuiOutlinedInput-input": { py: 2, px: 1, fontSize: "14px" },
             }}
@@ -181,11 +181,11 @@ export const Systemlog = () => {
             sx={{
               px: 2,
               py: 2.5,
-              borderRadius: 2,
-              bgcolor: "rgba(163, 119, 58, 0.1)",
+              borderRadius: 1,
+              bgcolor: "rgba(245,158,11, 0.1)",
               border: 1,
-              borderColor: "rgba(163, 119, 58, 0.2)",
-              color: "#6735c8",
+              borderColor: "rgba(245,158,11, 0.2)",
+              color: "#6366f1",
               fontSize: "10px",
               fontWeight: 600,
               letterSpacing: "0.2em",
@@ -217,7 +217,7 @@ export const Systemlog = () => {
         {loading ? (
           /* SYNC STATE LOAD ENGINE */
           <Stack alignItems="center" justifyContent="center" sx={{ py: 16 }} spacing={3}>
-            <CircularProgress thickness={4} sx={{ color: "#6735c8", width: "48px !important", height: "48px !important" }} />
+            <CircularProgress thickness={4} sx={{ color: "#6366f1", width: "48px !important", height: "48px !important" }} />
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="caption" sx={{ display: "block", fontWeight: 600, color: "text.primary", letterSpacing: "0.15em", animation: "pulse 2s infinite", mb: 0.5 }}>
                 Synchronizing Ledger...
@@ -230,7 +230,7 @@ export const Systemlog = () => {
         ) : error ? (
           /* FETCH FAILURE STATE */
           <Stack alignItems="center" justifyContent="center" sx={{ py: 16 }} spacing={2}>
-            <Avatar variant="rounded" sx={{ bgcolor: "rgba(169, 75, 63, 0.1)", color: "#e0564b", width: 56, height: 56 }}>
+            <Avatar variant="rounded" sx={{ bgcolor: "rgba(239,68,68, 0.1)", color: "#ef4444", width: 56, height: 56 }}>
               <FiShield size={24} />
             </Avatar>
             <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
@@ -305,9 +305,9 @@ export const Systemlog = () => {
                           borderBottom: 1,
                           borderColor: "divider",
                           "&:last-child": { borderBottom: "none" },
-                          "&:hover": { bgcolor: "rgba(163, 119, 58, 0.05)" },
-                          "&:hover .timestamp-cell": { color: "#6735c8" },
-                          "&:hover .actor-avatar": { borderColor: "rgba(163, 119, 58, 0.5)" },
+                          "&:hover": { bgcolor: "rgba(245,158,11, 0.05)" },
+                          "&:hover .timestamp-cell": { color: "#6366f1" },
+                          "&:hover .actor-avatar": { borderColor: "rgba(245,158,11, 0.5)" },
                         }}
                       >
                         {/* TIMESTAMP */}
@@ -327,13 +327,13 @@ export const Systemlog = () => {
                               sx={{
                                 width: 32,
                                 height: 32,
-                                borderRadius: 2,
+                                borderRadius: 1,
                                 bgcolor: "action.hover",
                                 border: 1,
                                 borderColor: "divider",
                                 fontSize: "10px",
                                 fontWeight: 600,
-                                color: "#6735c8",
+                                color: "#6366f1",
                                 transition: "border-color 0.3s",
                                 boxShadow: "inset 0px 1px 2px rgba(0,0,0,0.2)",
                               }}
@@ -389,7 +389,7 @@ export const Systemlog = () => {
                   animate={{ opacity: 1, y: 0 }}
                   sx={{
                     p: 4,
-                    borderRadius: 2,
+                    borderRadius: 1,
                     bgcolor: "rgba(255,255,255,0.01)",
                     border: 1,
                     borderColor: "divider",
@@ -405,7 +405,7 @@ export const Systemlog = () => {
                   </Box>
 
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                    <Typography variant="body2" sx={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 600, color: "#6735c8", letterSpacing: 0.5 }}>
+                    <Typography variant="body2" sx={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 600, color: "#6366f1", letterSpacing: 0.5 }}>
                       {new Date(log.timestamp || log.createdAt).toLocaleString()}
                     </Typography>
                     <Box component="span" sx={getBadgeStyle(log.action)}>
@@ -414,7 +414,7 @@ export const Systemlog = () => {
                   </Stack>
 
                   <Typography variant="subtitle2" sx={{ fontWeight: 600, letterSpacing: 0.5, mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                    <Avatar variant="rounded" sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: "rgba(163, 119, 58, 0.2)", color: "#6735c8", "& .MuiSvgIcon-root": { fontSize: 12 } }}>
+                    <Avatar variant="rounded" sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: "rgba(245,158,11, 0.2)", color: "#6366f1", "& .MuiSvgIcon-root": { fontSize: 12 } }}>
                       <FiUser size={12} />
                     </Avatar>
                     {log.user}

@@ -16,10 +16,10 @@ import { AICard, AIButton, AIResult } from "./AICard";
 
   const riskColors = {
     High: {
-      border: "rgba(169, 75, 63, 0.3)",
-      bg: "rgba(169, 75, 63, 0.05)",
+      border: "rgba(239,68,68, 0.3)",
+      bg: "rgba(239,68,68, 0.05)",
       text: "error.main",
-      badge: "rgba(169, 75, 63, 0.1)",
+      badge: "rgba(239,68,68, 0.1)",
     },
     Medium: {
       border: "rgba(245, 158, 11, 0.3)",
@@ -28,10 +28,10 @@ import { AICard, AIButton, AIResult } from "./AICard";
       badge: "rgba(245, 158, 11, 0.1)",
     },
     Low: {
-      border: "rgba(46, 122, 89, 0.3)",
-      bg: "rgba(46, 122, 89, 0.05)",
+      border: "rgba(16,185,129, 0.3)",
+      bg: "rgba(16,185,129, 0.05)",
       text: "success.main",
-      badge: "rgba(46, 122, 89, 0.1)",
+      badge: "rgba(16,185,129, 0.1)",
     },
   };
 
@@ -97,8 +97,8 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => (
             title="Spending risk"
             icon={<FiAlertTriangle size={15} />}
             iconColor="error.main"
-            iconBg="rgba(169, 75, 63, 0.1)"
-            borderColor="rgba(169, 75, 63, 0.15)"
+            iconBg="rgba(239,68,68, 0.1)"
+            borderColor="rgba(239,68,68, 0.15)"
             isLoading={isLoading}
             onRefresh={onRefresh}
           >

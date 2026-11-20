@@ -110,6 +110,7 @@ export const AdminDashboardLayout = () => {
                     fontFamily: "var(--font-display)",
                     fontSize: "1.2rem",
                     fontWeight: 600,
+                    color: "text.primary",
                     letterSpacing: "-0.01em",
                     lineHeight: 1.2,
                     display: { xs: "none", sm: "block" },

@@ -34,6 +34,7 @@ const Eyebrow = ({ children }) => (
       color: "var(--pub-accent-deep)",
       fontSize: 11.5,
       fontWeight: 600,
+      border: "1px solid color-mix(in srgb, var(--pub-accent) 14%, transparent)",
     }}
   >
     {children}
@@ -132,7 +133,7 @@ const ExpenseChapter = () => (
         sx={{
           bgcolor: "var(--pub-bg)",
           border: "1px solid var(--pub-hair)",
-          borderRadius: "22px",
+          borderRadius: "16px",
           p: { xs: 2.5, sm: 3.25 },
           boxShadow: "var(--shadow-panel)",
         }}
@@ -355,7 +356,7 @@ const ForecastChapter = () => (
         sx={{
           bgcolor: "var(--pub-bg)",
           border: "1px solid var(--pub-hair)",
-          borderRadius: "22px",
+          borderRadius: "16px",
           p: { xs: 2.25, sm: 3 },
         }}
       >
@@ -408,8 +409,8 @@ const ForecastChapter = () => (
         >
           <defs>
             <linearGradient id="forecast-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6735c8" stopOpacity="0.16" />
-              <stop offset="100%" stopColor="#6735c8" stopOpacity="0" />
+              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
             </linearGradient>
           </defs>
           {[30, 70, 110].map((y) => (
@@ -431,7 +432,7 @@ const ForecastChapter = () => (
           <path
             d="M0 112 L48 104 L96 108 L144 84 L192 90 L240 66"
             fill="none"
-            stroke="#6735c8"
+            stroke="#6366f1"
             strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -446,7 +447,7 @@ const ForecastChapter = () => (
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
           />
-          <circle cx="240" cy="66" r="4" fill="#6735c8" />
+          <circle cx="240" cy="66" r="4" fill="#6366f1" />
         </Box>
 
         <Stack

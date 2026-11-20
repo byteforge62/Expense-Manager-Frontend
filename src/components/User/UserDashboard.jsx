@@ -277,8 +277,8 @@ export const UserDashboard = () => {
           title="Financial health"
           icon={<FiShield size={16} />}
           iconColor="secondary.main"
-          iconBg="rgba(163, 119, 58, 0.1)"
-          borderColor="rgba(163, 119, 58, 0.15)"
+          iconBg="rgba(245,158,11, 0.1)"
+          borderColor="rgba(245,158,11, 0.15)"
           isLoading={loadingHealth}
           value={healthScore}
           onRefresh={fetchHealthScore}
@@ -293,8 +293,8 @@ export const UserDashboard = () => {
           title="Spending patterns"
           icon={<FiBarChart2 size={16} />}
           iconColor="cyan.main"
-          iconBg="rgba(74, 47, 203, 0.1)"
-          borderColor="rgba(74, 47, 203, 0.15)"
+          iconBg="rgba(79,70,229, 0.1)"
+          borderColor="rgba(79,70,229, 0.15)"
           isLoading={loadingInsights}
           value={expenseInsights}
           onRefresh={fetchExpenseInsights}
@@ -309,8 +309,8 @@ export const UserDashboard = () => {
           title="Cash-flow forecast"
           icon={<FiTrendingUp size={16} />}
           iconColor="primary.main"
-          iconBg="rgba(163, 119, 58, 0.1)"
-          borderColor="rgba(163, 119, 58, 0.15)"
+          iconBg="rgba(245,158,11, 0.1)"
+          borderColor="rgba(245,158,11, 0.15)"
           isLoading={loadingForecast}
           value={forecast}
           onRefresh={fetchForecast}
@@ -325,8 +325,8 @@ export const UserDashboard = () => {
           title="Savings suggestions"
           icon={<FiZap size={16} />}
           iconColor="success.main"
-          iconBg="rgba(46, 122, 89, 0.1)"
-          borderColor="rgba(46, 122, 89, 0.15)"
+          iconBg="rgba(16,185,129, 0.1)"
+          borderColor="rgba(16,185,129, 0.15)"
           isLoading={loadingSavings}
           value={savingOpportunities}
           onRefresh={fetchSavingOpportunities}

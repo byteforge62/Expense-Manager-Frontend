@@ -58,10 +58,10 @@ import {
 } from "./FinancialIntelligenceComponents";
 
 const colorPalette = [
-  "#6735c8",
-  "#1f9d6b",
-  "#b07c26",
-  "#e0564b",
+  "#6366f1",
+  "#10b981",
+  "#f59e0b",
+  "#ef4444",
   "#a78bfa",
   "#8a8a99",
   "#4c6fa8",
@@ -341,7 +341,7 @@ export default function FinancialIntelligencePage() {
             <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.12em", }}>
               Financial intelligence
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 600, letterSpacing: "-0.04em", mt: 0.5 }}>
+            <Typography component="h1" variant="h4" sx={{ fontWeight: 600, letterSpacing: "-0.04em", mt: 0.5 }}>
               Money signals and decisions
             </Typography>
             {overview.generatedAt && (
@@ -468,15 +468,15 @@ export default function FinancialIntelligencePage() {
                   <AreaChart data={trendData}>
                     <defs>
                       <linearGradient id="spendFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#6735c8" stopOpacity={0.34} />
-                        <stop offset="95%" stopColor="#6735c8" stopOpacity={0.03} />
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.34} />
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0.03} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid stroke="rgba(148,163,184,0.15)" vertical={false} />
                     <XAxis dataKey="label" stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} />
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
-                    <Area type="monotone" dataKey="value" stroke="#6735c8" strokeWidth={2.5} fill="url(#spendFill)" />
+                    <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={2.5} fill="url(#spendFill)" />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -531,8 +531,8 @@ export default function FinancialIntelligencePage() {
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
                     <Legend />
-                    <Bar dataKey="income" fill="#1f9d6b" radius={[5, 5, 0, 0]} />
-                    <Bar dataKey="expenses" fill="#e0564b" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="income" fill="#10b981" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="expenses" fill="#ef4444" radius={[5, 5, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -599,7 +599,7 @@ export default function FinancialIntelligencePage() {
                     <Box key={`${item.id || item.title || "recommendation"}-${index}`} sx={{ p: 2.2, borderRadius: 1.5, border: "1px solid rgba(139,92,246,0.18)", bgcolor: "rgba(139,92,246,0.04)" }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(57,133,255,0.12)", color: "#6735c8" }}><FiTrendingUp size={14} /></Avatar>
+                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(57,133,255,0.12)", color: "#6366f1" }}><FiTrendingUp size={14} /></Avatar>
                           <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{item.title || "Recommendation"}</Typography>
                         </Stack>
                         <StatusBadge status={item.priority || "medium"} />

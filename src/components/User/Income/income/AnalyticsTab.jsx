@@ -82,12 +82,12 @@ const AnalyticsTab = ({
           />
           <Bar
             dataKey="income"
-            fill="#1f9d6b"
+            fill="#10b981"
             radius={[6, 6, 0, 0]}
           />
           <Bar
             dataKey="expense"
-            fill="#e0564b"
+            fill="#ef4444"
             radius={[6, 6, 0, 0]}
           />
         </BarChart>
@@ -149,11 +149,11 @@ const AnalyticsTab = ({
           <Line
             type="monotone"
             dataKey="amount"
-            stroke="#6735c8"
+            stroke="#6366f1"
             strokeWidth={3}
             dot={{
               r: 4,
-              fill: "#6735c8",
+              fill: "#6366f1",
               strokeWidth: 2,
               stroke: "var(--surface-primary)",
             }}

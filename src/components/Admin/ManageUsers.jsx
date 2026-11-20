@@ -83,7 +83,7 @@ export const ManageUsers = () => {
       toast.success("ENTRY ARCHIVED", {
         autoClose: 1800,
         style: {
-          backgroundColor: "#1f9d6b",
+          backgroundColor: "#10b981",
           color: "white",
           fontWeight: "900",
           borderRadius: "1rem",
@@ -93,7 +93,7 @@ export const ManageUsers = () => {
       toast.error("PROTOCOL FAILURE", {
         autoClose: 1800,
         style: {
-          backgroundColor: "#e0564b",
+          backgroundColor: "#ef4444",
           color: "white",
           fontWeight: "900",
           borderRadius: "1rem",
@@ -103,9 +103,9 @@ export const ManageUsers = () => {
   };
 
   const getRoleColorStyles = (role) => {
-    if (role === "Admin") return { color: "#a78bfa", bgcolor: "rgba(163, 119, 58, 0.1)", borderColor: "rgba(163, 119, 58, 0.2)" };
-    if (role === "Manager") return { color: "#3E6BB5", bgcolor: "rgba(163, 119, 58, 0.1)", borderColor: "rgba(163, 119, 58, 0.2)" };
-    return { color: "#1f9d6b", bgcolor: "rgba(46, 122, 89, 0.1)", borderColor: "rgba(46, 122, 89, 0.2)" };
+    if (role === "Admin") return { color: "#a78bfa", bgcolor: "rgba(245,158,11, 0.1)", borderColor: "rgba(245,158,11, 0.2)" };
+    if (role === "Manager") return { color: "#3E6BB5", bgcolor: "rgba(245,158,11, 0.1)", borderColor: "rgba(245,158,11, 0.2)" };
+    return { color: "#10b981", bgcolor: "rgba(16,185,129, 0.1)", borderColor: "rgba(16,185,129, 0.2)" };
   };
 
   return (
@@ -156,10 +156,10 @@ export const ManageUsers = () => {
             fontWeight: 600,
             fontSize: "10px",
             letterSpacing: 1,
-            bgcolor: "rgba(74, 47, 203, 0.1)",
-            border: "1px solid rgba(74, 47, 203, 0.2)",
-            color: "#6735c8",
-            borderRadius: 2,
+            bgcolor: "rgba(79,70,229, 0.1)",
+            border: "1px solid rgba(79,70,229, 0.2)",
+            color: "#6366f1",
+            borderRadius: 1,
             px: 1,
           }}
         />
@@ -179,7 +179,7 @@ export const ManageUsers = () => {
         }}
       >
         {/* Glow ambient nodes */}
-        <Box sx={{ position: "absolute", top: 0, right: 0, width: 256, height: 256, bgcolor: "rgba(74, 47, 203, 0.03)", filter: "blur(100px)", pointerEvents: "none" }} />
+        <Box sx={{ position: "absolute", top: 0, right: 0, width: 256, height: 256, bgcolor: "rgba(79,70,229, 0.03)", filter: "blur(100px)", pointerEvents: "none" }} />
         <Box sx={{ position: "absolute", bottom: 0, left: 0, width: 256, height: 256, bgcolor: "rgba(74, 95, 85, 0.03)", filter: "blur(100px)", pointerEvents: "none" }} />
 
         <Grid container spacing={3} sx={{ position: "relative" }}>
@@ -196,7 +196,7 @@ export const ManageUsers = () => {
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
+                  borderRadius: 1,
                   bgcolor: "action.hover",
                   fontSize: "14px",
                   fontWeight: "bold",
@@ -218,7 +218,7 @@ export const ManageUsers = () => {
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
+                  borderRadius: 1,
                   bgcolor: "action.hover",
                   fontSize: "11px",
                   fontWeight: 600,
@@ -252,7 +252,7 @@ export const ManageUsers = () => {
       >
         {loading ? (
           <Stack alignItems="center" justifyContent="center" sx={{ py: 16, gap: 3 }}>
-            <CircularProgress size={48} thickness={4} sx={{ color: "#6735c8" }} />
+            <CircularProgress size={48} thickness={4} sx={{ color: "#6366f1" }} />
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="caption" sx={{ display: "block", fontWeight: 600, color: "text.primary", tracking: 1.5, }} className="animate-pulse">
                 Synchronizing Nodes...
@@ -312,7 +312,7 @@ export const ManageUsers = () => {
                         exit={{ opacity: 0 }}
                         transition={{ delay: index * 0.02 }}
                         sx={{
-                          "&:hover": { bgcolor: "rgba(74, 47, 203, 0.02)" },
+                          "&:hover": { bgcolor: "rgba(79,70,229, 0.02)" },
                           transition: "background-color 0.3s",
                           "& td": { borderBottom: 1, borderColor: "divider" },
                         }}
@@ -324,21 +324,21 @@ export const ManageUsers = () => {
                               sx={{
                                 width: 48,
                                 height: 48,
-                                borderRadius: 2,
+                                borderRadius: 1,
                                 bgcolor: "action.hover",
                                 border: 1,
                                 borderColor: "divider",
                                 fontSize: "14px",
                                 fontWeight: 600,
-                                color: "#6735c8",
+                                color: "#6366f1",
                                 boxShadow: "inset 0 2px 4px rgba(0,0,0,0.05)",
                                 transition: "border-color 0.3s",
-                                ".MuiTableRow-root:hover &": { borderColor: "rgba(74, 47, 203, 0.5)" },
+                                ".MuiTableRow-root:hover &": { borderColor: "rgba(79,70,229, 0.5)" },
                               }}
                             >
                               {user.name?.charAt(0).toUpperCase()}
                             </Avatar>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600, letterSpacing: -0.5, transition: "color 0.3s", ".MuiTableRow-root:hover &": { color: "#6735c8" } }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 600, letterSpacing: -0.5, transition: "color 0.3s", ".MuiTableRow-root:hover &": { color: "#6366f1" } }}>
                               {user.name}
                             </Typography>
                           </Stack>
@@ -380,9 +380,9 @@ export const ManageUsers = () => {
                                 bgcolor: "action.hover",
                                 border: 1,
                                 borderColor: "divider",
-                                color: "#6735c8",
+                                color: "#6366f1",
                                 transition: "all 0.2s",
-                                "&:hover": { bgcolor: "#6735c8", color: "#fff" },
+                                "&:hover": { bgcolor: "#6366f1", color: "#fff" },
                                 "&:active": { transform: "scale(0.9)" },
                               }}
                               title="INSPECT VECTOR"
@@ -399,9 +399,9 @@ export const ManageUsers = () => {
                                 bgcolor: "action.hover",
                                 border: 1,
                                 borderColor: "divider",
-                                color: "#e0564b",
+                                color: "#ef4444",
                                 transition: "all 0.2s",
-                                "&:hover": { bgcolor: "#e0564b", color: "#fff" },
+                                "&:hover": { bgcolor: "#ef4444", color: "#fff" },
                                 "&:active": { transform: "scale(0.9)" },
                               }}
                               title="ARCHIVE ENTITY"
@@ -442,10 +442,10 @@ export const ManageUsers = () => {
                         "&:hover .ambient-glow": { transform: "scale(1.5)" },
                       }}
                     >
-                      <Box className="ambient-glow" sx={{ position: "absolute", top: -48, right: -48, width: 128, height: 128, bgcolor: "rgba(74, 47, 203, 0.03)", filter: "blur(50px)", pointerEvents: "none", transition: "transform 0.7s" }} />
+                      <Box className="ambient-glow" sx={{ position: "absolute", top: -48, right: -48, width: 128, height: 128, bgcolor: "rgba(79,70,229, 0.03)", filter: "blur(50px)", pointerEvents: "none", transition: "transform 0.7s" }} />
 
                       <Stack direction="row" alignItems="center" spacing={2.5}>
-                        <Avatar variant="rounded" sx={{ width: 56, height: 56, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", color: "#6735c8", fontWeight: 600, fontSize: "20px" }}>
+                        <Avatar variant="rounded" sx={{ width: 56, height: 56, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", color: "#6366f1", fontWeight: 600, fontSize: "20px" }}>
                           {user.name?.charAt(0).toUpperCase()}
                         </Avatar>
                         <Box sx={{ minWidth: 0, flex: 1 }}>
@@ -467,15 +467,15 @@ export const ManageUsers = () => {
                             fontSize: "8px",
                             fontWeight: 600,
                             letterSpacing: 1,
-                            borderRadius: 2,
+                            borderRadius: 1,
                             ...getRoleColorStyles(user.role),
                           }}
                         />
                         <Stack direction="row" spacing={1}>
-                          <IconButton onClick={() => navigate(`/admin/user/${user._id}`)} sx={{ p: 1.5, borderRadius: 1.5, bgcolor: "#6735c8", color: "#fff", boxShadow: "0 10px 15px -3px rgba(74,47,203,0.2)", "&:hover": { bgcolor: "#6735c8" }, "&:active": { transform: "scale(0.9)" } }}>
+                          <IconButton onClick={() => navigate(`/admin/user/${user._id}`)} sx={{ p: 1.5, borderRadius: 1.5, bgcolor: "#6366f1", color: "#fff", boxShadow: "0 10px 15px -3px rgba(79,70,229,0.2)", "&:hover": { bgcolor: "#6366f1" }, "&:active": { transform: "scale(0.9)" } }}>
                             <FaEye size={14} />
                           </IconButton>
-                          <IconButton onClick={() => handleDelete(user._id)} sx={{ p: 1.5, borderRadius: 1.5, bgcolor: "#e0564b", color: "#fff", boxShadow: "0 10px 15px -3px rgba(244,63,94,0.2)", "&:hover": { bgcolor: "#e0564b" }, "&:active": { transform: "scale(0.9)" } }}>
+                          <IconButton onClick={() => handleDelete(user._id)} sx={{ p: 1.5, borderRadius: 1.5, bgcolor: "#ef4444", color: "#fff", boxShadow: "0 10px 15px -3px rgba(244,63,94,0.2)", "&:hover": { bgcolor: "#ef4444" }, "&:active": { transform: "scale(0.9)" } }}>
                             <FaTrash size={14} />
                           </IconButton>
                         </Stack>
@@ -492,7 +492,7 @@ export const ManageUsers = () => {
       {/* ── NAVIGATION ENGINE ── */}
       {totalPages > 1 && (
         <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
-          <Box sx={{ p: 1, bgcolor: "background.paper", borderRadius: 2, border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
+          <Box sx={{ p: 1, bgcolor: "background.paper", borderRadius: 1, border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
             <Pagination
               count={totalPages}
               page={currentPage}
@@ -504,17 +504,17 @@ export const ManageUsers = () => {
                   sx={{
                     minWidth: 44,
                     height: 44,
-                    borderRadius: 2,
+                    borderRadius: 1,
                     fontSize: "10px",
                     fontWeight: 600,
                     color: "text.disabled",
                     transition: "all 0.3s",
                     "&.Mui-selected": {
-                      background: "linear-gradient(to top right, #6735c8, #4922a8)",
+                      background: "linear-gradient(to top right, #6366f1, #4338ca)",
                       color: "#fff",
-                      boxShadow: "0 10px 15px -3px rgba(74,47,203,0.3)",
+                      boxShadow: "0 10px 15px -3px rgba(79,70,229,0.3)",
                       "&:hover": {
-                        background: "linear-gradient(to top right, #6735c8, #4922a8)",
+                        background: "linear-gradient(to top right, #6366f1, #4338ca)",
                       },
                     },
                     "&:not(.Mui-selected):hover": {

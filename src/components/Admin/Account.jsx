@@ -173,7 +173,7 @@ export const Account = () => {
             sx={{
               px: 2,
               py: 1,
-              borderRadius: 2,
+              borderRadius: 1,
               bgcolor: "cyan.main",
               opacity: 0.1,
               border: 1,
@@ -209,7 +209,7 @@ export const Account = () => {
               transition={{ delay: 0.1 }}
               sx={{
                 p: 5,
-                borderRadius: 2,
+                borderRadius: 1,
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
@@ -226,7 +226,7 @@ export const Account = () => {
                     sx={{
                       width: 160,
                       height: 160,
-                      borderRadius: 6,
+                      borderRadius: 1,
                       border: 4,
                       borderColor: "background.paper",
                       boxShadow: "0 0 20px rgba(0,0,0,0.15)",
@@ -294,7 +294,7 @@ export const Account = () => {
                     color="inherit"
                     onClick={() => setIsEditing(true)}
                     startIcon={<FiEdit2 />}
-                    sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold", letterSpacing: "0.1em" }}
+                    sx={{ py: 1.5, borderRadius: 1, fontWeight: "bold", letterSpacing: "0.1em" }}
                   >
                     Modify Credentials
                   </Button>
@@ -308,7 +308,7 @@ export const Account = () => {
                         onClick={handleSave}
                         disabled={loading}
                         startIcon={loading ? <FiRefreshCw className="animate-spin" /> : <FiCheck />}
-                        sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold" }}
+                        sx={{ py: 1.5, borderRadius: 1, fontWeight: "bold" }}
                       >
                         DEPLOY
                       </Button>
@@ -323,7 +323,7 @@ export const Account = () => {
                           setPreview(null);
                         }}
                         startIcon={<FiX />}
-                        sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold" }}
+                        sx={{ py: 1.5, borderRadius: 1, fontWeight: "bold" }}
                       >
                         ABORT
                       </Button>
@@ -337,8 +337,8 @@ export const Account = () => {
             <Box
               sx={{
                 p: 3,
-                borderRadius: 2,
-                background: "linear-gradient(to bottom right, rgba(74, 47, 203, 0.08), transparent)",
+                borderRadius: 1,
+                background: "linear-gradient(to bottom right, rgba(79,70,229, 0.08), transparent)",
                 border: 1,
                 borderColor: "divider",
               }}
@@ -367,7 +367,7 @@ export const Account = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            sx={{ p: { xs: 4, sm: 5 }, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}
+            sx={{ p: { xs: 4, sm: 5 }, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}
           >
             <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 5 }}>
               <Avatar sx={{ bgcolor: "action.selected", border: 1, borderColor: "divider", color: "cyan.main", borderRadius: 4 }}>
@@ -456,7 +456,7 @@ export const Account = () => {
                   justifyContent="between"
                   alignItems="center"
                   spacing={2}
-                  sx={{ p: 3, borderRadius: 5, bgcolor: "action.hover", border: 1, borderColor: "divider" }}
+                  sx={{ p: 3, borderRadius: 1, bgcolor: "action.hover", border: 1, borderColor: "divider" }}
                 >
                   <Stack direction="row" spacing={2} alignItems="center">
                     <FiRefreshCw className="animate-spin" style={{ color: "var(--mui-palette-cyan-main)" }} />

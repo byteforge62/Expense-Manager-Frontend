@@ -147,9 +147,9 @@ export const FinancialForecast = () => {
                     <YAxis tickLine={false} axisLine={false} width={78} tick={{ fill: "var(--text-muted)", fontSize: 10 }} tickFormatter={(value) => new Intl.NumberFormat(undefined, { notation: "compact" }).format(value)} />
                     <Tooltip formatter={(value, name) => [formatAmount(value, currency), name]} contentStyle={{ background: "var(--surface-primary)", borderColor: "var(--border)", borderRadius: 10 }} />
                     <Legend />
-                    <Area type="monotone" dataKey="expected" name="Expected" stroke="#6735c8" fill="#6735c8" fillOpacity={0.11} connectNulls={false} />
-                    <Area type="monotone" dataKey="best" name="Best case" stroke="#1f9d6b" fill="#1f9d6b" fillOpacity={0.06} connectNulls={false} />
-                    <Area type="monotone" dataKey="worst" name="Worst case" stroke="#e0564b" fill="#e0564b" fillOpacity={0.05} connectNulls={false} />
+                    <Area type="monotone" dataKey="expected" name="Expected" stroke="#6366f1" fill="#6366f1" fillOpacity={0.11} connectNulls={false} />
+                    <Area type="monotone" dataKey="best" name="Best case" stroke="#10b981" fill="#10b981" fillOpacity={0.06} connectNulls={false} />
+                    <Area type="monotone" dataKey="worst" name="Worst case" stroke="#ef4444" fill="#ef4444" fillOpacity={0.05} connectNulls={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

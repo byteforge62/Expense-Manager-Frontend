@@ -31,9 +31,9 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           <Stack direction="row" spacing={2} alignItems="center">
             <Avatar
               sx={{
-                bgcolor: "rgba(74, 47, 203, 0.1)",
+                bgcolor: "rgba(79,70,229, 0.1)",
                 border: 1,
-                borderColor: "rgba(74, 47, 203, 0.2)",
+                borderColor: "rgba(79,70,229, 0.2)",
                 color: "cyan.main",
                 borderRadius: 1.5,
                 width: 40,

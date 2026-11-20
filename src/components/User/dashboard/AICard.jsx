@@ -119,14 +119,14 @@ const AIButton = ({ onClick, label, color, icon = <FiZap size={14} /> }) => (
       boxShadow: "none",
       backgroundColor:
         color === "bg-rose-500 text-white hover:bg-rose-600"
-          ? "#e0564b"
+          ? "#ef4444"
           : color === "bg-violet-500 text-white hover:bg-violet-600"
-            ? "#6735c8"
+            ? "#6366f1"
             : color === "bg-cyan-500 text-white hover:bg-cyan-600"
-              ? "#6735c8"
+              ? "#6366f1"
               : color === "bg-blue-500 text-white hover:bg-blue-600"
-                ? "#6735c8"
-                : "#1f9d6b",
+                ? "#6366f1"
+                : "#10b981",
       color: "#fff",
       "&:hover": { filter: "brightness(1.08)", boxShadow: "none" },
     }}

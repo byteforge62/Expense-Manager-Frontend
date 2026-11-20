@@ -146,7 +146,7 @@ export const UserDashboardLayout = () => {
                     sx={{
                       minHeight: 38,
                       px: 1.5,
-                      borderRadius: 2.5,
+                      borderRadius: "10px",
                       color: isActive ? "var(--sidebar-accent-foreground)" : "text.secondary",
                       bgcolor: isActive ? "var(--sidebar-accent)" : "transparent",
                       "&:hover": { bgcolor: "var(--sidebar-accent)", color: "var(--sidebar-accent-foreground)" },
@@ -188,7 +188,7 @@ export const UserDashboardLayout = () => {
             alignItems: "center",
             gap: 1.25,
             p: 1.25,
-            borderRadius: 2.5,
+            borderRadius: "12px",
             border: 1,
             borderColor: "var(--sidebar-border)",
             bgcolor: "background.default",
@@ -198,7 +198,7 @@ export const UserDashboardLayout = () => {
             sx={{
               width: 32,
               height: 32,
-              borderRadius: 2,
+              borderRadius: "8px",
               bgcolor: "var(--sidebar-accent)",
               color: "var(--sidebar-accent-foreground)",
               fontSize: "0.82rem",

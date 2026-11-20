@@ -48,7 +48,7 @@ import {
   FiDatabase,
 } from "react-icons/fi";
 
-const COLORS = ["#6735c8", "#1f9d6b", "#a78bfa", "#4c6fa8", "#e0564b"];
+const COLORS = ["#6366f1", "#10b981", "#a78bfa", "#4c6fa8", "#ef4444"];
 
 export const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -187,7 +187,7 @@ export const AdminDashboard = () => {
               whileHover={{ y: -5 }}
               sx={{
                 p: 3,
-                borderRadius: 2,
+                borderRadius: 1,
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
@@ -202,7 +202,7 @@ export const AdminDashboard = () => {
                   border: 1,
                   borderColor: "divider",
                   color: kpi.color,
-                  borderRadius: 2,
+                  borderRadius: 1,
                   mb: 2,
                   width: 48,
                   height: 48,
@@ -237,7 +237,7 @@ export const AdminDashboard = () => {
                   direction="row"
                   spacing={3}
                   alignItems="center"
-                  sx={{ p: 3, borderRadius: 6, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 2 }}
+                  sx={{ p: 3, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 2 }}
                 >
                   <Avatar
                     sx={{
@@ -245,7 +245,7 @@ export const AdminDashboard = () => {
                       color: card.color,
                       border: 1,
                       borderColor: "divider",
-                      borderRadius: 2,
+                      borderRadius: 1,
                       width: 56,
                       height: 56,
                     }}
@@ -268,7 +268,7 @@ export const AdminDashboard = () => {
 
         {/* Global Finance Trend Chart */}
         <Grid size={{ xs: 12, lg: 8 }}>
-          <Box sx={{ p: 4, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}>
+          <Box sx={{ p: 4, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
               <Box>
                 <Stack direction="row" spacing={1} alignItems="center">
@@ -307,7 +307,7 @@ export const AdminDashboard = () => {
 
         {/* Category Saturation Chart */}
         <Grid size={{ xs: 12, lg: 4 }}>
-          <Box sx={{ p: 4, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3, h: "100%", display: "flex", flexDirection: "column" }}>
+          <Box sx={{ p: 4, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3, h: "100%", display: "flex", flexDirection: "column" }}>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
               <FiPieChart style={{ color: "var(--mui-palette-primary-main)" }} />
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -353,7 +353,7 @@ export const AdminDashboard = () => {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ p: 1.5, borderRadius: 2, bgcolor: "action.hover", border: 1, borderColor: "divider" }}
+                  sx={{ p: 1.5, borderRadius: 1, bgcolor: "action.hover", border: 1, borderColor: "divider" }}
                 >
                   <Stack direction="row" spacing={1.5} alignItems="center">
                     <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: COLORS[idx % COLORS.length] }} />
@@ -372,7 +372,7 @@ export const AdminDashboard = () => {
       </Grid>
 
       {/* ---------- UNIFIED GLOBAL LEDGER ---------- */}
-      <Box sx={{ p: 4, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3, position: "relative", overflow: "hidden" }}>
+      <Box sx={{ p: 4, borderRadius: 1, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3, position: "relative", overflow: "hidden" }}>
         
         <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={3} sx={{ mb: 4 }}>
           <Box>

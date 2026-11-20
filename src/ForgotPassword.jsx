@@ -78,7 +78,7 @@ export const ForgotPassword = () => {
           elevation={0}
           sx={{
             p: 4,
-            borderRadius: 2,
+            borderRadius: 1,
             border: 1,
             borderColor: "divider",
             bgcolor: "background.paper",
@@ -87,9 +87,14 @@ export const ForgotPassword = () => {
           <Stack spacing={3}>
             <Box textAlign="center">
               <Typography
-                variant="h5"
                 component="h1"
-                sx={{ fontWeight: "bold", tracking: "-0.01em" }}
+                sx={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.85rem",
+                  fontWeight: 700,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1.15,
+                }}
               >
                 Forgot Password
               </Typography>
@@ -103,10 +108,10 @@ export const ForgotPassword = () => {
                 role="status"
                 sx={{
                   p: 2,
-                  borderRadius: 1.5,
+                  borderRadius: 1,
                   border: 1,
                   borderColor: "success.main",
-                  bgcolor: "rgba(46, 122, 89, 0.08)",
+                  bgcolor: "rgba(16,185,129, 0.08)",
                 }}
               >
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>
@@ -148,9 +153,10 @@ export const ForgotPassword = () => {
                   disabled={loading}
                   sx={{
                     py: 1.5,
-                    borderRadius: 1.5,
+                    borderRadius: 1,
                     fontWeight: "bold",
-                    textTransform: "none",
+                    textTransform: "none",
+
                     "&:hover": {
                       opacity: 0.9,
                     },

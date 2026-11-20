@@ -53,6 +53,7 @@ export const HowItWorks = () => (
             color: "var(--pub-accent-deep)",
             fontSize: 11.5,
             fontWeight: 600,
+            border: "1px solid color-mix(in srgb, var(--pub-accent) 14%, transparent)",
           }}
         >
           How FinTrack works
@@ -129,7 +130,7 @@ export const HowItWorks = () => (
                 fontWeight: 700,
                 position: "relative",
                 zIndex: 1,
-                boxShadow: index === 0 ? "0 10px 22px -12px rgba(103,53,200,0.7)" : "none",
+                boxShadow: index === 0 ? "0 10px 22px -12px rgba(79,70,229,0.7)" : "none",
               }}
             >
               {index + 1}

@@ -93,7 +93,7 @@ export const ResetPassword = () => {
           elevation={0}
           sx={{
             p: 4,
-            borderRadius: 2,
+            borderRadius: 1,
             border: 1,
             borderColor: "divider",
             bgcolor: "background.paper",
@@ -102,9 +102,14 @@ export const ResetPassword = () => {
           <Stack spacing={3}>
             <Box textAlign="center">
               <Typography
-                variant="h5"
                 component="h1"
-                sx={{ fontWeight: "bold", tracking: "-0.01em" }}
+                sx={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.85rem",
+                  fontWeight: 700,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1.15,
+                }}
               >
                 Reset Password
               </Typography>
@@ -121,10 +126,10 @@ export const ResetPassword = () => {
                   role="status"
                   sx={{
                     p: 2,
-                    borderRadius: 1.5,
+                    borderRadius: 1,
                     border: 1,
                     borderColor: "success.main",
-                    bgcolor: "rgba(46, 122, 89, 0.08)",
+                    bgcolor: "rgba(16,185,129, 0.08)",
                   }}
                 >
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
@@ -142,9 +147,10 @@ export const ResetPassword = () => {
                   onClick={() => navigate("/login")}
                   sx={{
                     py: 1.5,
-                    borderRadius: 1.5,
+                    borderRadius: 1,
                     fontWeight: "bold",
-                    textTransform: "none",
+                    textTransform: "none",
+
                     "&:hover": {
                       opacity: 0.9,
                     },
@@ -161,7 +167,7 @@ export const ResetPassword = () => {
                       role="alert"
                       sx={{
                         p: 2,
-                        borderRadius: 1.5,
+                        borderRadius: 1,
                         border: 1,
                         borderColor: "error.main",
                         bgcolor: "rgba(239, 68, 68, 0.08)",
@@ -227,9 +233,10 @@ export const ResetPassword = () => {
                     disabled={loading}
                     sx={{
                       py: 1.5,
-                      borderRadius: 1.5,
+                      borderRadius: 1,
                       fontWeight: "bold",
-                      textTransform: "none",
+                      textTransform: "none",
+
                       "&:hover": {
                         opacity: 0.9,
                       },

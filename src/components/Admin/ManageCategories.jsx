@@ -158,21 +158,21 @@ export const ManageCategories = () => {
               value: totalCount,
               icon: <FiGrid size={20} />,
               bg: "linear-gradient(135deg, rgba(140, 103, 41, 0.15), rgba(74, 95, 85, 0.05))",
-              accent: "#6735c8",
+              accent: "#6366f1",
             },
             {
               label: "Income Nodes",
               value: incomeCount,
               icon: <FiActivity size={20} />,
               bg: "linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(20, 184, 166, 0.05))",
-              accent: "#1f9d6b",
+              accent: "#10b981",
             },
             {
               label: "Expense Nodes",
               value: expenseCount,
               icon: <FiFileText size={20} />,
               bg: "linear-gradient(135deg, rgba(225, 29, 72, 0.15), rgba(249, 115, 22, 0.05))",
-              accent: "#e0564b",
+              accent: "#ef4444",
             },
           ].map((card, idx) => (
             <Grid item xs={12} sm={4} key={idx}>
@@ -181,7 +181,7 @@ export const ManageCategories = () => {
                 whileHover={{ y: -4 }}
                 sx={{
                   p: 3,
-                  borderRadius: 6,
+                  borderRadius: 1,
                   background: card.bg,
                   border: 1,
                   borderColor: "divider",
@@ -203,7 +203,7 @@ export const ManageCategories = () => {
                   sx={{
                     width: 44,
                     height: 44,
-                    borderRadius: 2,
+                    borderRadius: 1,
                     bgcolor: "rgba(0,0,0,0.15)",
                     color: card.accent,
                     boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
@@ -226,7 +226,7 @@ export const ManageCategories = () => {
               onSubmit={handleSubmit(submitHandler)}
               sx={{
                 p: 3,
-                borderRadius: 6,
+                borderRadius: 1,
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
@@ -309,7 +309,7 @@ export const ManageCategories = () => {
           <Grid item xs={12} xl={9} sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             
             {/* Search and Filters Strip */}
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ p: 2, borderRadius: 6, bgcolor: "action.hover", border: 1, borderColor: "divider" }}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ p: 2, borderRadius: 1, bgcolor: "action.hover", border: 1, borderColor: "divider" }}>
               <TextField
                 placeholder="Search taxonomy cache..."
                 value={searchTerm}
@@ -340,7 +340,7 @@ export const ManageCategories = () => {
             </Stack>
 
             {/* Main Data Table */}
-            <TableContainer sx={{ borderRadius: 6, border: 1, borderColor: "divider", bgcolor: "background.paper", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.05)" }}>
+            <TableContainer sx={{ borderRadius: 1, border: 1, borderColor: "divider", bgcolor: "background.paper", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.05)" }}>
               {loading ? (
                 <Stack alignItems="center" justifyContent="center" sx={{ py: 10, gap: 2 }}>
                   <CircularProgress size={32} thickness={4} sx={{ color: "cyan.main" }} />
@@ -379,7 +379,7 @@ export const ManageCategories = () => {
                             />
                           ) : (
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar variant="rounded" sx={{ width: 32, height: 32, borderRadius: 2, fontSize: "12px", fontWeight: "bold", bgcolor: "action.selected", color: "text.secondary", border: 1, borderColor: "divider" }}>
+                              <Avatar variant="rounded" sx={{ width: 32, height: 32, borderRadius: 1, fontSize: "12px", fontWeight: "bold", bgcolor: "action.selected", color: "text.secondary", border: 1, borderColor: "divider" }}>
                                 {cat.name?.charAt(0)}
                               </Avatar>
                               <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "text.primary", "&:hover": { color: "cyan.main" }, transition: "color 0.2s" }}>
@@ -410,10 +410,10 @@ export const ManageCategories = () => {
                               sx={{
                                 fontSize: "9px",
                                 fontWeight: "bold",
-                                borderRadius: 2,
+                                borderRadius: 1,
                                 color: cat.type === "income" ? "emerald.main" : "rose.main",
-                                bgcolor: cat.type === "income" ? "rgba(46, 122, 89, 0.08)" : "rgba(169, 75, 63, 0.08)",
-                                borderColor: cat.type === "income" ? "rgba(46, 122, 89, 0.2)" : "rgba(169, 75, 63, 0.2)",
+                                bgcolor: cat.type === "income" ? "rgba(16,185,129, 0.08)" : "rgba(239,68,68, 0.08)",
+                                borderColor: cat.type === "income" ? "rgba(16,185,129, 0.2)" : "rgba(239,68,68, 0.2)",
                               }}
                             />
                           )}
@@ -424,7 +424,7 @@ export const ManageCategories = () => {
                           <Stack direction="row" spacing={1} justifyContent="center">
                             {editingId === cat._id ? (
                               <>
-                                <IconButton size="small" onClick={() => saveEdit(cat._id)} sx={{ color: "emerald.main", bgcolor: "rgba(46, 122, 89, 0.1)", "&:hover": { bgcolor: "emerald.main", color: "#fff" } }}>
+                                <IconButton size="small" onClick={() => saveEdit(cat._id)} sx={{ color: "emerald.main", bgcolor: "rgba(16,185,129, 0.1)", "&:hover": { bgcolor: "emerald.main", color: "#fff" } }}>
                                   <FiCheck size={14} />
                                 </IconButton>
                                 <IconButton size="small" onClick={() => setEditingId(null)} sx={{ color: "text.disabled", bgcolor: "action.hover" }}>

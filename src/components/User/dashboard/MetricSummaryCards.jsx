@@ -45,27 +45,28 @@ export const MetricSummaryCards = ({
         <Card
           sx={{
             height: "100%",
-            borderRadius: 3,
+            borderRadius: "12px",
             border: 1,
             borderColor: "divider",
             bgcolor: "background.paper",
-            transition: "border-color 160ms ease, transform 160ms ease",
-            "&:hover": { borderColor: "var(--border-medium)", transform: "translateY(-1px)" },
+            boxShadow: "var(--shadow-panel)",
+            transition: "border-color 160ms ease",
+            "&:hover": { borderColor: "var(--border-medium)" },
           }}
         >
           <Box sx={{ p: 2.5 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
               <Box sx={{ minWidth: 0 }}>
-                <Typography sx={{ fontSize: 12, fontWeight: 600, color: "text.secondary" }}>
+                <Typography sx={{ fontSize: 12.5, fontWeight: 500, color: "text.secondary" }}>
                   {item.label}
                 </Typography>
                 <Typography
                   sx={{
-                    mt: 0.9,
+                    mt: 0.85,
                     fontFamily: "var(--font-display)",
-                    fontSize: "1.55rem",
-                    fontWeight: 600,
-                    letterSpacing: "-0.035em",
+                    fontSize: "1.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "-0.04em",
                     lineHeight: 1.1,
                     fontVariantNumeric: "tabular-nums",
                   }}
@@ -82,7 +83,7 @@ export const MetricSummaryCards = ({
                   height: 36,
                   display: "grid",
                   placeItems: "center",
-                  borderRadius: 2,
+                  borderRadius: "10px",
                   color: item.color,
                   bgcolor: item.bg,
                   flexShrink: 0,

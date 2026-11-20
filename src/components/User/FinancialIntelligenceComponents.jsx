@@ -8,13 +8,13 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 const toneByStatus = {
-  triggered: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
-  high: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
-  critical: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
+  triggered: { color: "#ef4444", background: "rgba(244,63,94,0.1)" },
+  high: { color: "#ef4444", background: "rgba(244,63,94,0.1)" },
+  critical: { color: "#ef4444", background: "rgba(244,63,94,0.1)" },
   medium: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
   warning: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
-  clear: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
-  low: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
+  clear: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
+  low: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
   "not-evaluated": { color: "#64748b", background: "rgba(148,163,184,0.12)" },
 };
 
@@ -26,7 +26,7 @@ export function IconContainer({ icon: Icon, size = 38, children }) {
         height: size,
         borderRadius: 1.5,
         bgcolor: "rgba(139,92,246,0.12)",
-        color: "#6735c8",
+        color: "#6366f1",
         border: "1px solid rgba(139,92,246,0.18)",
       }}
     >
@@ -95,9 +95,9 @@ export function StatusBadge({ status }) {
 
 export function ConfidenceIndicator({ level }) {
   const tones = {
-    high: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
+    high: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
     medium: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
-    low: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
+    low: { color: "#ef4444", background: "rgba(244,63,94,0.1)" },
   };
   const confidence = String(level || "").toLowerCase();
   const tone = tones[confidence] || toneByStatus["not-evaluated"];
@@ -112,7 +112,7 @@ export function ConfidenceIndicator({ level }) {
 
 export function ChartContainer({ icon, title, eyebrow, children, height = 280, description }) {
   return (
-    <Card sx={{ borderRadius: 5, border: "1px solid rgba(148,163,184,0.2)", height: "100%" }}>
+    <Card sx={{ borderRadius: 1, border: "1px solid rgba(148,163,184,0.2)", height: "100%" }}>
       <CardContent sx={{ p: 3 }}>
         <SectionHeader icon={icon} title={title} eyebrow={eyebrow} />
         <Box role="group" aria-roledescription="chart" aria-label={description || title} sx={{ height, minWidth: 0 }}>
@@ -154,7 +154,7 @@ export function EmptyState({ icon: Icon, title, children }) {
 
 export function ErrorState({ title, message, actionLabel, onAction, refreshing = false }) {
   return (
-    <Card role="alert" sx={{ borderRadius: 5, p: 3, border: "1px solid rgba(244,63,94,0.2)", bgcolor: "rgba(244,63,94,0.04)" }}>
+    <Card role="alert" sx={{ borderRadius: 1, p: 3, border: "1px solid rgba(244,63,94,0.2)", bgcolor: "rgba(244,63,94,0.04)" }}>
       <Typography variant="h6" sx={{ fontWeight: 800 }}>{title}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>{message}</Typography>
       {onAction && (

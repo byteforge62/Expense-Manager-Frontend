@@ -143,8 +143,8 @@ describe("UserDashboard", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByText("Add a record to get started")).toHaveLength(3);
     expect(screen.queryByText("Spending trend")).toBeNull();
-    expect(screen.queryByText("Cash Equilibrium")).toBeNull();
-    expect(screen.queryByText("Disbursement Profile")).toBeNull();
+    expect(screen.queryByText("Inflow and outflow")).toBeNull();
+    expect(screen.queryByText("Spending by category")).toBeNull();
   });
 
   test("formats large amounts with en-IN grouping", async () => {
@@ -172,11 +172,11 @@ describe("UserDashboard", () => {
 
     expect(screen.getByText("Spending trend")).toBeInTheDocument();
     expect(screen.getByText("Expenses over the last 30 days")).toBeInTheDocument();
-    expect(screen.getByText("Cash Equilibrium")).toBeInTheDocument();
-    expect(screen.getByText("Aggregate Flow Comparison")).toBeInTheDocument();
+    expect(screen.getByText("Inflow and outflow")).toBeInTheDocument();
+    expect(screen.getByText("Income against expenses")).toBeInTheDocument();
     // The category pie is data-driven: one expense with a category name.
-    expect(screen.getByText("Disbursement Profile")).toBeInTheDocument();
-    expect(screen.getByText("Sector Allocation")).toBeInTheDocument();
+    expect(screen.getByText("Spending by category")).toBeInTheDocument();
+    expect(screen.getByText("Where this month went")).toBeInTheDocument();
   });
 
   test("hides the category chart when expenses have no category data", async () => {
@@ -191,8 +191,8 @@ describe("UserDashboard", () => {
     renderDashboard();
     await settle();
 
-    expect(screen.getByText("Cash Equilibrium")).toBeInTheDocument();
-    expect(screen.queryByText("Disbursement Profile")).toBeNull();
+    expect(screen.getByText("Inflow and outflow")).toBeInTheDocument();
+    expect(screen.queryByText("Spending by category")).toBeNull();
   });
 
   test("loads insight history on demand", async () => {

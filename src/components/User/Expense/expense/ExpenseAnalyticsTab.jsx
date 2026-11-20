@@ -67,7 +67,7 @@ const ExpenseAnalyticsTab = ({ chartData, categoryBreakdown }) => (
             content={<ChartTooltip />}
             cursor={{ fill: "var(--surface-tertiary)", opacity: 0.1 }}
           />
-          <Bar dataKey="amount" fill="#e0564b" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="amount" fill="#ef4444" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
