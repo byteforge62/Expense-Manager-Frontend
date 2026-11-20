@@ -38,7 +38,7 @@ const Shimmer = ({ className = "" }) => (
 
 const Field = ({ label, icon, children }) => (
   <div className="space-y-2">
-    <label className="block text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] ml-1">
+    <label className="block text-[10px] font-black text-[var(--text-muted)] tracking-[0.2em] ml-1">
       {label}
     </label>
     <div className="relative group">
@@ -196,7 +196,7 @@ export const RecurringTransactions = () => {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r from-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent uppercase">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--text-primary)]">
             Recurring transactions
           </h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">
@@ -204,7 +204,7 @@ export const RecurringTransactions = () => {
           </p>
         </div>
         <div
-          className={`inline-flex items-center gap-3 px-4 py-2 rounded-2xl border text-[10px] font-black uppercase tracking-widest shadow-sm transition-all
+          className={`inline-flex items-center gap-3 px-4 py-2 rounded-2xl border text-[10px] font-black tracking-widest shadow-sm transition-all
           ${activeCount > 0 ? "bg-cyan-500/10 border-cyan-500/20 text-cyan-500" : "bg-[var(--surface-primary)] border-[var(--border)] text-[var(--text-muted)]"}`}
         >
           <FiActivity
@@ -271,16 +271,13 @@ export const RecurringTransactions = () => {
             transition={{ duration: 0.4, delay: idx * 0.1 }}
             className={`relative overflow-hidden rounded-[2rem] border p-6 bg-[var(--surface-primary)] ${card.border} shadow-xl backdrop-blur-md group hover:-translate-y-1 transition-all duration-300`}
           >
-            <div
-              className={`absolute -top-10 -right-10 w-24 h-24 rounded-full blur-3xl opacity-10 ${card.glow} group-hover:opacity-20 transition-opacity`}
-            />
             <div className="relative">
               <div
                 className={`w-11 h-11 rounded-2xl flex items-center justify-center mb-4 border shadow-inner ${card.bg} ${card.border}`}
               >
                 <span className={card.color}>{card.icon}</span>
               </div>
-              <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-1">
+              <p className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.2em] mb-1">
                 {card.label}
               </p>
               <p
@@ -288,7 +285,7 @@ export const RecurringTransactions = () => {
               >
                 {card.value}
               </p>
-              <p className="text-[9px] font-bold text-[var(--text-muted)] mt-1 uppercase tracking-widest opacity-60 truncate">
+              <p className="text-[9px] font-bold text-[var(--text-muted)] mt-1 tracking-widest opacity-60 truncate">
                 {card.suffix}
               </p>
             </div>
@@ -314,10 +311,10 @@ export const RecurringTransactions = () => {
                   {editingId ? <FiEdit2 size={18} /> : <FiPlus size={18} />}
                 </div>
                 <div>
-                  <h2 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">
+                  <h2 className="text-sm font-black text-[var(--text-primary)] tracking-widest">
                     {editingId ? "Modify Protocol" : "Initialize Flow"}
                   </h2>
-                  <p className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-[0.2em] mt-0.5">
+                  <p className="text-[9px] font-bold text-[var(--text-muted)] tracking-[0.2em] mt-0.5">
                     Vector Definition
                   </p>
                 </div>
@@ -397,8 +394,8 @@ export const RecurringTransactions = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] text-white transition-all duration-300 shadow-2xl active:scale-[0.98] disabled:opacity-50
-                ${editingId ? "bg-gradient-to-r from-amber-500 to-orange-600 shadow-amber-500/30" : "bg-gradient-to-r from-cyan-500 to-blue-600 shadow-cyan-500/30"}`}
+                className={`w-full py-4 rounded-2xl font-black text-xs tracking-[0.2em] text-white transition-all duration-300 shadow-2xl active:scale-[0.98] disabled:opacity-50
+                ${editingId ? "bg-[var(--primary)] shadow-none" : "bg-[var(--primary)] shadow-cyan-500/30"}`}
               >
                 {submitting ? (
                   <FiRefreshCw size={16} className="animate-spin mx-auto" />
@@ -420,15 +417,15 @@ export const RecurringTransactions = () => {
                 <FiRepeat size={16} className="text-cyan-500" />
               </div>
               <div>
-                <h2 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest">
+                <h2 className="text-sm font-black text-[var(--text-primary)] tracking-widest">
                   Scheduled expenses
                 </h2>
-                <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mt-0.5">
+                <p className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest mt-0.5">
                   Execution Registry
                 </p>
               </div>
             </div>
-            <span className="text-[9px] font-black text-cyan-500 bg-cyan-500/10 px-3 py-1.5 rounded-lg border border-cyan-500/20 uppercase tracking-[0.2em]">
+            <span className="text-[9px] font-black text-cyan-500 bg-cyan-500/10 px-3 py-1.5 rounded-lg border border-cyan-500/20 tracking-[0.2em]">
               {recurringList.length} TELEMETRIES
             </span>
           </div>
@@ -449,10 +446,10 @@ export const RecurringTransactions = () => {
                   />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest">
+                  <p className="text-xs font-black text-[var(--text-primary)] tracking-widest">
                     No active protocols
                   </p>
-                  <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest max-w-[200px]">
+                  <p className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest max-w-[200px]">
                     Define your first recurring capital event in the
                     constructor.
                   </p>
@@ -486,16 +483,16 @@ export const RecurringTransactions = () => {
                             <FiRepeat size={24} />
                           </div>
                           <div className="min-w-0 space-y-2">
-                            <h4 className="text-base font-black text-[var(--text-primary)] uppercase tracking-tight truncate group-hover:text-cyan-500 transition-colors">
+                            <h4 className="text-base font-black text-[var(--text-primary)] tracking-tight truncate group-hover:text-cyan-500 transition-colors">
                               {item.title}
                             </h4>
                             <div className="flex flex-wrap items-center gap-3">
                               <span
-                                className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg border ${freq.bg} ${freq.color}`}
+                                className={`text-[9px] font-black tracking-widest px-2.5 py-1.5 rounded-lg border ${freq.bg} ${freq.color}`}
                               >
                                 {item.frequency}
                               </span>
-                              <div className="flex items-center gap-1.5 text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-widest">
+                              <div className="flex items-center gap-1.5 text-[9px] font-bold text-[var(--text-muted)] tracking-widest">
                                 <FiClock size={11} className="text-cyan-500" />
                                 {new Date(item.nextDate).toLocaleDateString(
                                   "en-IN",

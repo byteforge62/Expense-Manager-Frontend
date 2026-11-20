@@ -19,7 +19,7 @@ const DataCard = ({ title, value }) => {
         p: 3, // Equivalent to p-6 (6 * 4px = 24px padding)
         textAlign: "center",
         cursor: "pointer",
-        borderRadius: 4, // Equivalent to rounded-2xl
+        borderRadius: 2, // Equivalent to rounded-2xl
         border: 1,
         borderColor: "divider", // Hooks into your theme's default border system
         backdropFilter: "blur(24px)", // Equivalent to backdrop-blur-xl

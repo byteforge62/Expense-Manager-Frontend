@@ -49,7 +49,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                   border: 1,
                   borderColor: "rgba(245, 158, 11, 0.2)",
                   color: "warning.main",
-                  borderRadius: 3,
+                  borderRadius: 1.5,
                   width: 40,
                   height: 40,
                 }}
@@ -65,7 +65,6 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                   color="text.secondary"
                   sx={{
                     fontWeight: "bold",
-                    textTransform: "uppercase",
                     letterSpacing: "0.1em",
                   }}
                 >
@@ -78,7 +77,6 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
               size="small"
               sx={{
                 fontWeight: "black",
-                textTransform: "uppercase",
                 fontSize: "10px",
                 bgcolor: "rgba(245, 158, 11, 0.1)",
                 color: "warning.main",
@@ -96,7 +94,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     p: 2.5,
-                    borderRadius: 4,
+                    borderRadius: 2,
                     bgcolor: "action.hover",
                     border: 1,
                     borderColor: "divider",
@@ -109,7 +107,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                         bgcolor: "background.paper",
                         border: 1,
                         borderColor: "divider",
-                        borderRadius: 3,
+                        borderRadius: 1.5,
                         width: 36,
                         height: 36,
                       }}
@@ -125,7 +123,6 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                         sx={{
                           fontWeight: "bold",
                           display: "block",
-                          textTransform: "uppercase",
                           maxWidth: 120,
                         }}
                         noWrap
@@ -137,7 +134,6 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                         color="text.secondary"
                         sx={{
                           fontWeight: "bold",
-                          textTransform: "uppercase",
                           letterSpacing: "0.05em",
                           mt: 0.5,
                           display: "flex",

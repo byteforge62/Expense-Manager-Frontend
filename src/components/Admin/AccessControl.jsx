@@ -89,7 +89,7 @@ export const AccessControl = () => {
             fontWeight: 'bold', 
             color: 'cyan.main', 
             letterSpacing: '.2em', 
-            textTransform: 'uppercase',
+
             animation: 'pulse 1.5s infinite ease-in-out'
           }}
         >
@@ -155,7 +155,7 @@ export const AccessControl = () => {
           bgcolor: 'background.paper',
           border: 1,
           borderColor: 'divider',
-          borderRadius: 4,
+          borderRadius: 2,
           boxShadow: 3
         }}
       >
@@ -215,7 +215,7 @@ export const AccessControl = () => {
                 elevation={1}
                 sx={{
                   height: '100%',
-                  borderRadius: 4,
+                  borderRadius: 2,
                   border: 1,
                   borderColor: 'divider',
                   position: 'relative',
@@ -260,7 +260,7 @@ export const AccessControl = () => {
                       />
                     </Stack>
 
-                    <Grid container spacing={2} sx={{ p: 1.5, bgcolor: 'background.default', borderRadius: 3, border: 1, borderColor: 'divider' }}>
+                    <Grid container spacing={2} sx={{ p: 1.5, bgcolor: 'background.default', borderRadius: 1.5, border: 1, borderColor: 'divider' }}>
                       <Grid size={6}>
                         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 'bold' }}>METRIC/AGE</Typography>
                         <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>{user.age || "N/A"}</Typography>

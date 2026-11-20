@@ -102,7 +102,7 @@ export const Bills = () => {
     <section className="space-y-7 text-[var(--text-primary)]">
       <header className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--accent-electric)]">Planning / Payments</p>
+          <p className="text-xs font-semibold tracking-[0.12em] text-[var(--accent-electric)]">Planning / Payments</p>
           <h1 className="mt-2 text-2xl font-bold">Bills & payments</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">Keep due dates visible and link paid bills to an existing expense.</p>
         </div>
@@ -137,7 +137,7 @@ export const Bills = () => {
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="font-semibold">{bill.name}</h3>
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${overdue ? "bg-rose-500/10 text-rose-700 dark:text-rose-300" : paid ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "bg-[var(--accent-electric-soft)] text-[var(--accent-electric)]"}`}>
+                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide ${overdue ? "bg-rose-500/10 text-rose-700 dark:text-rose-300" : paid ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "bg-[var(--accent-electric-soft)] text-[var(--accent-electric)]"}`}>
                           {overdue ? "Overdue" : bill.status || "pending"}
                         </span>
                       </div>
@@ -168,7 +168,7 @@ export const Bills = () => {
             <label className="space-y-1 text-sm">Bill name<input required maxLength="100" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2" /></label>
             <label className="space-y-1 text-sm">Amount<input required type="number" min="0.01" step="0.01" value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2" /></label>
             <label className="space-y-1 text-sm">Due date<input required type="date" value={form.dueDate} onChange={(event) => setForm({ ...form, dueDate: event.target.value })} className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-2" /></label>
-            <button className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#3985ff] px-4 py-2.5 font-semibold text-[#101a2b]"><FiPlus />Add bill</button>
+            <button className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-2.5 font-semibold text-[var(--primary-foreground)]"><FiPlus />Add bill</button>
           </form>
           <p className="mt-4 border-t border-[var(--border)] pt-4 text-xs leading-relaxed text-[var(--text-muted)]">
             Settling a bill links it to an existing expense; it doesn’t create a new expense.

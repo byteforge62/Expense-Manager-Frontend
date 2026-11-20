@@ -25,13 +25,13 @@ import { FiTrendingDown, FiBarChart2, FiPieChart } from "react-icons/fi";
 /* ── Visual analytics: 30-day trend, inflow/outflow and category split ── */
 
 const COLORS = [
-  "#3985ff",
-  "#45b889",
-  "#e8b66b",
-  "#f07870",
-  "#a9c8f5",
-  "#8297b7",
-  "#4d74ad",
+  "#6735c8",
+  "#1f9d6b",
+  "#b07c26",
+  "#e0564b",
+  "#a78bfa",
+  "#8a8a99",
+  "#4c6fa8",
 ];
 
 const ChartTooltip = ({ active, payload, label }) => {
@@ -42,7 +42,7 @@ const ChartTooltip = ({ active, payload, label }) => {
         p: 2,
         border: 1,
         borderColor: "divider",
-        borderRadius: 3,
+        borderRadius: 1.5,
         boxShadow: 3,
       }}
     >
@@ -50,7 +50,6 @@ const ChartTooltip = ({ active, payload, label }) => {
         variant="caption"
         color="text.secondary"
         sx={{
-          textTransform: "uppercase",
           tracking: "0.05em",
           fontWeight: "bold",
         }}
@@ -97,11 +96,11 @@ export const SpendingTrendChart = ({ data }) => (
                 >
                   <Avatar
                     sx={{
-                      bgcolor: "rgba(244, 63, 94, 0.1)",
+                      bgcolor: "rgba(169, 75, 63, 0.1)",
                       border: 1,
-                      borderColor: "rgba(244, 63, 94, 0.2)",
+                      borderColor: "rgba(169, 75, 63, 0.2)",
                       color: "error.main",
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       width: 40,
                       height: 40,
                     }}
@@ -117,7 +116,6 @@ export const SpendingTrendChart = ({ data }) => (
                       color="text.secondary"
                       sx={{
                         fontWeight: "bold",
-                        textTransform: "uppercase",
                         letterSpacing: "0.1em",
                       }}
                     >
@@ -160,7 +158,7 @@ export const SpendingTrendChart = ({ data }) => (
                     <Line
                       type="monotone"
                       dataKey="amount"
-                      stroke="#f43f5e"
+                      stroke="#e0564b"
                       strokeWidth={4}
                       dot={{ r: 0 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
@@ -204,11 +202,11 @@ export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
                 >
                   <Avatar
                     sx={{
-                      bgcolor: "rgba(59, 130, 246, 0.1)",
+                      bgcolor: "rgba(163, 119, 58, 0.1)",
                       border: 1,
-                      borderColor: "rgba(59, 130, 246, 0.2)",
+                      borderColor: "rgba(163, 119, 58, 0.2)",
                       color: "primary.main",
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       width: 40,
                       height: 40,
                     }}
@@ -224,7 +222,6 @@ export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
                       color="text.secondary"
                       sx={{
                         fontWeight: "bold",
-                        textTransform: "uppercase",
                         letterSpacing: "0.1em",
                       }}
                     >
@@ -268,8 +265,8 @@ export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
                       cursor={{ fill: "var(--surface-tertiary)", opacity: 0.1 }}
                     />
                     <Bar dataKey="amount" radius={[12, 12, 0, 0]}>
-                      <Cell fill="#10b981" />
-                      <Cell fill="#f43f5e" />
+                      <Cell fill="#1f9d6b" />
+                      <Cell fill="#e0564b" />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -310,11 +307,11 @@ export const CategoryBreakdownChart = ({ data }) => (
                   >
                     <Avatar
                       sx={{
-                        bgcolor: "rgba(6, 182, 212, 0.1)",
+                        bgcolor: "rgba(74, 47, 203, 0.1)",
                         border: 1,
-                        borderColor: "rgba(6, 182, 212, 0.2)",
+                        borderColor: "rgba(74, 47, 203, 0.2)",
                         color: "cyan.main",
-                        borderRadius: 3,
+                        borderRadius: 1.5,
                         width: 40,
                         height: 40,
                       }}
@@ -333,7 +330,6 @@ export const CategoryBreakdownChart = ({ data }) => (
                         color="text.secondary"
                         sx={{
                           fontWeight: "bold",
-                          textTransform: "uppercase",
                           letterSpacing: "0.1em",
                         }}
                       >
@@ -361,7 +357,6 @@ export const CategoryBreakdownChart = ({ data }) => (
                         wrapperStyle={{
                           fontSize: 10,
                           fontWeight: 700,
-                          textTransform: "uppercase",
                           letterSpacing: "0.05em",
                           color: "var(--text-muted)",
                           paddingTop: 20,

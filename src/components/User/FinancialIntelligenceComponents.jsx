@@ -8,13 +8,13 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 const toneByStatus = {
-  triggered: { color: "#f43f5e", background: "rgba(244,63,94,0.1)" },
-  high: { color: "#f43f5e", background: "rgba(244,63,94,0.1)" },
-  critical: { color: "#f43f5e", background: "rgba(244,63,94,0.1)" },
+  triggered: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
+  high: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
+  critical: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
   medium: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
   warning: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
-  clear: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
-  low: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
+  clear: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
+  low: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
   "not-evaluated": { color: "#64748b", background: "rgba(148,163,184,0.12)" },
 };
 
@@ -24,9 +24,9 @@ export function IconContainer({ icon: Icon, size = 38, children }) {
       sx={{
         width: size,
         height: size,
-        borderRadius: 3,
+        borderRadius: 1.5,
         bgcolor: "rgba(139,92,246,0.12)",
-        color: "#8b5cf6",
+        color: "#6735c8",
         border: "1px solid rgba(139,92,246,0.18)",
       }}
     >
@@ -44,14 +44,14 @@ export function MetricCard({ icon: Icon, label, value, tone = "rgba(139,92,246,0
         gap: 1.5,
         p: 2,
         minWidth: 0,
-        borderRadius: 3,
+        borderRadius: 1.5,
         border: "1px solid rgba(148,163,184,0.2)",
         bgcolor: tone,
       }}
     >
       <IconContainer icon={Icon} size={34} />
       <Box sx={{ minWidth: 0 }}>
-        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: "0.08em" }}>
           {label}
         </Typography>
         <Typography variant="subtitle2" sx={{ fontWeight: 800, color: "text.primary", overflowWrap: "anywhere" }}>
@@ -68,7 +68,7 @@ export function SectionHeader({ icon: Icon, title, eyebrow, action }) {
       <Stack direction="row" spacing={1.5} alignItems="center" minWidth={0}>
         <IconContainer icon={Icon} />
         <Box minWidth={0}>
-          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.12em", }}>
             {eyebrow}
           </Typography>
           <Typography variant="h6" sx={{ fontWeight: 800, color: "text.primary" }}>
@@ -95,9 +95,9 @@ export function StatusBadge({ status }) {
 
 export function ConfidenceIndicator({ level }) {
   const tones = {
-    high: { color: "#10b981", background: "rgba(16,185,129,0.1)" },
+    high: { color: "#1f9d6b", background: "rgba(16,185,129,0.1)" },
     medium: { color: "#f59e0b", background: "rgba(245,158,11,0.1)" },
-    low: { color: "#f43f5e", background: "rgba(244,63,94,0.1)" },
+    low: { color: "#e0564b", background: "rgba(244,63,94,0.1)" },
   };
   const confidence = String(level || "").toLowerCase();
   const tone = tones[confidence] || toneByStatus["not-evaluated"];
@@ -132,7 +132,7 @@ export function InsightCard({ children, tone = "neutral" }) {
   };
   const selectedTone = tones[tone] || tones.neutral;
   return (
-    <Box sx={{ p: 2, borderRadius: 3, border: "1px solid", borderColor: selectedTone.border, bgcolor: selectedTone.background }}>
+    <Box sx={{ p: 2, borderRadius: 1.5, border: "1px solid", borderColor: selectedTone.border, bgcolor: selectedTone.background }}>
       {children}
     </Box>
   );
@@ -162,7 +162,7 @@ export function ErrorState({ title, message, actionLabel, onAction, refreshing =
           variant="contained"
           onClick={onAction}
           disabled={refreshing}
-          sx={{ mt: 2, borderRadius: 3, fontWeight: 700 }}
+          sx={{ mt: 2, borderRadius: 1.5, fontWeight: 700 }}
         >
           {refreshing ? "Retrying…" : actionLabel}
         </Button>

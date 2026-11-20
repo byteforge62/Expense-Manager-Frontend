@@ -75,7 +75,7 @@ export const FinancialForecast = () => {
     >
       <header className="flex flex-col justify-between gap-5 border-b border-[var(--border)] pb-6 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-lavender)]">Planning / Liquidity</p>
+          <p className="text-xs font-semibold tracking-[0.16em] text-[var(--accent-lavender)]">Planning / Liquidity</p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">Cash-flow outlook</h1>
           <p className="mt-2 max-w-2xl text-sm text-[var(--text-muted)]">Compare monthly cash positions using the backend’s expected, best and worst-case projections.</p>
         </div>
@@ -106,7 +106,7 @@ export const FinancialForecast = () => {
             {[3, 6, 12].map((months) => <option key={months} value={months}>{months} months</option>)}
           </select>
         </label>
-        <button disabled={loading || openingCash === ""} className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[var(--accent-electric)] px-5 py-3 font-semibold text-[#101a2b] transition hover:brightness-95 disabled:opacity-60">
+        <button disabled={loading || openingCash === ""} className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[var(--accent-electric)] px-5 py-3 font-semibold text-[#ffffff] transition hover:brightness-95 disabled:opacity-60">
           <FiRefreshCw className={loading ? "animate-spin" : ""} />
           {loading ? "Generating…" : "Generate forecast"}
         </button>
@@ -123,7 +123,7 @@ export const FinancialForecast = () => {
               ["Data confidence", forecast.dataConfidence],
             ].map(([label, value]) => (
               <div key={label} className="border-l-2 border-[var(--accent-lavender)] pl-4 py-1">
-                <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">{label}</p>
+                <p className="text-xs tracking-wide text-[var(--text-muted)]">{label}</p>
                 <p className="mt-2 text-xl font-semibold tabular-nums">
                   {label === "Data confidence"
                     ? (value?.level || value || "Unavailable")
@@ -147,9 +147,9 @@ export const FinancialForecast = () => {
                     <YAxis tickLine={false} axisLine={false} width={78} tick={{ fill: "var(--text-muted)", fontSize: 10 }} tickFormatter={(value) => new Intl.NumberFormat(undefined, { notation: "compact" }).format(value)} />
                     <Tooltip formatter={(value, name) => [formatAmount(value, currency), name]} contentStyle={{ background: "var(--surface-primary)", borderColor: "var(--border)", borderRadius: 10 }} />
                     <Legend />
-                    <Area type="monotone" dataKey="expected" name="Expected" stroke="#3985ff" fill="#3985ff" fillOpacity={0.11} connectNulls={false} />
-                    <Area type="monotone" dataKey="best" name="Best case" stroke="#45b889" fill="#45b889" fillOpacity={0.06} connectNulls={false} />
-                    <Area type="monotone" dataKey="worst" name="Worst case" stroke="#f07870" fill="#f07870" fillOpacity={0.05} connectNulls={false} />
+                    <Area type="monotone" dataKey="expected" name="Expected" stroke="#6735c8" fill="#6735c8" fillOpacity={0.11} connectNulls={false} />
+                    <Area type="monotone" dataKey="best" name="Best case" stroke="#1f9d6b" fill="#1f9d6b" fillOpacity={0.06} connectNulls={false} />
+                    <Area type="monotone" dataKey="worst" name="Worst case" stroke="#e0564b" fill="#e0564b" fillOpacity={0.05} connectNulls={false} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>

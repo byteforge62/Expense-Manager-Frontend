@@ -1,225 +1,196 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ================ Material UI Components ================
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
 import Badge from "@mui/material/Badge";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-// ================ Icons ================
-import { FiBell, FiSearch, FiMenu, FiLogOut, FiSettings } from "react-icons/fi";
+import { FiBell, FiMenu, FiLogOut, FiSettings } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { AdminSidebar } from "./AdminSidebar";
+
+const pageNames = {
+  "/admin/admindashboard": "Dashboard",
+  "/admin/manageusers": "Manage users",
+  "/admin/managecategories": "Categories",
+  "/admin/accesscontrol": "Access control",
+  "/admin/reportadmins": "Reports",
+  "/admin/systemlogs": "System logs",
+};
 
 export const AdminDashboardLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Permanent rail from `lg` up, overlay below it.
+  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const [isSidebarOpen, setIsSidebarOpen] = useState(isDesktop);
+
+  useEffect(() => {
+    setIsSidebarOpen(isDesktop);
+  }, [isDesktop]);
+
+  useEffect(() => {
+    if (!isDesktop) setIsSidebarOpen(false);
+  }, [location.pathname, isDesktop]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const pageName =
+    pageNames[location.pathname] ||
+    (location.pathname.includes("/account/")
+      ? "Account"
+      : location.pathname.includes("/user/")
+        ? "User detail"
+        : "Workspace");
 
   return (
-    <Box 
-      sx={{ 
-        minHeight: "100vh", 
-        bgcolor: "background.default", 
-        color: "text.primary",
-        fontFamily: "sans-serif",
-        "& ::selection": { bgcolor: "rgba(34, 211, 238, 0.3)" }
-      }}
-    >
-      {/* Sidebar Component */}
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary" }}>
       <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* Main Wrapper */}
       <Box
         sx={{
-          transition: "all 0.3s ease-in-out",
+          transition: (theme) =>
+            theme.transitions.create("padding-left", {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          pl: {
-            xs: 0,
-            lg: isSidebarOpen ? "260px" : "80px",
-          },
+          pl: { xs: 0, lg: isSidebarOpen ? "260px" : "76px" },
         }}
       >
-        {/* ========== MODERN TOP NAVBAR ========== */}
         <AppBar
           position="sticky"
           elevation={0}
           sx={{
             top: 0,
             zIndex: 55,
-            height: 80,
-            justifyContent: "center",
-            bgcolor: "rgba(var(--mui-palette-background-paperChannel), 0.6)",
-            backdropFilter: "blur(24px)",
+            bgcolor: "background.default",
             borderBottom: 1,
             borderColor: "divider",
-            px: { xs: 2, sm: 4 },
+            px: { xs: 2, sm: 3, lg: 4 },
           }}
         >
-          <Toolbar disableGutters sx={{ width: "100%", justifyContent: "space-between", gap: 2 }}>
-            
-            {/* Left: Mobile Toggle & Breadcrumbs */}
-            <Stack direction="row" alignItems="center" spacing={2}>
+          <Toolbar
+            disableGutters
+            sx={{
+              width: "100%",
+              justifyContent: "space-between",
+              gap: 2,
+              minHeight: "62px !important",
+            }}
+          >
+            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ minWidth: 0 }}>
               <IconButton
                 onClick={toggleSidebar}
+                aria-label="Toggle navigation"
                 sx={{
                   display: { lg: "none" },
-                  p: 1,
-                  borderRadius: 3,
-                  bgcolor: "action.hover",
+                  width: 36,
+                  height: 36,
                   border: 1,
                   borderColor: "divider",
-                  "&:hover": { bgcolor: "action.selected" },
                 }}
               >
-                <FiMenu size={20} style={{ color: "var(--mui-palette-text-secondary)" }} />
+                <FiMenu size={18} />
               </IconButton>
 
-              <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                <Typography 
-                  variant="body2" 
-                  sx={{ fontWeight: 500, color: "text.secondary", textTransform: "capitalize" }}
+              <Stack direction="row" alignItems="baseline" spacing={1.25} sx={{ minWidth: 0 }}>
+                <Typography
+                  sx={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    letterSpacing: "-0.01em",
+                    lineHeight: 1.2,
+                    display: { xs: "none", sm: "block" },
+                  }}
+                  noWrap
                 >
-                  Admin{" "}
-                  <Box component="span" sx={{ mx: 1, color: "text.disabled" }}>
-                    /
-                  </Box>{" "}
-                  <Box component="span" sx={{ color: "text.primary" }}>
-                    Workspace
-                  </Box>
+                  {pageName}
                 </Typography>
-              </Box>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", display: { xs: "none", md: "block" } }}
+                  noWrap
+                >
+                  Admin
+                </Typography>
+              </Stack>
             </Stack>
 
-            {/* Middle: Search (Desktop) */}
-            <Box sx={{ display: { xs: "none", md: "block" }, flex: 1, maxW: 440, mx: 4 }}>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Search global records..."
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FiSearch />
-                      </InputAdornment>
-                    ),
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 4,
-                    bgcolor: "action.hover",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }
-                }}
-              />
-            </Box>
-
-            {/* Right: Actions */}
-            <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 2 }}>
-              {/* Notifications */}
+            <Stack direction="row" alignItems="center" spacing={0.5}>
               <IconButton
-                sx={{
-                  p: 1.25,
-                  borderRadius: 3,
-                  bgcolor: "action.hover",
-                  border: 1,
-                  borderColor: "divider",
-                  "&:hover": { bgcolor: "action.selected" },
-                }}
+                aria-label="Notifications"
+                sx={{ width: 36, height: 36, border: 1, borderColor: "divider" }}
               >
                 <Badge
                   variant="dot"
-                  color="cyan"
+                  color="secondary"
                   overlap="circular"
                   sx={{
                     "& .MuiBadge-badge": {
-                      boxShadow: "0 0 8px rgba(34,211,238,0.5)",
-                      border: "2px solid var(--mui-palette-background-paper)",
-                    }
+                      border: "2px solid var(--mui-palette-background-default)",
+                    },
                   }}
                 >
-                  <FiBell size={20} style={{ color: "var(--mui-palette-text-secondary)" }} />
+                  <FiBell size={17} />
                 </Badge>
               </IconButton>
 
-              {/* Settings */}
               <IconButton
                 onClick={() => navigate(`/admin/account/${user?._id}`)}
+                aria-label="Account settings"
                 sx={{
-                  p: 1.25,
-                  borderRadius: 3,
-                  bgcolor: "action.hover",
+                  width: 36,
+                  height: 36,
                   border: 1,
                   borderColor: "divider",
-                  "&:hover": { bgcolor: "action.selected" },
+                  display: { xs: "none", sm: "inline-flex" },
                 }}
               >
-                <FiSettings size={20} style={{ color: "var(--mui-palette-text-secondary)" }} />
+                <FiSettings size={17} />
               </IconButton>
 
-              {/* Divider */}
-              <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: { xs: 0.5, sm: 1 }, height: 24, alignSelf: "center" }} />
+              <Divider
+                orientation="vertical"
+                variant="middle"
+                flexItem
+                sx={{ mx: { xs: 0.5, sm: 1.5 }, height: 22, alignSelf: "center" }}
+              />
 
-              {/* Logout */}
               <Button
-                variant="outlined"
-                color="error"
                 onClick={logout}
-                startIcon={<FiLogOut size={16} />}
-                sx={{
-                  px: { xs: 1.5, sm: 2.5 },
-                  py: 1,
-                  borderRadius: 3,
-                  fontWeight: "bold",
-                  fontSize: { xs: "12px", sm: "14px" },
-                  textTransform: "none",
-                  bgcolor: "rgba(244, 63, 94, 0.1)",
-                  borderColor: "rgba(244, 63, 94, 0.2)",
-                  color: "error.main",
-                  "&:hover": {
-                    bgcolor: "error.main",
-                    color: "common.white",
-                    borderColor: "error.main",
-                  }
-                }}
+                startIcon={<FiLogOut size={15} />}
+                sx={{ px: { xs: 1, sm: 1.5 }, color: "text.secondary" }}
               >
                 <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>
-                  Sign Out
+                  Sign out
                 </Box>
               </Button>
             </Stack>
           </Toolbar>
         </AppBar>
 
-        {/* ========== DYNAMIC MAIN CONTENT ========== */}
-        <Box component="main" sx={{ flex: 1, p: { xs: 2, sm: 4, lg: 5 } }}>
-          <Box sx={{ maxWidth: 1600, mx: "auto" }}>
+        <Box component="main" sx={{ flex: 1, p: { xs: 2, sm: 3, lg: 4 } }}>
+          <Box sx={{ maxWidth: 1520, mx: "auto" }}>
             <AnimatePresence mode="wait">
               <Box
                 component={motion.div}
                 key={location.pathname}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
               >
                 <Outlet />
               </Box>
@@ -227,42 +198,26 @@ export const AdminDashboardLayout = () => {
           </Box>
         </Box>
 
-        {/* Footer */}
         <Box
           component="footer"
           sx={{
-            py: 3,
-            px: { xs: 3, sm: 5 },
+            py: 2.5,
+            px: { xs: 2, sm: 3, lg: 4 },
             borderTop: 1,
             borderColor: "divider",
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 2,
+            gap: 1.5,
           }}
         >
-          <Typography variant="caption" sx={{ fontWeight: "medium", letterSpacing: "0.05em", color: "text.secondary" }}>
-            © 2026 FINTRACK ANALYTICS ENGINE. ALL RIGHTS RESERVED.
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            © 2026 FinTrack · Admin
           </Typography>
-          <Stack direction="row" spacing={3}>
-            {["SUPPORT", "API DOCS", "PRIVACY"].map((linkText) => (
-              <Link
-                key={linkText}
-                href="#"
-                underline="none"
-                sx={{
-                  fontSize: "11px",
-                  fontWeight: "medium",
-                  color: "text.secondary",
-                  transition: "color 0.2s",
-                  "&:hover": { color: "cyan.main" },
-                }}
-              >
-                {linkText}
-              </Link>
-            ))}
-          </Stack>
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+            Signed in as {user?.name || "administrator"}
+          </Typography>
         </Box>
       </Box>
     </Box>

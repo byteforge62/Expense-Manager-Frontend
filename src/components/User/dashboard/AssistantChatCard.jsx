@@ -106,7 +106,6 @@ export const AssistantChatCard = () => {
                     variant="caption"
                     sx={{
                       fontWeight: "bold",
-                      textTransform: "uppercase",
                       letterSpacing: "0.1em",
                     }}
                   >
@@ -128,7 +127,7 @@ export const AssistantChatCard = () => {
                       maxW: "85%",
                       px: 2,
                       py: 1.5,
-                      borderRadius: 4,
+                      borderRadius: 2,
                       fontSize: "0.85rem",
                       lineHeight: 1.5,
                       boxShadow: 1,
@@ -154,7 +153,7 @@ export const AssistantChatCard = () => {
                       borderColor: "divider",
                       px: 2,
                       py: 1.5,
-                      borderRadius: 4,
+                      borderRadius: 2,
                       borderBottomLeftRadius: 1,
                       display: "flex",
                       gap: 1,
@@ -194,7 +193,7 @@ export const AssistantChatCard = () => {
                 placeholder="Ask a question about your finances…"
                 slotProps={{
                   input: {
-                    sx: { borderRadius: 3, fontSize: "0.8rem" },
+                    sx: { borderRadius: 1.5, fontSize: "0.8rem" },
                   },
                 }}
               />
@@ -205,7 +204,7 @@ export const AssistantChatCard = () => {
                 sx={{
                   bgcolor: "orange.main",
                   color: "white",
-                  borderRadius: 3,
+                  borderRadius: 1.5,
                   width: 40,
                   height: 40,
                   background: "linear-gradient(to right, #f59e0b, #ea580c)",

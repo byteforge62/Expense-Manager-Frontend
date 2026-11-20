@@ -58,13 +58,13 @@ import {
 } from "./FinancialIntelligenceComponents";
 
 const colorPalette = [
-  "#3985ff",
-  "#45b889",
-  "#e8b66b",
-  "#f07870",
-  "#a9c8f5",
-  "#8297b7",
-  "#4d74ad",
+  "#6735c8",
+  "#1f9d6b",
+  "#b07c26",
+  "#e0564b",
+  "#a78bfa",
+  "#8a8a99",
+  "#4c6fa8",
 ];
 
 const safeArray = (value) => (Array.isArray(value) ? value : []);
@@ -140,7 +140,7 @@ const ChartTooltip = ({ active, payload, label }) => {
         color: "text.primary",
       }}
     >
-      <Typography variant="caption" sx={{ opacity: 0.8, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+      <Typography variant="caption" sx={{ opacity: 0.8, letterSpacing: "0.06em" }}>
         {label}
       </Typography>
       <Typography variant="body2" sx={{ fontWeight: 700, mt: 0.5 }}>
@@ -338,10 +338,10 @@ export default function FinancialIntelligencePage() {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
         <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2}>
           <Box>
-            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.12em", }}>
               Financial intelligence
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: "-0.04em", mt: 0.5 }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, letterSpacing: "-0.04em", mt: 0.5 }}>
               Money signals and decisions
             </Typography>
             {overview.generatedAt && (
@@ -363,7 +363,7 @@ export default function FinancialIntelligencePage() {
               disabled={refreshing}
               aria-busy={refreshing}
               startIcon={<FiRefreshCw size={16} />}
-              sx={{ borderRadius: 3, fontWeight: 700, px: 2.5 }}
+              sx={{ borderRadius: 1.5, fontWeight: 700, px: 2.5 }}
             >
               {refreshing ? "Refreshing…" : "Refresh overview"}
             </Button>
@@ -421,10 +421,10 @@ export default function FinancialIntelligencePage() {
                     aria-label={`Financial health score: ${Number.isFinite(score) ? Math.round(score) : "unavailable"} out of 100`}
                   />
                   <Box sx={{ position: "absolute", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-                    <Typography variant="h5" sx={{ fontWeight: 900, color: healthTone.color }}>
+                    <Typography variant="h5" sx={{ fontWeight: 600, color: healthTone.color }}>
                       {Number.isFinite(score) ? Math.round(score) : MISSING_VALUE}
                     </Typography>
-                    <Typography variant="caption" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", color: "text.secondary" }}>
+                    <Typography variant="caption" sx={{ letterSpacing: "0.08em", color: "text.secondary" }}>
                       / 100
                     </Typography>
                   </Box>
@@ -437,8 +437,8 @@ export default function FinancialIntelligencePage() {
                 </Box>
               </Stack>
 
-              <Box sx={{ mt: 3, p: 2, borderRadius: 3, bgcolor: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.12)" }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: "text.secondary" }}>
+              <Box sx={{ mt: 3, p: 2, borderRadius: 1.5, bgcolor: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.12)" }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: "0.08em", color: "text.secondary" }}>
                   Component check
                 </Typography>
                 <Stack spacing={1.2} sx={{ mt: 1.5 }}>
@@ -468,15 +468,15 @@ export default function FinancialIntelligencePage() {
                   <AreaChart data={trendData}>
                     <defs>
                       <linearGradient id="spendFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3985ff" stopOpacity={0.34} />
-                        <stop offset="95%" stopColor="#3985ff" stopOpacity={0.03} />
+                        <stop offset="5%" stopColor="#6735c8" stopOpacity={0.34} />
+                        <stop offset="95%" stopColor="#6735c8" stopOpacity={0.03} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid stroke="rgba(148,163,184,0.15)" vertical={false} />
                     <XAxis dataKey="label" stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} />
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
-                    <Area type="monotone" dataKey="value" stroke="#3985ff" strokeWidth={2.5} fill="url(#spendFill)" />
+                    <Area type="monotone" dataKey="value" stroke="#6735c8" strokeWidth={2.5} fill="url(#spendFill)" />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -531,8 +531,8 @@ export default function FinancialIntelligencePage() {
                     <YAxis stroke="rgba(100,116,139,0.8)" tickLine={false} axisLine={false} tickFormatter={(value) => formatNumber(value, { notation: "compact", maximumFractionDigits: 1 })} />
                     <Tooltip content={<ChartTooltip />} />
                     <Legend />
-                    <Bar dataKey="income" fill="#45b889" radius={[5, 5, 0, 0]} />
-                    <Bar dataKey="expenses" fill="#f07870" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="income" fill="#1f9d6b" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="expenses" fill="#e0564b" radius={[5, 5, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -557,7 +557,7 @@ export default function FinancialIntelligencePage() {
                   anomalies.map((anomaly, index) => {
                     const tones = getSeverityTone(anomaly.severity || anomaly.type);
                     return (
-                      <Box key={`${anomaly?.type || "anomaly"}-${index}`} sx={{ p: 2, borderRadius: 3, border: "1px solid", borderColor: tones.border, bgcolor: tones.bg }}>
+                      <Box key={`${anomaly?.type || "anomaly"}-${index}`} sx={{ p: 2, borderRadius: 1.5, border: "1px solid", borderColor: tones.border, bgcolor: tones.bg }}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                           <Stack direction="row" spacing={1.2} alignItems="center">
                             <Avatar sx={{ bgcolor: tones.bg, color: tones.color, width: 30, height: 30 }}><FiSearch size={14} /></Avatar>
@@ -596,10 +596,10 @@ export default function FinancialIntelligencePage() {
               <Stack spacing={1.8}>
                 {recommendations?.length ? (
                   recommendations.map((item, index) => (
-                    <Box key={`${item.id || item.title || "recommendation"}-${index}`} sx={{ p: 2.2, borderRadius: 3, border: "1px solid rgba(139,92,246,0.18)", bgcolor: "rgba(139,92,246,0.04)" }}>
+                    <Box key={`${item.id || item.title || "recommendation"}-${index}`} sx={{ p: 2.2, borderRadius: 1.5, border: "1px solid rgba(139,92,246,0.18)", bgcolor: "rgba(139,92,246,0.04)" }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(57,133,255,0.12)", color: "#3985ff" }}><FiTrendingUp size={14} /></Avatar>
+                          <Avatar sx={{ width: 28, height: 28, bgcolor: "rgba(57,133,255,0.12)", color: "#6735c8" }}><FiTrendingUp size={14} /></Avatar>
                           <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{item.title || "Recommendation"}</Typography>
                         </Stack>
                         <StatusBadge status={item.priority || "medium"} />
@@ -641,7 +641,7 @@ export default function FinancialIntelligencePage() {
                   const isOpen = Boolean(expandedRules[index]);
                   const status = rule.status || "not-evaluated";
                   return (
-                    <Box key={`${rule.ruleId || rule.id || "rule"}-${index}`} sx={{ p: 2.2, borderRadius: 3, border: "1px solid rgba(148,163,184,0.16)", bgcolor: "rgba(148,163,184,0.02)" }}>
+                    <Box key={`${rule.ruleId || rule.id || "rule"}-${index}`} sx={{ p: 2.2, borderRadius: 1.5, border: "1px solid rgba(148,163,184,0.16)", bgcolor: "rgba(148,163,184,0.02)" }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{rule.ruleId || rule.type || `Rule ${index + 1}`}</Typography>
                         <StatusBadge status={status} />
@@ -652,7 +652,7 @@ export default function FinancialIntelligencePage() {
                       </Button>
                       {isOpen && (
                         <Box sx={{ mt: 1.3, p: 1.5, borderRadius: 2, bgcolor: "rgba(15,23,42,0.04)", border: "1px solid rgba(148,163,184,0.12)" }}>
-                          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>Threshold</Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: "0.08em", }}>Threshold</Typography>
                           <Typography variant="body2" sx={{ mt: 0.6, fontWeight: 700 }}>
                             {rule.threshold ? JSON.stringify(rule.threshold) : "No threshold configured"}
                           </Typography>
@@ -677,21 +677,21 @@ export default function FinancialIntelligencePage() {
             <CardContent sx={{ p: 3 }}>
               <SectionHeader icon={FiShield} title="Rule summary" eyebrow="Engine snapshot" />
               <Stack spacing={2}>
-                <Box sx={{ p: 2, borderRadius: 3, bgcolor: "rgba(139,92,246,0.05)", border: "1px solid rgba(139,92,246,0.16)" }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" }}>Total rules</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mt: 0.6 }}>{ruleSummary.total ?? ruleCount ?? MISSING_VALUE}</Typography>
+                <Box sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(139,92,246,0.05)", border: "1px solid rgba(139,92,246,0.16)" }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", }}>Total rules</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mt: 0.6 }}>{ruleSummary.total ?? ruleCount ?? MISSING_VALUE}</Typography>
                 </Box>
-                <Box sx={{ p: 2, borderRadius: 3, bgcolor: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.16)" }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" }}>Triggered</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mt: 0.6 }}>{ruleSummary.triggered ?? triggeredRules ?? MISSING_VALUE}</Typography>
+                <Box sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(16,185,129,0.05)", border: "1px solid rgba(16,185,129,0.16)" }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", }}>Triggered</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mt: 0.6 }}>{ruleSummary.triggered ?? triggeredRules ?? MISSING_VALUE}</Typography>
                 </Box>
-                <Box sx={{ p: 2, borderRadius: 3, bgcolor: "rgba(148,163,184,0.05)", border: "1px solid rgba(148,163,184,0.16)" }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" }}>Not evaluated</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mt: 0.6 }}>{ruleSummary.notEvaluated ?? (rules ? rules.filter((rule) => rule.status === "not-evaluated").length : MISSING_VALUE)}</Typography>
+                <Box sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(148,163,184,0.05)", border: "1px solid rgba(148,163,184,0.16)" }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", }}>Not evaluated</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mt: 0.6 }}>{ruleSummary.notEvaluated ?? (rules ? rules.filter((rule) => rule.status === "not-evaluated").length : MISSING_VALUE)}</Typography>
                 </Box>
-                <Box sx={{ p: 2, borderRadius: 3, bgcolor: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.18)" }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase" }}>Clear</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 900, mt: 0.6 }}>{rules ? rules.filter((rule) => rule.status === "clear").length : MISSING_VALUE}</Typography>
+                <Box sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.18)" }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800, letterSpacing: "0.08em", }}>Clear</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 600, mt: 0.6 }}>{rules ? rules.filter((rule) => rule.status === "clear").length : MISSING_VALUE}</Typography>
                 </Box>
               </Stack>
             </CardContent>

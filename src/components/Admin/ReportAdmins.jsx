@@ -36,7 +36,7 @@ import {
   FiFileText,
 } from "react-icons/fi";
 
-const COLORS = ["#818cf8", "#34d399", "#fbbf24", "#f87171", "#a855f7"];
+const COLORS = ["#a78bfa", "#1f9d6b", "#b07c26", "#e0564b", "#3E6BB5"];
 
 export const ReportAdmins = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export const ReportAdmins = () => {
         justifyContent="center"
         sx={{ h: "70vh", color: "text.disabled" }}
       >
-        <CircularProgress size={40} sx={{ mb: 2, color: "#22d3ee" }} />
+        <CircularProgress size={40} sx={{ mb: 2, color: "#1f9d6b" }} />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           Loading system intelligence report...
         </Typography>
@@ -66,38 +66,38 @@ export const ReportAdmins = () => {
     {
       label: "Total Users",
       value: stats.totalUsers,
-      trend: "+12%",
-      color: "linear-gradient(to bottom right, #818cf8, #a855f7)",
+      trend: "All accounts",
+      color: "linear-gradient(to bottom right, #a78bfa, #3E6BB5)",
     },
     {
       label: "Active Users",
       value: stats.activeUsers,
-      trend: "+4%",
-      color: "linear-gradient(to bottom right, #34d399, #10b981)",
+      trend: "Enabled",
+      color: "linear-gradient(to bottom right, #1f9d6b, #1f9d6b)",
     },
     {
       label: "Deactivated Users",
       value: stats.deactivatedUsers,
-      trend: "-3%",
-      color: "linear-gradient(to bottom right, #f43f5e, #ef4444)",
+      trend: "Disabled",
+      color: "linear-gradient(to bottom right, #e0564b, #ef4444)",
     },
     {
       label: "Total Income",
-      value: `export const formatCurrency = (val) => ₹${stats.totalIncome?.toLocaleString()}`,
-      trend: "+8%",
-      color: "linear-gradient(to bottom right, #60a5fa, #06b6d4)",
+      value: `₹${stats.totalIncome?.toLocaleString("en-IN") || 0}`,
+      trend: "Recorded",
+      color: "linear-gradient(to bottom right, #6735c8, #6735c8)",
     },
     {
       label: "Total Expense",
-      value: `₹${stats.totalExpense?.toLocaleString()}`,
-      trend: "+6%",
-      color: "linear-gradient(to bottom right, #fbbf24, #f97316)",
+      value: `₹${stats.totalExpense?.toLocaleString("en-IN") || 0}`,
+      trend: "Recorded",
+      color: "linear-gradient(to bottom right, #b07c26, #f97316)",
     },
     {
       label: "Most Active User",
       value: stats.mostActiveUser || "N/A",
-      trend: "Top performer",
-      color: "linear-gradient(to bottom right, #c084fc, #f43f5e)",
+      trend: "Most entries",
+      color: "linear-gradient(to bottom right, #a78bfa, #e0564b)",
     },
   ];
 
@@ -122,15 +122,15 @@ export const ReportAdmins = () => {
           <Typography
             variant="h4"
             sx={{
-              fontWeight: 900,
+              fontWeight: 600,
               letterSpacing: -0.5,
               color: "text.primary",
               mb: 1,
             }}
           >
             Intelligence{" "}
-            <Box component="span" sx={{ color: "#22d3ee" }}>
-              Reports
+            <Box component="span" sx={{ color: "primary.main" }}>
+              reports
             </Box>
           </Typography>
           <Typography
@@ -149,7 +149,7 @@ export const ReportAdmins = () => {
                 w: 8,
                 h: 8,
                 borderRadius: "50%",
-                bgcolor: "#10b981",
+                bgcolor: "#1f9d6b",
                 animation: "pulse 2s infinite",
               }}
             />
@@ -158,7 +158,7 @@ export const ReportAdmins = () => {
           sx={{
             px: 1.5,
             py: 2,
-            borderRadius: 4,
+            borderRadius: 2,
             bgcolor: "background.paper",
             border: 1,
             borderColor: "divider",
@@ -167,7 +167,6 @@ export const ReportAdmins = () => {
             fontWeight: "bold",
             color: "text.secondary",
             letterSpacing: 1,
-            textTransform: "uppercase",
             "& .MuiChip-icon": { marginLeft: 0 },
           }}
         />
@@ -184,15 +183,16 @@ export const ReportAdmins = () => {
               transition={{ delay: index * 0.05 }}
               sx={{
                 p: 2.5,
-                borderRadius: 6,
-                bgcolor: "action.hover",
+                borderRadius: 3,
+                bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
                 position: "relative",
                 overflow: "hidden",
-                transition: "all 0.3s",
-                "&:hover": { bgcolor: "action.selected" },
-                "&:hover .kpi-title": { color: "#22d3ee" },
+                boxShadow: "none",
+                transition: "border-color 160ms ease",
+                "&:hover": { borderColor: "var(--border-medium)" },
+                "&:hover .kpi-title": { color: "primary.main" },
               }}
             >
               <Box sx={{ position: "relative", zIndex: 10 }}>
@@ -204,7 +204,6 @@ export const ReportAdmins = () => {
                     fontWeight: "bold",
                     color: "text.disabled",
                     letterSpacing: "0.2em",
-                    textTransform: "uppercase",
                     mb: 1,
                     transition: "color 0.3s",
                   }}
@@ -214,7 +213,7 @@ export const ReportAdmins = () => {
                 <Typography
                   variant="h5"
                   sx={{
-                    fontWeight: 900,
+                    fontWeight: 600,
                     color: "text.primary",
                     noWrap: true,
                   }}
@@ -232,12 +231,11 @@ export const ReportAdmins = () => {
                     label={kpi.trend}
                     size="small"
                     sx={{
-                      fontFamily: "monospace",
-                      fontSize: "10px",
-                      color: "#22d3ee",
-                      bgcolor: "rgba(34, 211, 238, 0.1)",
-                      border: "1px solid rgba(34, 211, 238, 0.2)",
-                      borderRadius: 1.5,
+                      fontSize: "10.5px",
+                      color: "text.secondary",
+                      bgcolor: "background.default",
+                      border: "1px solid var(--border)",
+                      borderRadius: 999,
                     }}
                   />
                   <Box
@@ -269,7 +267,7 @@ export const ReportAdmins = () => {
             animate={{ opacity: 1, x: 0 }}
             sx={{
               p: 4,
-              borderRadius: 10,
+              borderRadius: 1.5,
               bgcolor: "background.paper",
               border: 1,
               borderColor: "divider",
@@ -287,7 +285,6 @@ export const ReportAdmins = () => {
                 sx={{
                   fontWeight: "bold",
                   letterSpacing: "0.3em",
-                  textTransform: "uppercase",
                   color: "text.disabled",
                 }}
               >
@@ -298,11 +295,11 @@ export const ReportAdmins = () => {
                 sx={{
                   width: 40,
                   height: 40,
-                  borderRadius: 4,
+                  borderRadius: 2,
                   bgcolor: "action.hover",
                   border: 1,
                   borderColor: "divider",
-                  color: "#22d3ee",
+                  color: "#1f9d6b",
                 }}
               >
                 <FiActivity size={18} />
@@ -316,8 +313,8 @@ export const ReportAdmins = () => {
               >
                 <defs>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#22d3ee" stopOpacity={0.8} />
-                    <stop offset="100%" stopColor="#4f46e5" stopOpacity={0.1} />
+                    <stop offset="0%" stopColor="#1f9d6b" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#4A5F55" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
                 <XAxis
@@ -359,7 +356,7 @@ export const ReportAdmins = () => {
             animate={{ opacity: 1, x: 0 }}
             sx={{
               p: 4,
-              borderRadius: 10,
+              borderRadius: 1.5,
               bgcolor: "background.paper",
               border: 1,
               borderColor: "divider",
@@ -377,7 +374,6 @@ export const ReportAdmins = () => {
                 sx={{
                   fontWeight: "bold",
                   letterSpacing: "0.3em",
-                  textTransform: "uppercase",
                   color: "text.disabled",
                 }}
               >
@@ -388,11 +384,11 @@ export const ReportAdmins = () => {
                 sx={{
                   width: 40,
                   height: 40,
-                  borderRadius: 4,
+                  borderRadius: 2,
                   bgcolor: "action.hover",
                   border: 1,
                   borderColor: "divider",
-                  color: "#c084fc",
+                  color: "#a78bfa",
                 }}
               >
                 <FiPieChart size={18} />
@@ -449,7 +445,6 @@ export const ReportAdmins = () => {
                           sx={{
                             fontWeight: "bold",
                             color: "text.secondary",
-                            textTransform: "uppercase",
                             noWrap: true,
                           }}
                         >
@@ -477,7 +472,6 @@ export const ReportAdmins = () => {
                     fontWeight: "bold",
                     color: "text.disabled",
                     letterSpacing: "0.2em",
-                    textTransform: "uppercase",
                   }}
                 >
                   Registry Empty
@@ -495,7 +489,7 @@ export const ReportAdmins = () => {
         animate={{ opacity: 1, y: 0 }}
         sx={{
           p: 5,
-          borderRadius: 10,
+          borderRadius: 1.5,
           background: "linear-gradient(to bottom right, var(--surface-primary), var(--surface-secondary))",
           border: 1,
           borderColor: "divider",
@@ -533,16 +527,16 @@ export const ReportAdmins = () => {
                     variant="rounded"
                     sx={{
                       p: 1,
-                      borderRadius: 3,
-                      bgcolor: "rgba(6, 182, 212, 0.1)",
-                      border: "1px solid rgba(6, 182, 212, 0.2)",
-                      color: "#22d3ee",
+                      borderRadius: 1.5,
+                      bgcolor: "rgba(74, 47, 203, 0.1)",
+                      border: "1px solid rgba(74, 47, 203, 0.2)",
+                      color: "#1f9d6b",
                     }}
                   >
                     <FiActivity size={18} />
                   </Avatar>
                   <Box>
-                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, textTransform: "uppercase", mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, mb: 0.5 }}>
                       Peak Capital Flow
                     </Typography>
                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>
@@ -556,16 +550,16 @@ export const ReportAdmins = () => {
                     variant="rounded"
                     sx={{
                       p: 1,
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       bgcolor: "rgba(168, 85, 247, 0.1)",
                       border: "1px solid rgba(168, 85, 247, 0.2)",
-                      color: "#c084fc",
+                      color: "#a78bfa",
                     }}
                   >
                     <FiUsers size={18} />
                   </Avatar>
                   <Box>
-                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, textTransform: "uppercase", mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, mb: 0.5 }}>
                       Primary Operator
                     </Typography>
                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>
@@ -583,16 +577,16 @@ export const ReportAdmins = () => {
                     variant="rounded"
                     sx={{
                       p: 1,
-                      borderRadius: 3,
-                      bgcolor: "rgba(244, 63, 94, 0.1)",
-                      border: "1px solid rgba(244, 63, 94, 0.2)",
-                      color: "#f43f5e",
+                      borderRadius: 1.5,
+                      bgcolor: "rgba(169, 75, 63, 0.1)",
+                      border: "1px solid rgba(169, 75, 63, 0.2)",
+                      color: "#e0564b",
                     }}
                   >
                     <FiXCircle size={18} />
                   </Avatar>
                   <Box>
-                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, textTransform: "uppercase", mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, mb: 0.5 }}>
                       Dormant Accounts
                     </Typography>
                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>
@@ -606,16 +600,16 @@ export const ReportAdmins = () => {
                     variant="rounded"
                     sx={{
                       p: 1,
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       bgcolor: "rgba(245, 158, 11, 0.1)",
                       border: "1px solid rgba(245, 158, 11, 0.2)",
-                      color: "#fbbf24",
+                      color: "#b07c26",
                     }}
                   >
                     <FiFileText size={18} />
                   </Avatar>
                   <Box>
-                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, textTransform: "uppercase", mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: 1, mb: 0.5 }}>
                       Operational Outlay
                     </Typography>
                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "text.primary" }}>

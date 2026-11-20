@@ -208,14 +208,14 @@ export const Transaction = () => {
                 className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors active:scale-[0.98]
                   ${
                     activeTab === tab.key
-                      ? "bg-[#3985ff] text-[#101a2b]"
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
                       : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-secondary)]"
                   }`}
               >
                 {tab.label}
                 <span
                   className={`text-xs rounded-full px-1.5 py-0.5 font-medium
-                  ${activeTab === tab.key ? "bg-[#101a2b]/10 text-[#101a2b]" : "bg-[var(--surface-tertiary)] text-[var(--text-muted)]"}`}
+                  ${activeTab === tab.key ? "bg-white/15 text-white" : "bg-[var(--surface-tertiary)] text-[var(--text-muted)]"}`}
                 >
                   {tab.count}
                 </span>
@@ -254,12 +254,12 @@ export const Transaction = () => {
                       <div
                         className={`flex items-center gap-4 px-8 py-5 bg-[var(--surface-secondary)]/30`}
                       >
-                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]" />
-                        <span className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-[0.3em]">
+                        <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(74,47,203,0.4)]" />
+                        <span className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.3em]">
                           {date}
                         </span>
                         <div className="flex-1 h-px bg-[var(--border)]/50" />
-                        <span className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-[0.1em] border border-[var(--border)] px-2 py-1 rounded-md">
+                        <span className="text-[9px] font-black text-[var(--text-muted)] tracking-[0.1em] border border-[var(--border)] px-2 py-1 rounded-md">
                           {groupedByDate[date].length} OPERATIONS
                         </span>
                       </div>
@@ -295,20 +295,20 @@ export const Transaction = () => {
                             {/* Core Telemetry (Description/Category) */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-3">
-                                <h5 className="text-sm font-black text-[var(--text-primary)] truncate uppercase tracking-tight">
+                                <h5 className="text-sm font-black text-[var(--text-primary)] truncate tracking-tight">
                                   {t.description ||
                                     t.source ||
                                     "Unknown Vector"}
                                 </h5>
                                 {t.type === "Expense" && t.hasBudget && (
-                                  <span className="text-[8px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20 uppercase tracking-widest">
+                                  <span className="text-[8px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20 tracking-widest">
                                     Strategic
                                   </span>
                                 )}
                               </div>
                               <div className="flex items-center gap-2 mt-2">
                                 {t.categoryID?.name && (
-                                  <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-muted)] uppercase tracking-widest">
+                                  <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-muted)] tracking-widest">
                                     {t.categoryID.name}
                                   </span>
                                 )}
@@ -326,7 +326,7 @@ export const Transaction = () => {
                               {t.type === "Expense" && !t.hasBudget && (
                                 <button
                                   onClick={() => handlePlanBudget(t)}
-                                  className="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl
+                                  className="text-[9px] font-black tracking-widest px-3 py-1.5 rounded-xl
                                              bg-cyan-500/10 border border-cyan-500/20 text-cyan-500
                                              hover:bg-cyan-500 hover:text-white shadow-lg shadow-cyan-500/10
                                              transition-all duration-300 whitespace-nowrap active:scale-95"
@@ -354,7 +354,7 @@ export const Transaction = () => {
               <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                 <FiFilter size={14} className="text-cyan-500" />
               </div>
-              <h4 className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-[0.2em]">
+              <h4 className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.2em]">
                 Parameter Matrix
               </h4>
             </div>
@@ -363,7 +363,7 @@ export const Transaction = () => {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[10px] font-black tracking-widest transition-all
                     ${
                       activeTab === tab.key
                         ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-500"
@@ -393,7 +393,7 @@ export const Transaction = () => {
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                 <FiDollarSign size={14} className="text-blue-500" />
               </div>
-              <h4 className="text-[10px] font-black text-[var(--text-primary)] uppercase tracking-[0.2em]">
+              <h4 className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.2em]">
                 Totality Ledger
               </h4>
             </div>
@@ -420,7 +420,7 @@ export const Transaction = () => {
                   key={i}
                   className={`flex items-center justify-between group ${i < 2 ? "pb-4 border-b border-[var(--border)]/50" : ""}`}
                 >
-                  <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">
+                  <span className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest">
                     {row.label}
                   </span>
                   <span
@@ -434,7 +434,7 @@ export const Transaction = () => {
 
               {/* Progress Indicator */}
               <div className="pt-2">
-                <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest mb-3">
+                <div className="flex items-center justify-between text-[10px] font-black tracking-widest mb-3">
                   <span className="text-[var(--text-muted)]">
                     Efficiency Score
                   </span>
@@ -459,9 +459,9 @@ export const Transaction = () => {
                     transition={{ duration: 1.5, ease: "circOut" }}
                     className={`h-full rounded-full shadow-[0_0_12px_rgba(0,0,0,0.2)] ${
                       savingsRate >= 20
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-600"
+                        ? "bg-[var(--primary)]"
                         : savingsRate >= 0
-                          ? "bg-gradient-to-r from-amber-500 to-orange-600"
+                          ? "bg-[var(--primary)]"
                           : "bg-gradient-to-r from-rose-500 to-red-700"
                     }`}
                   />

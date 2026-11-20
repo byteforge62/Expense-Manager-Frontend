@@ -98,9 +98,8 @@ export const UserDetails = () => {
           variant="body2"
           sx={{
             fontWeight: "semibold",
-            color: "rgba(6, 182, 212, 0.6)",
+            color: "rgba(74, 47, 203, 0.6)",
             letterSpacing: "0.15em",
-            textTransform: "uppercase",
             animation: "pulse 2s infinite",
           }}
         >
@@ -118,7 +117,7 @@ export const UserDetails = () => {
           onClick={() => navigate(-1)}
           sx={{
             p: 1.25,
-            borderRadius: 3,
+            borderRadius: 1.5,
             bgcolor: "action.hover",
             border: 1,
             borderColor: "divider",
@@ -131,10 +130,10 @@ export const UserDetails = () => {
           <FiChevronLeft size={20} />
         </IconButton>
         <Box>
-          <Typography variant="body2" sx={{ fontWeight: "bold", color: "text.disabled", textTransform: "uppercase", letterSpacing: "0.3em", fontSize: "12px" }}>
+          <Typography variant="body2" sx={{ fontWeight: "bold", color: "text.disabled", letterSpacing: "0.3em", fontSize: "12px" }}>
             Subject Analysis
           </Typography>
-          <Typography variant="caption" sx={{ color: "rgba(6, 182, 212, 0.6)", fontFamily: "monospace" }}>
+          <Typography variant="caption" sx={{ color: "rgba(74, 47, 203, 0.6)", fontFamily: "monospace" }}>
             ID: {userId}
           </Typography>
         </Box>
@@ -147,7 +146,7 @@ export const UserDetails = () => {
           <Card
             sx={{
               position: "relative",
-              borderRadius: 10,
+              borderRadius: 1.5,
               bgcolor: "background.paper",
               border: 1,
               borderColor: "divider",
@@ -192,7 +191,7 @@ export const UserDetails = () => {
                       width: 128,
                       height: 128,
                       borderRadius: 6,
-                      border: "2px solid rgba(6, 182, 212, 0.3)",
+                      border: "2px solid rgba(74, 47, 203, 0.3)",
                       objectFit: "cover",
                       boxShadow: 5,
                       p: 0.5,
@@ -209,7 +208,7 @@ export const UserDetails = () => {
                       bgcolor: "action.hover",
                       border: 1,
                       borderColor: "divider",
-                      boxShadow: "0 0 20px rgba(6, 182, 212, 0.1)",
+                      boxShadow: "0 0 20px rgba(74, 47, 203, 0.1)",
                     }}
                   >
                     <FiUser size={64} style={{ color: "var(--text-muted)" }} />
@@ -222,7 +221,7 @@ export const UserDetails = () => {
                     bottom: -8,
                     right: -8,
                     p: 1,
-                    borderRadius: 3,
+                    borderRadius: 1.5,
                     bgcolor: "rgba(234, 179, 8, 0.1)",
                     border: "1px solid rgba(234, 179, 8, 0.2)",
                     color: "rgb(250, 204, 21)",
@@ -235,7 +234,7 @@ export const UserDetails = () => {
 
               {/* Subject Information Stack */}
               <Stack spacing={1} sx={{ flex: 1 }}>
-                <Typography variant="h3" sx={{ fontWeight: 900, tracking: "-0.05em", color: "text.primary" }}>
+                <Typography variant="h3" sx={{ fontWeight: 600, tracking: "-0.05em", color: "text.primary" }}>
                   {user?.name}
                 </Typography>
                 <Typography variant="body1" sx={{ color: "text.secondary", fontWeight: 500 }}>
@@ -254,16 +253,16 @@ export const UserDetails = () => {
                     label={`${user?.role} ACCESS`}
                     sx={{
                       fontSize: "10px",
-                      fontWeight: 900,
+                      fontWeight: 600,
                       letterSpacing: "0.15em",
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       border: 1,
                       ...(user?.role === "Admin"
-                        ? { bgcolor: "rgba(6, 182, 212, 0.1)", borderColor: "rgba(6, 182, 212, 0.3)", color: "cyan" }
+                        ? { bgcolor: "rgba(74, 47, 203, 0.1)", borderColor: "rgba(74, 47, 203, 0.3)", color: "cyan" }
                         : { bgcolor: "action.hover", borderColor: "divider", color: "text.disabled" }),
                     }}
                   />
-                  <Stack direction="row" alignItems="center" spacing={1} sx={{ color: "text.disabled", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  <Stack direction="row" alignItems="center" spacing={1} sx={{ color: "text.disabled", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.1em", }}>
                     <FiCalendar style={{ color: "cyan" }} />
                     <span>Decrypted: {new Date(user?.createdAt).toLocaleDateString()}</span>
                   </Stack>
@@ -277,7 +276,7 @@ export const UserDetails = () => {
                   sx={{
                     px: 3,
                     py: 1.5,
-                    borderRadius: 4,
+                    borderRadius: 2,
                     bgcolor: "action.hover",
                     borderColor: "divider",
                     color: "text.secondary",
@@ -300,21 +299,21 @@ export const UserDetails = () => {
                 label: "Gross Inflow",
                 value: totalIncome,
                 icon: <FiArrowUpRight size={20} />,
-                gradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%)",
+                gradient: "linear-gradient(135deg, rgba(46, 122, 89, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%)",
                 accent: "rgb(52, 211, 153)",
               },
               {
                 label: "Operational Outflow",
                 value: totalExpense,
                 icon: <FiArrowDownLeft size={20} />,
-                gradient: "linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(249, 115, 22) 100%)",
+                gradient: "linear-gradient(135deg, rgba(169, 75, 63, 0.2) 0%, rgba(249, 115, 22) 100%)",
                 accent: "rgb(251, 113, 133)",
               },
               {
                 label: "Allocated Reserves",
                 value: totalBudget,
                 icon: <FiActivity size={20} />,
-                gradient: "linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%)",
+                gradient: "linear-gradient(135deg, rgba(140, 103, 41, 0.2) 0%, rgba(74, 95, 85, 0.1) 100%)",
                 accent: "rgb(96, 165, 250)",
               },
             ].map((card, idx) => (
@@ -336,10 +335,10 @@ export const UserDetails = () => {
                   }}
                 >
                   <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", textTransform: "uppercase", letterSpacing: "0.15em", mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", color: "text.disabled", letterSpacing: "0.15em", mb: 0.5 }}>
                       {card.label}
                     </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 900, color: "text.primary" }}>
+                    <Typography variant="h4" sx={{ fontWeight: 600, color: "text.primary" }}>
                       ₹{card.value.toLocaleString()}
                     </Typography>
                   </Box>
@@ -347,7 +346,7 @@ export const UserDetails = () => {
                     className="icon-box"
                     sx={{
                       p: 2,
-                      borderRadius: 4,
+                      borderRadius: 2,
                       bgcolor: "rgba(255, 255, 255, 0.03)",
                       color: card.accent,
                       boxShadow: "inset 0px 1px 3px rgba(0,0,0,0.4)",
@@ -365,16 +364,16 @@ export const UserDetails = () => {
           <Grid container spacing={3}>
             {/* Distribution View */}
             <Grid size={{ xs: 12, lg: 6 }}>
-              <Card sx={{ p: 4, borderRadius: 10, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
-                <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
+              <Card sx={{ p: 4, borderRadius: 1.5, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
+                <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
                   Convergent Distribution
                 </Typography>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={[{ name: "Inflow", amount: totalIncome }, { name: "Outflow", amount: totalExpense }]}>
                     <defs>
                       <linearGradient id="distGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.8} />
-                        <stop offset="100%" stopColor="#4f46e5" stopOpacity={0.1} />
+                        <stop offset="0%" stopColor="#6735c8" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#4A5F55" stopOpacity={0.1} />
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--text-muted)", fontSize: 10, fontWeight: 700 }} />
@@ -388,27 +387,27 @@ export const UserDetails = () => {
 
             {/* Cyclical Trends */}
             <Grid size={{ xs: 12, lg: 6 }}>
-              <Card sx={{ p: 4, borderRadius: 10, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
-                <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
+              <Card sx={{ p: 4, borderRadius: 1.5, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
+                <Typography variant="caption" sx={{ display: "block", fontWeight: "bold", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
                   Cyclical Velocity
                 </Typography>
                 <ResponsiveContainer width="100%" height={260}>
                   <AreaChart data={monthlyData}>
                     <defs>
                       <linearGradient id="areaIn" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
+                        <stop offset="0%" stopColor="#1f9d6b" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#1f9d6b" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="areaOut" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#f43f5e" stopOpacity={0} />
+                        <stop offset="0%" stopColor="#e0564b" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#e0564b" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: "var(--text-muted)", fontSize: 10, fontWeight: 700 }} />
                     <YAxis hide />
                     <Tooltip contentStyle={{ background: "var(--surface-primary)", border: "1px solid var(--border)", borderRadius: "15px", color: "var(--text-primary)" }} />
-                    <Area type="monotone" dataKey="income" stroke="#10b981" fill="url(#areaIn)" strokeWidth={3} />
-                    <Area type="monotone" dataKey="expense" stroke="#f43f5e" fill="url(#areaOut)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="income" stroke="#1f9d6b" fill="url(#areaIn)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="expense" stroke="#e0564b" fill="url(#areaOut)" strokeWidth={3} />
                   </AreaChart>
                 </ResponsiveContainer>
               </Card>
@@ -416,8 +415,8 @@ export const UserDetails = () => {
           </Grid>
 
           {/* ===================== TIMELINE (RECENT ACTIVITY) ===================== */}
-          <Card sx={{ p: 4, borderRadius: 10, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
-            <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: 1.5, fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
+          <Card sx={{ p: 4, borderRadius: 1.5, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}>
+            <Typography variant="caption" sx={{ display: "flex", alignItems: "center", gap: 1.5, fontWeight: "bold", letterSpacing: "0.3em", color: "text.disabled", mb: 4 }}>
               Sequence Transactional Log
               <Box component="span" sx={{ w: 6, h: 6, borderRadius: "50%", bgcolor: "cyan", animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite" }} />
             </Typography>
@@ -463,7 +462,7 @@ export const UserDetails = () => {
                     sx={{
                       flexGrow: 1,
                       p: 2.5,
-                      borderRadius: 4,
+                      borderRadius: 2,
                       bgcolor: "rgba(255,255,255,0.01)",
                       border: 1,
                       borderColor: "divider",
@@ -472,7 +471,7 @@ export const UserDetails = () => {
                     }}
                   >
                     <Grid size={{ xs: 12, md: 8 }}>
-                      <Typography variant="caption" sx={{ display: "block", fontFamily: "monospace", color: "text.disabled", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.1em", mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ display: "block", fontFamily: "monospace", color: "text.disabled", fontWeight: "bold", letterSpacing: "0.1em", mb: 0.5 }}>
                         {new Date(tx.date).toLocaleString()}
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: "text.primary" }}>
@@ -494,7 +493,7 @@ export const UserDetails = () => {
                             : { bgcolor: "rgba(244,63,94,0.05)", borderColor: "rgba(244,63,94,0.2)", color: "rgb(251, 113, 133)" }),
                         }}
                       />
-                      <Typography variant="h5" sx={{ fontWeight: 900, color: tx.type === "income" ? "rgb(52, 211, 153)" : "rgb(251, 113, 133)" }}>
+                      <Typography variant="h5" sx={{ fontWeight: 600, color: tx.type === "income" ? "rgb(52, 211, 153)" : "rgb(251, 113, 133)" }}>
                         {tx.type === "income" ? "+" : "-"}₹{tx.amount.toLocaleString()}
                       </Typography>
                     </Grid>

@@ -1,266 +1,136 @@
-import React from "react";
-import { motion } from "framer-motion";
-
-// ================ Material UI Components ================
+import { Link as RouterLink } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid"; // Native Grid component
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 
-// ================ Icons ================
-import {
-  FiTwitter,
-  FiGithub,
-  FiLinkedin,
-  FiArrowUpRight,
-} from "react-icons/fi";
+import fintrackMark from "../../assets/brand/fintrack-mark.svg";
 
-/**
- * --- SITE FOOTER ---
- * Provides site-wide links, social media connections, and system status information.
- */
+const COLUMNS = [
+  {
+    heading: "Product",
+    links: [
+      { label: "How it works", href: "#how" },
+      { label: "Expense tracking", href: "#product" },
+      { label: "Forecasting", href: "#forecast" },
+      { label: "FAQ", href: "#questions" },
+    ],
+  },
+  {
+    heading: "Account",
+    links: [
+      { label: "Create an account", to: "/signup" },
+      { label: "Sign in", to: "/login" },
+      { label: "Reset password", to: "/forgot-password" },
+    ],
+  },
+];
+
+const linkSx = {
+  display: "block",
+  fontSize: 12.5,
+  color: "var(--pub-muted)",
+  textDecoration: "none",
+  py: 0.55,
+  "&:hover": { color: "var(--pub-accent)" },
+};
+
+/** The colophon: brand, index and the one line that has to be said. */
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
-  // --- DATA: FOOTER LINKS ---
-  const footerLinks = {
-    product: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Integrations", href: "#integrations" },
-      { label: "FAQ", href: "#faq" },
-    ],
-    resources: [
-      { label: "Documentation", href: "#" },
-      { label: "Security", href: "#" },
-      { label: "API Reference", href: "#" },
-      { label: "System Status", href: "#" },
-    ],
-    company: [
-      { label: "About Us", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-    ],
-  };
-
-  const socialLinks = [
-    { icon: <FiTwitter />, href: "#", label: "Twitter" },
-    { icon: <FiGithub />, href: "#", label: "GitHub" },
-    { icon: <FiLinkedin />, href: "#", label: "LinkedIn" },
-  ];
+  const year = new Date().getFullYear();
 
   return (
     <Box
       component="footer"
       sx={{
-        position: "relative",
-        mt: 10,
-        pt: 10,
-        pb: 5,
-        borderTop: 1,
-        borderColor: "divider",
-        overflow: "hidden",
+        bgcolor: "var(--pub-surface)",
+        borderTop: "1px solid var(--pub-hair)",
+        px: "var(--pub-gutter)",
+        pt: { xs: 5, md: 6 },
+        pb: 3.5,
       }}
     >
-      {/* ── BACKGROUND VISUAL GLOWS ── */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 800,
-          height: 300,
-          bgcolor: "rgba(6, 182, 212, 0.05)",
-          filter: "blur(120px)",
-          borderRadius: "50%",
-          pointerEvents: "none",
-        }}
-      />
-
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 10 }}>
-        <Grid container spacing={{ xs: 6, lg: 4 }} sx={{ mb: 8 }}>
-          
-          {/* ── BRAND SECTION ── */}
-          <Grid size={{ xs: 12, md: 6, lg: 4 }} sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Stack direction="row" alignItems="center" spacing={1.5}>
-              <Box
-                sx={{
-                  height: 40,
-                  width: 40,
-                  borderRadius: 3,
-                  background: "linear-gradient(135deg, #06b6d4, #2563eb)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 4px 14px rgba(6, 182, 212, 0.2)",
-                }}
-              >
-                <Box
-                  component="svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                  sx={{ width: 20, height: 20, color: "common.white" }}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v1m0 9v1M5.05 5.05A9 9 0 1118.95 18.95"
-                  />
-                </Box>
-              </Box>
+      <Box sx={{ maxWidth: "var(--pub-max)", mx: "auto" }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "1.4fr 1fr 1fr" },
+            columnGap: 5,
+            rowGap: 4,
+            pb: 4,
+          }}
+        >
+          <Box>
+            <Stack direction="row" spacing={1.1} alignItems="center">
+              <Box component="img" src={fintrackMark} alt="" sx={{ width: 26, height: 26 }} />
               <Typography
-                variant="h5"
                 sx={{
-                  fontWeight: "bold",
-                  letterSpacing: "-0.02em",
-                  background: "linear-gradient(to right, #22d3ee, #3b82f6)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "1.25rem",
+                  fontWeight: 600,
+                  letterSpacing: "-0.045em",
                 }}
               >
                 FinTrack
               </Typography>
             </Stack>
-
-            <Typography variant="body1" sx={{ color: "text.secondary", maxWidth: 320, lineHeight: 1.6 }}>
-              The high-performance dashboard for engineers of their own finances. Track, analyze, and optimize your wealth with technical precision.
+            <Typography
+              sx={{
+                mt: 1.5,
+                fontSize: 12.5,
+                lineHeight: 1.7,
+                color: "var(--pub-muted)",
+                maxWidth: 300,
+              }}
+            >
+              A personal ledger for income, spending, budgets and forecasts.
+              Kept in rupees, one account to one book.
             </Typography>
-            
-            {/* Social Icons Stack */}
-            <Stack direction="row" spacing={2}>
-              {socialLinks.map((social, i) => (
-                <IconButton
-                  key={i}
-                  component={motion.a}
-                  href={social.href}
-                  whileHover={{ y: -3, scale: 1.1 }}
-                  aria-label={social.label}
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 2,
-                    bgcolor: "action.hover",
-                    border: 1,
-                    borderColor: "divider",
-                    color: "text.secondary",
-                    transition: "all 0.2s",
-                    "&:hover": {
-                      color: "cyan.main",
-                      borderColor: "rgba(6, 182, 212, 0.5)",
-                      bgcolor: "action.selected",
-                    },
-                  }}
-                >
-                  {social.icon}
-                </IconButton>
-              ))}
-            </Stack>
-          </Grid>
+          </Box>
 
-          {/* ── LINK COLUMNS ── */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <Grid size={{ xs: 12, sm: 4, lg: 2.6 }} key={category} sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {COLUMNS.map((column) => (
+            <Box key={column.heading}>
               <Typography
-                variant="caption"
                 sx={{
-                  fontWeight: "bold",
+                  fontSize: 10.5,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  letterSpacing: "0.2em",
-                  color: "text.primary",
+                  color: "var(--pub-quiet)",
                 }}
               >
-                {category}
+                {column.heading}
               </Typography>
-              <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 2 }}>
-                {links.map((link, i) => (
-                  <Box component="li" key={i}>
-                    <Link
-                      href={link.href}
-                      underline="none"
-                      sx={{
-                        color: "text.secondary",
-                        transition: "color 0.2s",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 0.5,
-                        fontSize: "14px",
-                        "&:hover": { color: "cyan.main" },
-                        "&:hover .arrow-icon": { opacity: 1, transform: "translate(0, 0)" },
-                      }}
-                    >
+              <Box sx={{ mt: 1.5 }}>
+                {column.links.map((link) =>
+                  link.to ? (
+                    <Box key={link.label} component={RouterLink} to={link.to} sx={linkSx}>
                       {link.label}
-                      <Box
-                        className="arrow-icon"
-                        sx={{
-                          display: "inline-flex",
-                          opacity: 0,
-                          transform: "translate(-4px, 4px)",
-                          transition: "all 0.2s ease-in-out",
-                        }}
-                      >
-                        <FiArrowUpRight size={14} />
-                      </Box>
-                    </Link>
-                  </Box>
-                ))}
+                    </Box>
+                  ) : (
+                    <Box key={link.label} component="a" href={link.href} sx={linkSx}>
+                      {link.label}
+                    </Box>
+                  ),
+                )}
               </Box>
-            </Grid>
-          ))}
-
-        </Grid>
-
-        {/* ── BOTTOM CORNER STRIP BAR ── */}
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={3}
-          sx={{ pt: 4, borderTop: 1, borderColor: "divider" }}
-        >
-          <Typography variant="body2" sx={{ fontFamily: "monospace", color: "text.disabled" }}>
-            &copy; {currentYear} FinTrack Labs Inc. All rights reserved.
-          </Typography>
-          
-          {/* Status Runtime Diagnostics Metrics Indicators */}
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing={4}
-            sx={{
-              fontFamily: "monospace",
-              color: "text.disabled",
-              textTransform: "uppercase",
-              letterSpacing: "0.15em",
-              fontSize: "12px",
-            }}
-          >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Box
-                sx={{
-                  w: 8,
-                  h: 8,
-                  borderRadius: "50%",
-                  bgcolor: "emerald.main",
-                  animation: "pulse 2s infinite",
-                }}
-              />
-              <Typography variant="caption" sx={{ fontFamily: "inherit" }}>
-                All Systems Operational
-              </Typography>
-            </Stack>
-            <Box component="span" sx={{ display: { xs: "none", sm: "block" } }}>
-              v2.4.0-stable
             </Box>
-          </Stack>
+          ))}
+        </Box>
+
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          spacing={1}
+          sx={{ pt: 2.5, borderTop: "1px solid var(--pub-hair)" }}
+        >
+          <Typography sx={{ fontSize: 11.5, color: "var(--pub-quiet)" }}>
+            © {year} FinTrack
+          </Typography>
+          <Typography sx={{ fontSize: 11.5, color: "var(--pub-quiet)" }}>
+            Figures on this page are illustrative.
+          </Typography>
         </Stack>
-      </Container>
+      </Box>
     </Box>
   );
 };

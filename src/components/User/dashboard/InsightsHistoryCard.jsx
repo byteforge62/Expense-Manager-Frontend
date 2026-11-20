@@ -31,11 +31,11 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           <Stack direction="row" spacing={2} alignItems="center">
             <Avatar
               sx={{
-                bgcolor: "rgba(6, 182, 212, 0.1)",
+                bgcolor: "rgba(74, 47, 203, 0.1)",
                 border: 1,
-                borderColor: "rgba(6, 182, 212, 0.2)",
+                borderColor: "rgba(74, 47, 203, 0.2)",
                 color: "cyan.main",
-                borderRadius: 3,
+                borderRadius: 1.5,
                 width: 40,
                 height: 40,
               }}
@@ -51,7 +51,6 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
                 color="text.secondary"
                 sx={{
                   fontWeight: "bold",
-                  textTransform: "uppercase",
                   letterSpacing: "0.1em",
                 }}
               >
@@ -67,7 +66,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
               sx={{
                 fontWeight: "bold",
                 textTransform: "none",
-                borderRadius: 3,
+                borderRadius: 1.5,
               }}
             >
               Refresh history
@@ -111,7 +110,6 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
                 variant="caption"
                 sx={{
                   fontWeight: "bold",
-                  textTransform: "uppercase",
                   letterSpacing: "0.1em",
                 }}
               >
@@ -133,7 +131,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
                 <Card
                   sx={{
                     p: 2,
-                    borderRadius: 3,
+                    borderRadius: 1.5,
                     border: 1,
                     borderColor: "divider",
                   }}

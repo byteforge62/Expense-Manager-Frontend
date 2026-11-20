@@ -145,7 +145,7 @@ export const ManageCategories = () => {
               bgcolor: "background.paper",
               color: "text.secondary",
               p: 0.5,
-              borderRadius: 3,
+              borderRadius: 1.5,
             }}
           />
         </Stack>
@@ -157,22 +157,22 @@ export const ManageCategories = () => {
               label: "Total Managed",
               value: totalCount,
               icon: <FiGrid size={20} />,
-              bg: "linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(99, 102, 241, 0.05))",
-              accent: "#60a5fa",
+              bg: "linear-gradient(135deg, rgba(140, 103, 41, 0.15), rgba(74, 95, 85, 0.05))",
+              accent: "#6735c8",
             },
             {
               label: "Income Nodes",
               value: incomeCount,
               icon: <FiActivity size={20} />,
               bg: "linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(20, 184, 166, 0.05))",
-              accent: "#34d399",
+              accent: "#1f9d6b",
             },
             {
               label: "Expense Nodes",
               value: expenseCount,
               icon: <FiFileText size={20} />,
               bg: "linear-gradient(135deg, rgba(225, 29, 72, 0.15), rgba(249, 115, 22, 0.05))",
-              accent: "#f43f5e",
+              accent: "#e0564b",
             },
           ].map((card, idx) => (
             <Grid item xs={12} sm={4} key={idx}>
@@ -192,7 +192,7 @@ export const ManageCategories = () => {
                 }}
               >
                 <Box>
-                  <Typography variant="caption" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, textTransform: "uppercase" }}>
+                  <Typography variant="caption" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, }}>
                     {card.label}
                   </Typography>
                   <Typography variant="h3" sx={{ fontWeight: "bold", color: "text.primary", mt: 0.5 }}>
@@ -203,7 +203,7 @@ export const ManageCategories = () => {
                   sx={{
                     width: 44,
                     height: 44,
-                    borderRadius: 4,
+                    borderRadius: 2,
                     bgcolor: "rgba(0,0,0,0.15)",
                     color: card.accent,
                     boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
@@ -236,13 +236,13 @@ export const ManageCategories = () => {
                 boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)",
               }}
             >
-              <Typography variant="caption" sx={{ fontWeight: "bold", color: "text.secondary", tracking: 1.5, textTransform: "uppercase", pb: 1, borderBottom: 1, borderColor: "divider" }}>
+              <Typography variant="caption" sx={{ fontWeight: "bold", color: "text.secondary", tracking: 1.5, pb: 1, borderBottom: 1, borderColor: "divider" }}>
                 New Category Protocol
               </Typography>
 
               <Stack spacing={2.5}>
                 <Box>
-                  <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "text.secondary", textTransform: "uppercase", tracking: 0.5 }}>
+                  <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "text.secondary", tracking: 0.5 }}>
                     System Label
                   </Typography>
                   <TextField
@@ -252,13 +252,13 @@ export const ManageCategories = () => {
                     placeholder="e.g. Infrastructure"
                     error={!!errors.name}
                     helperText={errors.name?.message}
-                    FormHelperTextProps={{ sx: { fontSize: "10px", fontWeight: "bold", textTransform: "uppercase", m: 0, mt: 0.75 } }}
+                    FormHelperTextProps={{ sx: { fontSize: "10px", fontWeight: "bold", m: 0, mt: 0.75 } }}
                     sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 } }}
                   />
                 </Box>
 
                 <Box>
-                  <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "text.secondary", textTransform: "uppercase", tracking: 0.5 }}>
+                  <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "text.secondary", tracking: 0.5 }}>
                     Classification Type
                   </Typography>
                   <Controller
@@ -289,17 +289,14 @@ export const ManageCategories = () => {
                 variant="contained"
                 fullWidth
                 sx={{
-                  py: 1.5,
-                  borderRadius: 3,
-                  fontWeight: "bold",
-                  fontSize: "11px",
-                  letterSpacing: 1.5,
-                  background: "linear-gradient(to right, #0891b2, #2563eb)",
-                  boxShadow: "0 4px 12px rgba(34, 211, 238, 0.2)",
-                  transition: "all 0.3s",
+                  py: 1.25,
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  background: "var(--primary)",
+                  boxShadow: "none",
                   "&:hover": {
-                    transform: "scale(1.02)",
-                    background: "linear-gradient(to right, #0891b2, #2563eb)",
+                    background: "var(--primary)",
+                    opacity: 0.92,
                   },
                 }}
               >
@@ -347,7 +344,7 @@ export const ManageCategories = () => {
               {loading ? (
                 <Stack alignItems="center" justifyContent="center" sx={{ py: 10, gap: 2 }}>
                   <CircularProgress size={32} thickness={4} sx={{ color: "cyan.main" }} />
-                  <Typography variant="caption" sx={{ fontWeight: "bold", tracking: 1.5, color: "text.secondary", textTransform: "uppercase" }}>
+                  <Typography variant="caption" sx={{ fontWeight: "bold", tracking: 1.5, color: "text.secondary", }}>
                     Fetching Taxonomy...
                   </Typography>
                 </Stack>
@@ -355,9 +352,9 @@ export const ManageCategories = () => {
                 <Table>
                   <TableHead>
                     <TableRow sx={{ bgcolor: "action.hover" }}>
-                      <TableCell sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, textTransform: "uppercase", py: 2 }}>Structure Label</TableCell>
-                      <TableCell sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, textTransform: "uppercase", py: 2 }}>Flow Classification</TableCell>
-                      <TableCell align="center" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, textTransform: "uppercase", py: 2 }}>Maintenance</TableCell>
+                      <TableCell sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, py: 2 }}>Structure Label</TableCell>
+                      <TableCell sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, py: 2 }}>Flow Classification</TableCell>
+                      <TableCell align="center" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.secondary", tracking: 1.5, py: 2 }}>Maintenance</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -415,8 +412,8 @@ export const ManageCategories = () => {
                                 fontWeight: "bold",
                                 borderRadius: 2,
                                 color: cat.type === "income" ? "emerald.main" : "rose.main",
-                                bgcolor: cat.type === "income" ? "rgba(16, 185, 129, 0.08)" : "rgba(244, 63, 94, 0.08)",
-                                borderColor: cat.type === "income" ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)",
+                                bgcolor: cat.type === "income" ? "rgba(46, 122, 89, 0.08)" : "rgba(169, 75, 63, 0.08)",
+                                borderColor: cat.type === "income" ? "rgba(46, 122, 89, 0.2)" : "rgba(169, 75, 63, 0.2)",
                               }}
                             />
                           )}
@@ -427,7 +424,7 @@ export const ManageCategories = () => {
                           <Stack direction="row" spacing={1} justifyContent="center">
                             {editingId === cat._id ? (
                               <>
-                                <IconButton size="small" onClick={() => saveEdit(cat._id)} sx={{ color: "emerald.main", bgcolor: "rgba(16, 185, 129, 0.1)", "&:hover": { bgcolor: "emerald.main", color: "#fff" } }}>
+                                <IconButton size="small" onClick={() => saveEdit(cat._id)} sx={{ color: "emerald.main", bgcolor: "rgba(46, 122, 89, 0.1)", "&:hover": { bgcolor: "emerald.main", color: "#fff" } }}>
                                   <FiCheck size={14} />
                                 </IconButton>
                                 <IconButton size="small" onClick={() => setEditingId(null)} sx={{ color: "text.disabled", bgcolor: "action.hover" }}>

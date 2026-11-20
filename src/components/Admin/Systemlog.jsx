@@ -52,18 +52,18 @@ export const Systemlog = () => {
 
   // Badge Color Protocol mapped directly to inline stylings
   const getBadgeStyle = (action) => {
-    const base = { fontSize: "9px", fontWeight: 900, letterSpacing: 1, textTransform: "uppercase", px: 1.5, py: 0.5, borderRadius: 3, border: 1 };
+    const base = { fontSize: "9px", fontWeight: 600, letterSpacing: 1, px: 1.5, py: 0.5, borderRadius: 1.5, border: 1 };
     if (!action) return { ...base, bgcolor: "rgba(107, 114, 128, 0.1)", borderColor: "rgba(107, 114, 128, 0.2)", color: "#6b7280" };
     
     const act = action.toLowerCase();
     if (act.includes("delete"))
-      return { ...base, bgcolor: "rgba(244, 63, 94, 0.1)", borderColor: "rgba(244, 63, 94, 0.2)", color: "#f43f5e" };
+      return { ...base, bgcolor: "rgba(169, 75, 63, 0.1)", borderColor: "rgba(169, 75, 63, 0.2)", color: "#e0564b" };
     if (act.includes("update"))
-      return { ...base, bgcolor: "rgba(6, 182, 212, 0.1)", borderColor: "rgba(6, 182, 212, 0.2)", color: "#06b6d4" };
+      return { ...base, bgcolor: "rgba(74, 47, 203, 0.1)", borderColor: "rgba(74, 47, 203, 0.2)", color: "#6735c8" };
     if (act.includes("create"))
-      return { ...base, bgcolor: "rgba(16, 185, 129, 0.1)", borderColor: "rgba(16, 185, 129, 0.2)", color: "#10b981" };
+      return { ...base, bgcolor: "rgba(46, 122, 89, 0.1)", borderColor: "rgba(46, 122, 89, 0.2)", color: "#1f9d6b" };
       
-    return { ...base, bgcolor: "rgba(139, 92, 246, 0.1)", borderColor: "rgba(139, 92, 246, 0.2)", color: "#8b5cf6" };
+    return { ...base, bgcolor: "rgba(163, 119, 58, 0.1)", borderColor: "rgba(163, 119, 58, 0.2)", color: "#6735c8" };
   };
 
   return (
@@ -84,12 +84,9 @@ export const Systemlog = () => {
           <Typography
             variant="h4"
             sx={{
-              fontWeight: 900,
+              fontWeight: 600,
               letterSpacing: -1,
-              textTransform: "uppercase",
-              background: "linear-gradient(to right, var(--text-primary), var(--text-secondary))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              color: "text.primary",
             }}
           >
             Operational Ledger
@@ -102,7 +99,6 @@ export const Systemlog = () => {
               color: "text.disabled",
               mt: 0.5,
               letterSpacing: "0.2em",
-              textTransform: "uppercase",
             }}
           >
             Immutable Transactional Integrity Audit
@@ -115,14 +111,13 @@ export const Systemlog = () => {
           sx={{
             px: 1.5,
             py: 2,
-            borderRadius: 4,
-            bgcolor: "rgba(139, 92, 246, 0.1)",
-            border: "1px solid rgba(139, 92, 246, 0.2)",
-            color: "#8b5cf6",
+            borderRadius: 2,
+            bgcolor: "rgba(163, 119, 58, 0.1)",
+            border: "1px solid rgba(163, 119, 58, 0.2)",
+            color: "#6735c8",
             fontSize: "10px",
-            fontWeight: 900,
+            fontWeight: 600,
             letterSpacing: 1,
-            textTransform: "uppercase",
             "& .MuiChip-icon": { color: "inherit", marginLeft: 0 },
           }}
         />
@@ -132,7 +127,7 @@ export const Systemlog = () => {
       <Card
         sx={{
           p: { xs: 4, sm: 5 },
-          borderRadius: 10,
+          borderRadius: 1.5,
           bgcolor: "background.paper",
           border: 1,
           borderColor: "divider",
@@ -142,8 +137,8 @@ export const Systemlog = () => {
         }}
       >
         {/* Synthetic background ambient blurs */}
-        <Box sx={{ position: "absolute", top: 0, right: 0, w: 256, h: 256, bgcolor: "rgba(139, 92, 246, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
-        <Box sx={{ position: "absolute", bottom: 0, left: 0, w: 256, h: 256, bgcolor: "rgba(6, 182, 212, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
+        <Box sx={{ position: "absolute", top: 0, right: 0, w: 256, h: 256, bgcolor: "rgba(163, 119, 58, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
+        <Box sx={{ position: "absolute", bottom: 0, left: 0, w: 256, h: 256, bgcolor: "rgba(74, 47, 203, 0.05)", filter: "blur(100px)", pointerEvents: "none" }} />
 
         <Stack
           direction={{ xs: "column", lg: "row" }}
@@ -167,14 +162,14 @@ export const Systemlog = () => {
             sx={{
               "& .MuiOutlinedInput-root": {
                 bgcolor: "action.hover",
-                borderRadius: 4,
+                borderRadius: 2,
                 color: "text.primary",
                 fontWeight: "bold",
                 letterSpacing: "-0.01em",
                 "& fieldset": { borderColor: "divider" },
                 "&:hover fieldset": { borderColor: "action.active" },
-                "&.Mui-focused fieldset": { borderColor: "rgba(139, 92, 246, 0.5)", borderWidth: "1px" },
-                "&.Mui-focused": { boxShadow: "0 0 0 4px rgba(139, 92, 246, 0.05)" },
+                "&.Mui-focused fieldset": { borderColor: "rgba(163, 119, 58, 0.5)", borderWidth: "1px" },
+                "&.Mui-focused": { boxShadow: "0 0 0 4px rgba(163, 119, 58, 0.05)" },
               },
               "& .MuiOutlinedInput-input": { py: 2, px: 1, fontSize: "14px" },
             }}
@@ -186,15 +181,14 @@ export const Systemlog = () => {
             sx={{
               px: 2,
               py: 2.5,
-              borderRadius: 4,
-              bgcolor: "rgba(139, 92, 246, 0.1)",
+              borderRadius: 2,
+              bgcolor: "rgba(163, 119, 58, 0.1)",
               border: 1,
-              borderColor: "rgba(139, 92, 246, 0.2)",
-              color: "#8b5cf6",
+              borderColor: "rgba(163, 119, 58, 0.2)",
+              color: "#6735c8",
               fontSize: "10px",
-              fontWeight: 900,
+              fontWeight: 600,
               letterSpacing: "0.2em",
-              textTransform: "uppercase",
               whiteSpace: "nowrap",
               boxShadow: "inset 0px 1px 3px rgba(0,0,0,0.2)",
               alignSelf: { xs: "stretch", lg: "auto" },
@@ -212,7 +206,7 @@ export const Systemlog = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
         sx={{
-          borderRadius: 10,
+          borderRadius: 1.5,
           bgcolor: "background.paper",
           border: 1,
           borderColor: "divider",
@@ -223,12 +217,12 @@ export const Systemlog = () => {
         {loading ? (
           /* SYNC STATE LOAD ENGINE */
           <Stack alignItems="center" justifyContent="center" sx={{ py: 16 }} spacing={3}>
-            <CircularProgress thickness={4} sx={{ color: "#8b5cf6", width: "48px !important", height: "48px !important" }} />
+            <CircularProgress thickness={4} sx={{ color: "#6735c8", width: "48px !important", height: "48px !important" }} />
             <Box sx={{ textAlign: "center" }}>
-              <Typography variant="caption" sx={{ display: "block", fontWeight: 900, color: "text.primary", letterSpacing: "0.15em", textTransform: "uppercase", animation: "pulse 2s infinite", mb: 0.5 }}>
+              <Typography variant="caption" sx={{ display: "block", fontWeight: 600, color: "text.primary", letterSpacing: "0.15em", animation: "pulse 2s infinite", mb: 0.5 }}>
                 Synchronizing Ledger...
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.disabled", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              <Typography variant="body2" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.disabled", letterSpacing: "0.1em", }}>
                 Compiling Historical Telemetry
               </Typography>
             </Box>
@@ -236,10 +230,10 @@ export const Systemlog = () => {
         ) : error ? (
           /* FETCH FAILURE STATE */
           <Stack alignItems="center" justifyContent="center" sx={{ py: 16 }} spacing={2}>
-            <Avatar variant="rounded" sx={{ bgcolor: "rgba(244, 63, 94, 0.1)", color: "#f43f5e", width: 56, height: 56 }}>
+            <Avatar variant="rounded" sx={{ bgcolor: "rgba(169, 75, 63, 0.1)", color: "#e0564b", width: 56, height: 56 }}>
               <FiShield size={24} />
             </Avatar>
-            <Typography variant="h6" sx={{ fontWeight: 900, color: "text.primary" }}>
+            <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
               Audit stream unavailable
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 420, textAlign: "center" }}>
@@ -254,7 +248,7 @@ export const Systemlog = () => {
               sx={{
                 width: 80,
                 height: 80,
-                borderRadius: 10,
+                borderRadius: 1.5,
                 bgcolor: "action.hover",
                 border: 1,
                 borderColor: "divider",
@@ -264,10 +258,10 @@ export const Systemlog = () => {
               <FiClipboard size={40} style={{ opacity: 0.2 }} />
             </Avatar>
             <Box sx={{ textAlign: "center" }}>
-              <Typography variant="caption" sx={{ display: "block", fontWeight: 900, color: "text.primary", letterSpacing: "0.15em", textTransform: "uppercase", mb: 0.5 }}>
+              <Typography variant="caption" sx={{ display: "block", fontWeight: 600, color: "text.primary", letterSpacing: "0.15em", mb: 0.5 }}>
                 No match in registry
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.disabled", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              <Typography variant="body2" sx={{ fontSize: "10px", fontWeight: "bold", color: "text.disabled", letterSpacing: "0.1em", }}>
                 Modify taxonomy filters to access data nodes.
               </Typography>
             </Box>
@@ -286,10 +280,9 @@ export const Systemlog = () => {
                           px: 4,
                           py: 3,
                           fontSize: "10px",
-                          fontWeight: 900,
+                          fontWeight: 600,
                           color: "text.disabled",
                           letterSpacing: "0.2em",
-                          textTransform: "uppercase",
                           borderBottom: "none",
                         }}
                       >
@@ -312,9 +305,9 @@ export const Systemlog = () => {
                           borderBottom: 1,
                           borderColor: "divider",
                           "&:last-child": { borderBottom: "none" },
-                          "&:hover": { bgcolor: "rgba(139, 92, 246, 0.05)" },
-                          "&:hover .timestamp-cell": { color: "#8b5cf6" },
-                          "&:hover .actor-avatar": { borderColor: "rgba(139, 92, 246, 0.5)" },
+                          "&:hover": { bgcolor: "rgba(163, 119, 58, 0.05)" },
+                          "&:hover .timestamp-cell": { color: "#6735c8" },
+                          "&:hover .actor-avatar": { borderColor: "rgba(163, 119, 58, 0.5)" },
                         }}
                       >
                         {/* TIMESTAMP */}
@@ -339,15 +332,15 @@ export const Systemlog = () => {
                                 border: 1,
                                 borderColor: "divider",
                                 fontSize: "10px",
-                                fontWeight: 900,
-                                color: "#8b5cf6",
+                                fontWeight: 600,
+                                color: "#6735c8",
                                 transition: "border-color 0.3s",
                                 boxShadow: "inset 0px 1px 2px rgba(0,0,0,0.2)",
                               }}
                             >
                               {log.user?.charAt(0).toUpperCase()}
                             </Avatar>
-                            <Typography variant="body2" sx={{ fontSize: "12px", fontWeight: 900, textTransform: "uppercase", letterSpacing: -0.5 }}>
+                            <Typography variant="body2" sx={{ fontSize: "12px", fontWeight: 600, letterSpacing: -0.5 }}>
                               {log.user}
                             </Typography>
                           </Stack>
@@ -396,7 +389,7 @@ export const Systemlog = () => {
                   animate={{ opacity: 1, y: 0 }}
                   sx={{
                     p: 4,
-                    borderRadius: 8,
+                    borderRadius: 2,
                     bgcolor: "rgba(255,255,255,0.01)",
                     border: 1,
                     borderColor: "divider",
@@ -412,7 +405,7 @@ export const Systemlog = () => {
                   </Box>
 
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-                    <Typography variant="body2" sx={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 900, color: "#8b5cf6", letterSpacing: 0.5 }}>
+                    <Typography variant="body2" sx={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 600, color: "#6735c8", letterSpacing: 0.5 }}>
                       {new Date(log.timestamp || log.createdAt).toLocaleString()}
                     </Typography>
                     <Box component="span" sx={getBadgeStyle(log.action)}>
@@ -420,14 +413,14 @@ export const Systemlog = () => {
                     </Box>
                   </Stack>
 
-                  <Typography variant="subtitle2" sx={{ fontWeight: 900, textTransform: "uppercase", letterSpacing: 0.5, mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
-                    <Avatar variant="rounded" sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: "rgba(139, 92, 246, 0.2)", color: "#8b5cf6", "& .MuiSvgIcon-root": { fontSize: 12 } }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600, letterSpacing: 0.5, mb: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
+                    <Avatar variant="rounded" sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: "rgba(163, 119, 58, 0.2)", color: "#6735c8", "& .MuiSvgIcon-root": { fontSize: 12 } }}>
                       <FiUser size={12} />
                     </Avatar>
                     {log.user}
                   </Typography>
 
-                  <Typography variant="body2" sx={{ fontSize: "11px", fontWeight: "bold", color: "text.disabled", leadingRelaxed: true, textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  <Typography variant="body2" sx={{ fontSize: "11px", fontWeight: "bold", color: "text.disabled", leadingRelaxed: true, letterSpacing: 0.5 }}>
                     {log.description}
                   </Typography>
                 </Card>

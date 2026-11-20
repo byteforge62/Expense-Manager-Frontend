@@ -1,17 +1,23 @@
 @import "tailwindcss";
-@import "@fontsource/roboto/300.css";
-@import "@fontsource/roboto/400.css";
-@import "@fontsource/roboto/500.css";
-@import "@fontsource/roboto/700.css";
+@import "@fontsource/instrument-sans/400.css";
+@import "@fontsource/instrument-sans/500.css";
+@import "@fontsource/instrument-sans/600.css";
+@import "@fontsource/instrument-sans/700.css";
+@import "@fontsource/bricolage-grotesque/400.css";
+@import "@fontsource/bricolage-grotesque/500.css";
+@import "@fontsource/bricolage-grotesque/600.css";
+@import "@fontsource/bricolage-grotesque/700.css";
+@import "@fontsource/newsreader/400.css";
+@import "@fontsource/newsreader/500.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 3px);
+  --radius-md: calc(var(--radius) - 1px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 2px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -46,142 +52,169 @@
 }
 
 /* ============================================================
-   LIGHT MODE VARIABLES
+   FINTRACK DESIGN SYSTEM — "Violet Ledger"
+   Warm white canvas, white working surfaces, one deep violet
+   brand signal, lavender support tints. Money carries semantic
+   colour: green for income, coral for spending, violet for what
+   remains. Figures are always tabular.
    ============================================================ */
+
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  --background: #f1f0eb;
-  --foreground: #222a36;
-  --card: #faf9f5;
-  --card-foreground: #222a36;
-  --popover: #faf9f5;
-  --popover-foreground: #222a36;
-  --primary: #3985ff;
-  --primary-foreground: #101a2b;
-  --secondary: #e9e7e0;
-  --secondary-foreground: #222a36;
-  --muted: #e9e7e0;
-  --muted-foreground: #687281;
-  --accent: #e5edf9;
-  --accent-foreground: #245ba8;
-  --destructive: #d65f5a;
-  --border: #d9d9d4;
-  --input: #d9d9d4;
-  --ring: rgb(57 133 255 / 45%);
-  --chart-1: #3985ff;
-  --chart-2: #45b889;
-  --chart-3: #e8b66b;
-  --chart-4: #f07870;
-  --chart-5: #8297b7;
-  --sidebar: #222a36;
-  --sidebar-foreground: #e9e7e0;
-  --sidebar-primary: #76aaff;
-  --sidebar-primary-foreground: #101a2b;
-  --sidebar-accent: #2d394b;
-  --sidebar-accent-foreground: #e9e7e0;
-  --sidebar-border: rgb(233 231 224 / 12%);
-  --sidebar-ring: rgb(118 170 255 / 48%);
+  --font-sans: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
 
-  --surface-primary: #faf9f5;
-  --surface-secondary: #f1f0eb;
-  --surface-tertiary: #e9e7e0;
-  --surface-overlay: rgb(34 42 54 / 3%);
-  --surface-subtle: rgb(34 42 54 / 5%);
-  --border-subtle: rgb(34 42 54 / 9%);
-  --border-medium: rgb(34 42 54 / 15%);
-  --text-primary: #222a36;
-  --text-secondary: #465160;
-  --text-tertiary: #65707e;
-  --text-muted: #737e8b;
-  --accent-electric: #3985ff;
-  --accent-electric-soft: #e5edf9;
-  --accent-lavender: #3985ff;
-  --accent-lavender-soft: #e5edf9;
-  --accent-sage: #e4f2eb;
-  --accent-peach: #fae9e6;
-  --positive: #348e6b;
-  --negative: #d65f5a;
-  --warning: #a87527;
+  --background: #f7f6f3;
+  --foreground: #191922;
+  --card: #ffffff;
+  --card-foreground: #191922;
+  --popover: #ffffff;
+  --popover-foreground: #191922;
+  --primary: #6735c8;
+  --primary-foreground: #ffffff;
+  --secondary: #f0ecfb;
+  --secondary-foreground: #3d2384;
+  --muted: #f1efe9;
+  --muted-foreground: #5f5f6d;
+  --accent: #ede5ff;
+  --accent-foreground: #3d2384;
+  --destructive: #d94f43;
+  --border: #e7e3da;
+  --input: #e2ded4;
+  --ring: rgb(103 53 200 / 35%);
+  --chart-1: #6735c8;
+  --chart-2: #1f9d6b;
+  --chart-3: #e0564b;
+  --chart-4: #a78bfa;
+  --chart-5: #8a8a99;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #191922;
+  --sidebar-primary: #6735c8;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4efff;
+  --sidebar-accent-foreground: #4922a8;
+  --sidebar-border: #ece7dd;
+  --sidebar-ring: rgb(103 53 200 / 38%);
+
+  --surface-primary: #ffffff;
+  --surface-secondary: #faf9f6;
+  --surface-tertiary: #f1ede6;
+  --surface-overlay: rgb(25 25 34 / 4%);
+  --surface-subtle: rgb(25 25 34 / 5%);
+  --border-subtle: rgb(25 25 34 / 8%);
+  --border-medium: rgb(25 25 34 / 16%);
+  --text-primary: #191922;
+  --text-secondary: #4b4b59;
+  --text-tertiary: #66666f;
+  --text-muted: #7c7c88;
+  --accent-electric: #6735c8;
+  --accent-electric-soft: #ede5ff;
+  --accent-lavender: #4922a8;
+  --accent-lavender-soft: #f4efff;
+  --accent-sage: #e6f4ec;
+  --accent-peach: #fdeeeb;
+  --positive: #1f9d6b;
+  --negative: #d94f43;
+  --warning: #b07c26;
   --radius-control: 0.625rem;
-  --radius-panel: 0.875rem;
-  --shadow-panel: 0 8px 24px rgb(34 42 54 / 6%);
+  --radius-panel: 1rem;
+  --shadow-panel: 0 1px 2px rgb(25 25 34 / 4%), 0 16px 40px -28px rgb(25 25 34 / 26%);
+  --shadow-raised: 0 2px 4px rgb(25 25 34 / 4%), 0 28px 60px -34px rgb(37 21 76 / 32%);
 }
 
 /* ============================================================
-   DARK MODE VARIABLES
+   DARK MODE
    ============================================================ */
 .dark {
-  --background: #171b23;
-  --foreground: #e9e7e0;
-  --card: #222a36;
-  --card-foreground: #e9e7e0;
-  --popover: #222a36;
-  --popover-foreground: #e9e7e0;
-  --primary: #5b9aff;
-  --primary-foreground: #101a2b;
-  --secondary: #2d3644;
-  --secondary-foreground: #e9e7e0;
-  --muted: #2d3644;
-  --muted-foreground: #aab3bf;
-  --accent: #26364e;
-  --accent-foreground: #b6d1ff;
-  --destructive: #f07870;
-  --border: rgb(233 231 224 / 12%);
-  --input: rgb(233 231 224 / 16%);
-  --ring: rgb(91 154 255 / 48%);
-  --chart-1: #76aaff;
-  --chart-2: #45b889;
-  --chart-3: #e8b66b;
-  --chart-4: #f07870;
-  --chart-5: #a9c8f5;
-  --sidebar: #171b23;
-  --sidebar-foreground: #e9e7e0;
-  --sidebar-primary: #76aaff;
-  --sidebar-primary-foreground: #101a2b;
-  --sidebar-accent: #222a36;
-  --sidebar-accent-foreground: #e9e7e0;
-  --sidebar-border: rgb(233 231 224 / 12%);
-  --sidebar-ring: rgb(118 170 255 / 48%);
+  --background: #121218;
+  --foreground: #f0eee9;
+  --card: #1a1a22;
+  --card-foreground: #f0eee9;
+  --popover: #1e1e27;
+  --popover-foreground: #f0eee9;
+  --primary: #b199f5;
+  --primary-foreground: #1c1233;
+  --secondary: #241f33;
+  --secondary-foreground: #dfd6ff;
+  --muted: #202028;
+  --muted-foreground: #a8a6b2;
+  --accent: #2a2240;
+  --accent-foreground: #d7c9ff;
+  --destructive: #ff8a7a;
+  --border: rgb(240 238 233 / 11%);
+  --input: rgb(240 238 233 / 15%);
+  --ring: rgb(177 153 245 / 45%);
+  --chart-1: #b199f5;
+  --chart-2: #55c79b;
+  --chart-3: #ff8a7a;
+  --chart-4: #8f7ae0;
+  --chart-5: #9a98a6;
+  --sidebar: #16161d;
+  --sidebar-foreground: #f0eee9;
+  --sidebar-primary: #b199f5;
+  --sidebar-primary-foreground: #1c1233;
+  --sidebar-accent: #221d33;
+  --sidebar-accent-foreground: #e6ddff;
+  --sidebar-border: rgb(240 238 233 / 9%);
+  --sidebar-ring: rgb(177 153 245 / 48%);
 
-  --surface-primary: #222a36;
-  --surface-secondary: #1c232e;
-  --surface-tertiary: #2d3644;
-  --surface-overlay: rgb(0 0 0 / 25%);
-  --surface-subtle: rgb(233 231 224 / 5%);
-  --border-subtle: rgb(233 231 224 / 10%);
-  --border-medium: rgb(233 231 224 / 16%);
-  --text-primary: #e9e7e0;
-  --text-secondary: #c1c8d1;
-  --text-tertiary: #aab3bf;
-  --text-muted: #929baa;
-  --accent-electric: #76aaff;
-  --accent-electric-soft: #26364e;
-  --accent-lavender: #76aaff;
-  --accent-lavender-soft: #26364e;
-  --accent-sage: #20372f;
-  --accent-peach: #3b2b30;
-  --positive: #45b889;
-  --negative: #f07870;
-  --warning: #e8b66b;
-  --shadow-panel: 0 10px 28px rgb(0 0 0 / 20%);
+  --surface-primary: #1a1a22;
+  --surface-secondary: #15151c;
+  --surface-tertiary: #242430;
+  --surface-overlay: rgb(0 0 0 / 28%);
+  --surface-subtle: rgb(240 238 233 / 5%);
+  --border-subtle: rgb(240 238 233 / 9%);
+  --border-medium: rgb(240 238 233 / 17%);
+  --text-primary: #f0eee9;
+  --text-secondary: #c3c1cc;
+  --text-tertiary: #a5a3af;
+  --text-muted: #918f9c;
+  --accent-electric: #b199f5;
+  --accent-electric-soft: #2a2240;
+  --accent-lavender: #cdbcff;
+  --accent-lavender-soft: #241f33;
+  --accent-sage: #142a22;
+  --accent-peach: #2e1b18;
+  --positive: #55c79b;
+  --negative: #ff8a7a;
+  --warning: #e0b36c;
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 45%), 0 22px 48px -30px rgb(0 0 0 / 85%);
+  --shadow-raised: 0 2px 6px rgb(0 0 0 / 40%), 0 34px 70px -38px rgb(0 0 0 / 90%);
 }
 
 /* ============================================================
-   GLOBAL OVERRIDES
-   Theme-aware application foundations and legacy utility alignment.
+   BASE
    ============================================================ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground;
-    font-family: "Roboto", "Inter", "Segoe UI", sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
     transition:
       background-color 0.2s ease,
       color 0.2s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-optical-sizing: auto;
   }
 
   :where(button, a, input, select, textarea) {
@@ -189,55 +222,161 @@
       color 140ms ease,
       background-color 140ms ease,
       border-color 140ms ease,
-      box-shadow 140ms ease,
-      transform 140ms ease;
+      box-shadow 140ms ease;
   }
 
   :where(button, a, input, select, textarea):focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--accent-electric) 65%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--accent-electric) 70%, transparent);
     outline-offset: 2px;
   }
 
-  .user-layout {
-    background: var(--background);
-    color: var(--text-primary);
+  ::selection {
+    background: color-mix(in srgb, var(--accent-electric) 22%, transparent);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-medium) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: 999px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .user-layout,
+  .admin-layout {
     font-variant-numeric: tabular-nums;
   }
 
-  .user-layout main h1 {
+  /* Sticky public navigation must not cover the section it jumps to. */
+  .public-layout [id] {
+    scroll-margin-top: 86px;
+  }
+
+  .user-layout main h1,
+  .admin-layout main h1 {
     background: none !important;
     color: var(--text-primary) !important;
     -webkit-text-fill-color: currentColor;
-    font-family: "Roboto", "Segoe UI", sans-serif;
-    font-size: clamp(1.7rem, 3vw, 2.25rem);
-    font-weight: 700;
-    letter-spacing: -0.045em;
-    line-height: 1.12;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 2.8vw, 2.15rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
     text-transform: none;
   }
 
-  .user-layout main h2 {
+  .user-layout main h2,
+  .admin-layout main h2 {
+    font-family: var(--font-display);
     letter-spacing: -0.025em;
   }
 
   .user-layout main input,
   .user-layout main select,
-  .user-layout main textarea {
+  .user-layout main textarea,
+  .admin-layout main input,
+  .admin-layout main select,
+  .admin-layout main textarea {
     color: var(--text-primary);
     color-scheme: light;
   }
 
   .dark .user-layout main input,
   .dark .user-layout main select,
-  .dark .user-layout main textarea {
+  .dark .user-layout main textarea,
+  .dark .admin-layout main input,
+  .dark .admin-layout main select,
+  .dark .admin-layout main textarea {
     color-scheme: dark;
   }
 
-  /* ── Override hardcoded dark backgrounds ── */
+  /* ── Restraint: no decorative colour glows, softer elevation ── */
+  .user-layout main [class*="blur-3xl"],
+  .admin-layout main [class*="blur-3xl"] {
+    display: none !important;
+  }
 
-  /* bg-[var(--card)] and bg-[var(--card)]/80 */
-  [class*="bg-\[#111318\]"] {
+  .user-layout main [class*="shadow-2xl"],
+  .admin-layout main [class*="shadow-2xl"] {
+    box-shadow: var(--shadow-panel) !important;
+  }
+
+  /* ── Legacy hardcoded dark surfaces ── */
+  [class*="bg-\[#111318\]"],
+  [class*="bg-\[#171b23\]"],
+  [class*="bg-\[#181b22\]"],
+  [class*="bg-\[#1a1d24\]"] {
     background-color: var(--surface-primary) !important;
+  }
+
+  .user-layout main [class*="text-[#e9e7e0]"],
+  .user-layout main [class*="text-[#f5f8ff]"] {
+    color: var(--text-primary) !important;
+  }
+
+  .user-layout main [class*="text-[#b2bbc7]"],
+  .user-layout main [class*="text-[#b7c0cb]"] {
+    color: var(--text-secondary) !important;
+  }
+
+  [class*="bg-\[#0d0f14\]"] {
+    background-color: var(--surface-secondary) !important;
+  }
+
+  [class*="bg-\[#0c0e12\]"],
+  [class*="bg-\[#0b0c10\]"],
+  [class*="bg-\[#0f1115\]"],
+  [class*="bg-\[#1a1d24\]"],
+  [class*="bg-\[#181b22\]"],
+  [class*="bg-\[#1a1d26\]"] {
+    background-color: var(--surface-tertiary) !important;
+  }
+
+  [class*="bg-black\/40"] {
+    background-color: var(--surface-overlay) !important;
+  }
+
+  [class*="bg-white\/5"],
+  [class*="bg-white\/4"],
+  [class*="bg-white\/8"] {
+    background-color: var(--surface-subtle) !important;
+  }
+
+  .user-layout
+    [class*="text-[var(--text)]"]:not([class*="text-[var(--text)]/"]),
+  .admin-layout
+    [class*="text-[var(--text)]"]:not([class*="text-[var(--text)]/"]) {
+    color: var(--text-primary);
+  }
+
+  [class*="border-white\/10"] {
+    border-color: var(--border-subtle) !important;
+  }
+  [class*="border-white\/15"],
+  [class*="border-white\/20"] {
+    border-color: var(--border-medium) !important;
+  }
+
+  .dark\:bg-gradient-to-b,
+  [class*="dark:from-\[#0c0e12\]"] {
+    background: var(--surface-tertiary);
+  }
+
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    background-color: var(--surface-primary) !important;
+    border-color: var(--border-subtle) !important;
+    color: var(--text-primary) !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -250,67 +389,11 @@
       transition-duration: 0.01ms !important;
     }
   }
-
-  /* bg-[#0d0f14] and bg-[#0d0f14]/80 */
-  [class*="bg-\[#0d0f14\]"] {
-    background-color: var(--surface-secondary) !important;
-  }
-
-  /* bg-[#0c0e12], bg-[#0b0c10], bg-[#0f1115], bg-[#0f1115] */
-  [class*="bg-\[#0c0e12\]"],
-  [class*="bg-\[#0b0c10\]"],
-  [class*="bg-\[#0f1115\]"],
-  [class*="bg-\[#1a1d24\]"],
-  [class*="bg-\[#181b22\]"],
-  [class*="bg-\[#1a1d26\]"] {
-    background-color: var(--surface-tertiary) !important;
-  }
-
-  /* bg-[var(--card)] inputs */
-  [class*="bg-black\/40"] {
-    background-color: var(--surface-overlay) !important;
-  }
-
-  /* bg-white/5, bg-white/4 subtle surfaces */
-  [class*="bg-white\/5"],
-  [class*="bg-white\/4"],
-  [class*="bg-white\/8"] {
-    background-color: var(--surface-subtle) !important;
-  }
-
-  /* ── Text overrides ── */
-  /* text-[var(--text)] in component context → theme-aware */
-  .user-layout
-    [class*="text-[var(--text)]"]:not([class*="text-[var(--text)]/"]),
-  .admin-layout
-    [class*="text-[var(--text)]"]:not([class*="text-[var(--text)]/"]) {
-    color: var(--text-primary);
-  }
-
-  /* border-white/* → theme-aware border */
-  [class*="border-white\/10"] {
-    border-color: var(--border-subtle) !important;
-  }
-  [class*="border-white\/15"],
-  [class*="border-white\/20"] {
-    border-color: var(--border-medium) !important;
-  }
-
-  /* ── Gradient backgrounds on page wrappers ── */
-  /* The dark gradient on UserDashboardLayout root */
-  .dark\:bg-gradient-to-b,
-  [class*="dark:from-\[#0c0e12\]"] {
-    background: var(--surface-tertiary);
-  }
-
-  /* ── Chart tooltip dark bg ── */
-  .recharts-tooltip-wrapper .recharts-default-tooltip {
-    background-color: var(--surface-primary) !important;
-    border-color: var(--border-subtle) !important;
-    color: var(--text-primary) !important;
-  }
 }
 
+/* ============================================================
+   CHARTS
+   ============================================================ */
 .user-layout .recharts-cartesian-grid line {
   stroke: var(--border-subtle);
 }
@@ -322,10 +405,13 @@
 }
 
 .user-layout .recharts-default-tooltip {
-  border-radius: 0.75rem;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--border) !important;
   box-shadow: var(--shadow-panel);
+  font-variant-numeric: tabular-nums;
 }
 
+/* ── Legacy accent utilities, remapped to the stamped palette ── */
 .user-layout [class~="text-violet-500"],
 .user-layout [class~="text-violet-600"],
 .user-layout [class~="text-cyan-500"],
@@ -337,12 +423,12 @@
 .user-layout [class~="bg-violet-500/5"],
 .user-layout [class~="bg-cyan-500/10"],
 .user-layout [class~="bg-cyan-500/5"] {
-  background-color: color-mix(in srgb, var(--accent-electric) 11%, transparent) !important;
+  background-color: color-mix(in srgb, var(--accent-electric) 10%, transparent) !important;
 }
 
 .user-layout [class~="bg-violet-600"] {
-  background-color: #3985ff !important;
-  color: #101a2b !important;
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
 }
 
 .user-layout [class~="border-violet-500/20"],
@@ -353,10 +439,142 @@
 }
 
 /* ============================================================
-   SHIMMER ANIMATION
+   ANIMATIONS
    ============================================================ */
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
   }
 }
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ============================================================
+   LEGACY TAILWIND ACCENTS → STAMPED PALETTE
+   User pages were written with named Tailwind accents. These map
+   them onto the same violet / blue / oxblood tokens used by MUI,
+   so charts, progress bars and chips stay in one palette.
+   ============================================================ */
+@layer base {
+  .user-layout [class*="from-cyan-"],
+  .user-layout [class*="from-emerald-"],
+  .user-layout [class*="from-teal-"] {
+    --tw-gradient-from: var(--primary);
+  }
+
+  .user-layout [class*="to-cyan-"],
+  .user-layout [class*="to-emerald-"],
+  .user-layout [class*="to-teal-"],
+  .user-layout [class*="to-blue-"] {
+    --tw-gradient-to: #35209b;
+  }
+
+  .user-layout [class*="from-rose-"],
+  .user-layout [class*="to-rose-"],
+  .user-layout [class*="to-pink-"] {
+    --tw-gradient-from: var(--negative);
+    --tw-gradient-to: #8f2a1c;
+  }
+
+  .user-layout [class*="from-amber-"],
+  .user-layout [class*="to-amber-"],
+  .user-layout [class*="to-orange-"] {
+    --tw-gradient-from: var(--warning);
+    --tw-gradient-to: #6d4a0c;
+  }
+
+  .user-layout [class*="text-rose-"] {
+    color: var(--negative) !important;
+  }
+
+  .user-layout [class*="text-amber-"] {
+    color: var(--warning) !important;
+  }
+
+  .user-layout [class*="text-indigo-"] {
+    color: var(--primary) !important;
+  }
+
+  .user-layout [class*="focus:border-cyan-500"]:focus,
+  .user-layout [class*="focus:border-emerald-500"]:focus {
+    border-color: var(--primary) !important;
+  }
+
+  .user-layout [class*="focus:ring-cyan-500"]:focus,
+  .user-layout [class*="focus:ring-emerald-500"]:focus {
+    --tw-ring-color: color-mix(in srgb, var(--primary) 18%, transparent) !important;
+  }
+
+  .user-layout [class*="text-emerald-"] {
+    color: var(--positive) !important;
+  }
+
+  .user-layout [class*="bg-rose-500"] {
+    background-color: var(--negative) !important;
+  }
+
+  .user-layout [class*="bg-emerald-500"] {
+    background-color: var(--positive) !important;
+  }
+}
+
+/* ============================================================
+   PUBLIC SITE — "THE LEDGER LINE"
+   Public-only field tokens. The marketing page holds an ink
+   surface and a paper surface at the same time, so each field
+   carries its own foreground instead of inheriting the theme.
+   In dark mode the two fields swap roles and stay separated by
+   tone rather than by light versus dark.
+   ============================================================ */
+.public-layout {
+  --pub-gutter: clamp(20px, 5vw, 72px);
+  --pub-max: 1240px;
+  --pub-serif: "Newsreader", Georgia, "Times New Roman", serif;
+
+  --pub-bg: #fbf8f3;
+  --pub-surface: #ffffff;
+  --pub-surface-alt: #f5f0ff;
+  --pub-fg: #191922;
+  --pub-muted: #5b5b69;
+  --pub-quiet: #85858f;
+  --pub-hair: rgb(25 25 34 / 10%);
+
+  --pub-accent: #6735c8;
+  --pub-accent-deep: #4922a8;
+  --pub-lavender: #ede5ff;
+  --pub-lavender-soft: #f5f0ff;
+  --pub-violet-field: #1d1038;
+  --pub-violet-field-2: #2f1860;
+  --pub-violet-field-fg: #f6f3ff;
+  --pub-positive: #1f9d6b;
+  --pub-negative: #e0564b;
+}
+
+.dark .public-layout {
+  --pub-bg: #121218;
+  --pub-surface: #1a1a22;
+  --pub-surface-alt: #1d1929;
+  --pub-fg: #f0eee9;
+  --pub-muted: #b4b2be;
+  --pub-quiet: #8d8b97;
+  --pub-hair: rgb(240 238 233 / 12%);
+
+  --pub-accent: #b199f5;
+  --pub-accent-deep: #cdbcff;
+  --pub-lavender: #2a2240;
+  --pub-lavender-soft: #221d33;
+  --pub-violet-field: #17111f;
+  --pub-violet-field-2: #2a1a4a;
+  --pub-violet-field-fg: #f6f3ff;
+  --pub-positive: #55c79b;
+  --pub-negative: #ff8a7a;
+}
+

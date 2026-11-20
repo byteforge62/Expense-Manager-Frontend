@@ -70,11 +70,12 @@ export const ResetPassword = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 64px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "background.default",
+        background:
+          "radial-gradient(70% 60% at 50% 0%, var(--accent-electric-soft) 0%, transparent 65%), var(--background)",
         color: "text.primary",
         px: 2,
         position: "relative",
@@ -83,46 +84,16 @@ export const ResetPassword = () => {
     >
       <ToastContainer transition={Bounce} />
 
-      {/* Decorative ambient lights */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: -160,
-          right: -160,
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          bgcolor: "cyan.main",
-          opacity: 0.1,
-          filter: "blur(120px)",
-          pointerEvents: "none",
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: -160,
-          left: -160,
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          bgcolor: "primary.main",
-          opacity: 0.1,
-          filter: "blur(120px)",
-          pointerEvents: "none",
-        }}
-      />
-
       <Container maxWidth="xs" sx={{ position: "relative", zIndex: 1 }}>
         <Paper
           component={motion.div}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          elevation={4}
+          elevation={0}
           sx={{
             p: 4,
-            borderRadius: 6,
+            borderRadius: 2,
             border: 1,
             borderColor: "divider",
             bgcolor: "background.paper",
@@ -150,10 +121,10 @@ export const ResetPassword = () => {
                   role="status"
                   sx={{
                     p: 2,
-                    borderRadius: 3,
+                    borderRadius: 1.5,
                     border: 1,
                     borderColor: "success.main",
-                    bgcolor: "rgba(16, 185, 129, 0.08)",
+                    bgcolor: "rgba(46, 122, 89, 0.08)",
                   }}
                 >
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
@@ -171,11 +142,9 @@ export const ResetPassword = () => {
                   onClick={() => navigate("/login")}
                   sx={{
                     py: 1.5,
-                    borderRadius: 3,
+                    borderRadius: 1.5,
                     fontWeight: "bold",
-                    textTransform: "none",
-                    background: "linear-gradient(to right, var(--mui-palette-cyan-main, #00acc1), var(--mui-palette-primary-main, #1976d2))",
-                    color: "white",
+                    textTransform: "none",
                     "&:hover": {
                       opacity: 0.9,
                     },
@@ -192,7 +161,7 @@ export const ResetPassword = () => {
                       role="alert"
                       sx={{
                         p: 2,
-                        borderRadius: 3,
+                        borderRadius: 1.5,
                         border: 1,
                         borderColor: "error.main",
                         bgcolor: "rgba(239, 68, 68, 0.08)",
@@ -258,11 +227,9 @@ export const ResetPassword = () => {
                     disabled={loading}
                     sx={{
                       py: 1.5,
-                      borderRadius: 3,
+                      borderRadius: 1.5,
                       fontWeight: "bold",
-                      textTransform: "none",
-                      background: "linear-gradient(to right, var(--mui-palette-cyan-main, #00acc1), var(--mui-palette-primary-main, #1976d2))",
-                      color: "white",
+                      textTransform: "none",
                       "&:hover": {
                         opacity: 0.9,
                       },

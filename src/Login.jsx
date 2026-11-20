@@ -6,10 +6,9 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "./components/Utils/axiosInstance";
-import { motion } from "framer-motion";
 
-// ================ Material UI Components ================
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -21,28 +20,15 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
 
-// ================ Icons ================
-import {
-  FiMail,
-  FiLock,
-  FiEye,
-  FiEyeOff,
-  FiArrowRight,
-  FiTrendingUp,
-  FiPieChart,
-  FiShield,
-  FiCheckCircle,
-  FiBarChart2,
-} from "react-icons/fi";
+import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
+import fintrackMark from "./assets/brand/fintrack-mark.svg";
 
 /**
- * --- LOGIN COMPONENT ---
- * This handles authenticating users and redirecting them to the correct dashboard.
+ * --- LOGIN ---
+ * Authenticates the user and routes them to the right dashboard.
  */
-
 export const Login = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.ui);
@@ -54,12 +40,9 @@ export const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  // --- FORM SUBMISSION LOGIC ---
   const submitHandler = async (data) => {
     let wakingUpToast = null;
 
-    // If the backend (e.g. Render/Railway) is sleeping, let the user know 
-    // so they don't think the app is broken.
     const wakingUpTimer = setTimeout(() => {
       wakingUpToast = toast.info(
         "Backend is waking up... this might take a minute.",
@@ -71,9 +54,7 @@ export const Login = () => {
     }, 10000);
 
     try {
-      // Send credentials to the server
       const res = await axiosInstance.post("/user/login", data);
-      // Cleanup the "waking up" notice if it triggered
       clearTimeout(wakingUpTimer);
       if (wakingUpToast) toast.dismiss(wakingUpToast);
 
@@ -89,7 +70,6 @@ export const Login = () => {
 
         const loginData = { user, role, token };
 
-        // Do not mark the session authenticated without the account and token.
         if (!loginData.user?._id || !loginData.token) {
           console.error("Incomplete user data from API:", res.data);
           toast.error("Login failed: Missing user details.", {
@@ -104,10 +84,8 @@ export const Login = () => {
           autoClose: 2000,
         });
 
-        // Store the user info in our global Redux state
         dispatch(loginSuccess(loginData));
 
-        // Send Admins and Users to their respective homes
         if (role === "Admin") {
           navigate("/admin/admindashboard");
         } else {
@@ -118,7 +96,6 @@ export const Login = () => {
       clearTimeout(wakingUpTimer);
       if (wakingUpToast) toast.dismiss(wakingUpToast);
 
-      // Handle common errors like wrong password or server timeout
       const errorMessage =
         error.response?.data?.message ||
         (error.code === "ECONNABORTED"
@@ -135,379 +112,245 @@ export const Login = () => {
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 80px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        py: 4,
-        bgcolor: "background.default",
         color: "text.primary",
-        position: "relative",
-        overflow: "hidden",
+        py: { xs: 4, md: 6 },
+        background:
+          "radial-gradient(80% 70% at 88% 0%, var(--accent-electric-soft) 0%, transparent 62%), var(--background)",
       }}
     >
-      <ToastContainer transition={Bounce} theme="dark" />
+      <ToastContainer transition={Bounce} theme="light" />
 
-      {/* Dynamic ambient lights */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: -160,
-          right: -160,
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          bgcolor: "cyan.main",
-          opacity: 0.05,
-          filter: "blur(120px)",
-          pointerEvents: "none",
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: -160,
-          left: -160,
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          bgcolor: "primary.main",
-          opacity: 0.05,
-          filter: "blur(120px)",
-          pointerEvents: "none",
-        }}
-      />
+      <Container maxWidth="lg">
+        <Grid
+          container
+          spacing={{ xs: 4, lg: 8 }}
+          alignItems="center"
+          sx={{ minHeight: { lg: "calc(100vh - 160px)" } }}
+        >
+          {/* Left: the statement */}
+          <Grid size={{ xs: 12, lg: 6 }} sx={{ order: { xs: 2, lg: 1 } }}>
+            <Stack spacing={3.5} sx={{ maxWidth: 480 }}>
+              <Stack direction="row" alignItems="center" spacing={1.25}>
+                <Box component="img" src={fintrackMark} alt="" sx={{ width: 30, height: 30 }} />
+                <Typography
+                  sx={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.4rem",
+                    fontWeight: 600,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  FinTrack
+                </Typography>
+              </Stack>
 
-      <Paper
-        component={motion.div}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        elevation={6}
-        sx={{
-          width: "100%",
-          maxWidth: 1000,
-          borderRadius: 8,
-          overflow: "hidden",
-          border: 1,
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Grid container>
-          {/* ══ LEFT PANEL ══ */}
-          <Grid
-            size={{ xs: 0, lg: 6 }}
-            sx={{
-              display: { xs: "none", lg: "flex" },
-              flexDirection: "column",
-              justifyContent: "space-between",
-              bgcolor: "action.hover",
-              borderRight: 1,
-              borderColor: "divider",
-              p: 6,
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            {/* Ambient light overlay */}
+              <Typography
+                component="h1"
+                sx={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: { xs: "2.15rem", sm: "2.8rem" },
+                  fontWeight: 600,
+                  lineHeight: 1.06,
+                  letterSpacing: "-0.035em",
+                }}
+              >
+                Keep the book.
+                <br />
+                The numbers follow.
+              </Typography>
+
+              <Typography sx={{ color: "text.secondary", lineHeight: 1.7, maxWidth: 400 }}>
+                Sign in to see this month&apos;s balance, what is left in each
+                budget, and the entries that still need your attention.
+              </Typography>
+
+              <Stack sx={{ borderTop: 1, borderColor: "divider", display: { xs: "none", md: "flex" } }}>
+                {[
+                  {
+                    label: "One ledger",
+                    text: "Income, spending, budgets and forecasts, kept together.",
+                  },
+                  {
+                    label: "Your records",
+                    text: "Scoped to your account and served over an authenticated API.",
+                  },
+                  {
+                    label: "Open data",
+                    text: "Export your entries whenever you need them.",
+                  },
+                ].map((item) => (
+                  <Box
+                    key={item.label}
+                    sx={{ py: 1.5, borderBottom: 1, borderColor: "divider" }}
+                  >
+                    <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
+                      {item.label}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12.5, color: "text.secondary", mt: 0.25 }}>
+                      {item.text}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
+            </Stack>
+          </Grid>
+
+          {/* Right: the form */}
+          <Grid size={{ xs: 12, lg: 6 }} sx={{ order: { xs: 1, lg: 2 } }}>
             <Box
               sx={{
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(135deg, rgba(6, 182, 212, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%)",
-                pointerEvents: "none",
+                maxWidth: 460,
+                mx: { xs: "auto", lg: "auto" },
+                bgcolor: "background.paper",
+                border: 1,
+                borderColor: "divider",
+                borderRadius: 3,
+                boxShadow: "var(--shadow-panel)",
+                p: { xs: 3, sm: 4.5 },
               }}
-            />
-
-            {/* Brand */}
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ zIndex: 1 }}>
-              <Avatar
-                sx={{
-                  bgcolor: "cyan.main",
-                  width: 40,
-                  height: 40,
-                  borderRadius: 3,
-                  boxShadow: "0 8px 16px 0 rgba(6, 182, 212, 0.2)",
-                }}
-              >
-                <FiTrendingUp style={{ color: "white" }} />
-              </Avatar>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold",
-                  background: "linear-gradient(to right, #06b6d4, #3b82f6)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                FinTrack
-              </Typography>
-            </Stack>
-
-            {/* Content */}
-            <Stack spacing={4} sx={{ zIndex: 1, my: 4 }}>
-              <Box>
-                <Typography variant="h3" sx={{ fontWeight: "bold", lineHeight: 1.15, letterSpacing: "-0.03em" }}>
-                  Master Your <br />
-                  <Box component="span" sx={{ color: "cyan.main" }}>
-                    Financial Future.
-                  </Box>
+            >
+              <Box sx={{ mb: 3.5 }}>
+                <Typography
+                  component="h2"
+                  sx={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.85rem",
+                    fontWeight: 500,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.15,
+                  }}
+                >
+                  Welcome back
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mt: 2, maxW: 360, lineHeight: 1.6 }}>
-                  Join thousands of users tracking their wealth with precision and style.
+                <Typography sx={{ mt: 0.75, color: "text.secondary", fontSize: 13.5 }}>
+                  Enter your details to open your dashboard.
                 </Typography>
               </Box>
 
-              <Stack spacing={2.5}>
-                {[
-                  {
-                    icon: <FiBarChart2 size={16} />,
-                    text: "Real-time spending analytics",
-                    color: "cyan.main",
-                    bg: "rgba(6, 182, 212, 0.1)",
-                    border: "rgba(6, 182, 212, 0.2)",
-                  },
-                  {
-                    icon: <FiPieChart size={16} />,
-                    text: "Smart budget management",
-                    color: "success.main",
-                    bg: "rgba(16, 185, 129, 0.1)",
-                    border: "rgba(16, 185, 129, 0.2)",
-                  },
-                  {
-                    icon: <FiShield size={16} />,
-                    text: "Bank-grade security standards",
-                    color: "primary.main",
-                    bg: "rgba(59, 130, 246, 0.1)",
-                    border: "rgba(59, 130, 246, 0.2)",
-                  },
-                ].map((item, i) => (
-                  <Stack key={i} direction="row" spacing={2} alignItems="center">
-                    <Avatar
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 3,
-                        bgcolor: item.bg,
-                        color: item.color,
-                        border: 1,
-                        borderColor: item.border,
-                      }}
-                    >
-                      {item.icon}
-                    </Avatar>
-                    <Typography variant="body2" sx={{ fontWeight: 500, color: "text.secondary" }}>
-                      {item.text}
-                    </Typography>
-                  </Stack>
-                ))}
+              <Stack
+                component="form"
+                onSubmit={handleSubmit(submitHandler)}
+                spacing={2.5}
+                noValidate
+              >
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  type="email"
+                  placeholder="name@example.com"
+                  variant="outlined"
+                  required
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
+                  slotProps={{
+                    inputLabel: { shrink: true },
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FiMail size={15} />
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  variant="outlined"
+                  required
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                  {...register("password", { required: "Password is required" })}
+                  slotProps={{
+                    inputLabel: { shrink: true },
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FiLock size={15} />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                            edge="end"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                            size="small"
+                          >
+                            {showPassword ? <FiEyeOff size={15} /> : <FiEye size={15} />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <FormControlLabel
+                    control={<Checkbox size="small" />}
+                    label={
+                      <Typography sx={{ fontSize: 12.5, color: "text.secondary" }}>
+                        Remember me
+                      </Typography>
+                    }
+                    sx={{ ml: -0.5 }}
+                  />
+                  <Link
+                    component={RouterLink}
+                    to="/forgot-password"
+                    underline="hover"
+                    sx={{ fontSize: 12.5, fontWeight: 600, color: "text.primary" }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Stack>
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  disabled={isLoading}
+                  endIcon={isLoading ? null : <FiArrowRight size={17} />}
+                  sx={{ minHeight: 46, mt: 0.5 }}
+                >
+                  {isLoading ? (
+                    <Stack direction="row" spacing={1.25} alignItems="center">
+                      <CircularProgress size={16} sx={{ color: "inherit" }} />
+                      <span>Authenticating…</span>
+                    </Stack>
+                  ) : (
+                    "Sign in"
+                  )}
+                </Button>
               </Stack>
 
-              <Grid container spacing={2}>
-                {[
-                  { value: "₹2.5L+", label: "Avg. Savings" },
-                  { value: "99.9%", label: "Accuracy" },
-                  { value: "Secure", label: "Encryption" },
-                ].map((s, i) => (
-                  <Grid size={4} key={i}>
-                    <Box
-                      sx={{
-                        bgcolor: "background.paper",
-                        border: 1,
-                        borderColor: "divider",
-                        borderRadius: 4,
-                        p: 2,
-                        textAlign: "center",
-                      }}
-                    >
-                      <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                        {s.value}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: "block", textTransform: "uppercase", fontSize: "9px", fontWeight: "bold", mt: 0.5 }}>
-                        {s.label}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
-            </Stack>
+              <Divider sx={{ my: 3 }} />
 
-            <Typography variant="caption" color="text.secondary" sx={{ zIndex: 1, display: "flex", alignItems: "center", gap: 1 }}>
-              <FiCheckCircle style={{ color: "var(--mui-palette-success-main)" }} /> © 2025 FinTrack. Trusted globally.
-            </Typography>
-          </Grid>
-
-          {/* ══ RIGHT: Form ══ */}
-          <Grid size={{ xs: 12, lg: 6 }} sx={{ p: { xs: 4, sm: 6 }, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            {/* Mobile brand */}
-            <Stack
-              direction="row"
-              spacing={1.5}
-              alignItems="center"
-              justifyContent="center"
-              sx={{ display: { xs: "flex", lg: "none" }, mb: 4 }}
-            >
-              <Avatar
-                sx={{
-                  bgcolor: "cyan.main",
-                  width: 40,
-                  height: 40,
-                  borderRadius: 3,
-                }}
-              >
-                <FiTrendingUp style={{ color: "white" }} />
-              </Avatar>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                FinTrack
-              </Typography>
-            </Stack>
-
-            {/* Header */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" sx={{ fontWeight: "bold", letterSpacing: "-0.02em" }}>
-                Welcome back
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                Enter your details to access your dashboard.
-              </Typography>
-            </Box>
-
-            <Stack component="form" onSubmit={handleSubmit(submitHandler)} spacing={3} noValidate>
-              <TextField
-                fullWidth
-                label="Email Address"
-                type="email"
-                placeholder="name@example.com"
-                variant="outlined"
-                required
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                slotProps={{
-                  inputLabel: { shrink: true },
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FiMail />
-                      </InputAdornment>
-                    ),
-                  }
-                }}
-              />
-
-              <TextField
-                fullWidth
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                variant="outlined"
-                required
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                {...register("password", { required: "Password is required" })}
-                slotProps={{
-                  inputLabel: { shrink: true },
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FiLock />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                        >
-                          {showPassword ? <FiEyeOff /> : <FiEye />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }
-                }}
-              />
-
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <FormControlLabel
-                  control={<Checkbox size="small" />}
-                  label={
-                    <Typography variant="caption" sx={{ fontWeight: "bold", color: "text.secondary" }}>
-                      Remember me
-                    </Typography>
-                  }
-                />
+              <Typography sx={{ fontSize: 13, color: "text.secondary", textAlign: "center" }}>
+                New to FinTrack?{" "}
                 <Link
                   component={RouterLink}
-                  to="/forgot-password"
-                  variant="caption"
-                  color="primary"
-                  sx={{ fontWeight: "bold", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                  to="/signup"
+                  underline="hover"
+                  sx={{ fontWeight: 600, color: "text.primary" }}
                 >
-                  Forgot password?
+                  Create an account
                 </Link>
-              </Stack>
-
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={isLoading}
-                sx={{
-                  py: 1.75,
-                  borderRadius: 3,
-                  fontWeight: "bold",
-                  textTransform: "none",
-                  fontSize: "0.95rem",
-                  background: "linear-gradient(to right, var(--mui-palette-cyan-main, #00acc1), var(--mui-palette-primary-main, #1976d2))",
-                  color: "white",
-                  display: "flex",
-                  gap: 1.5,
-                  boxShadow: "0 8px 24px rgba(6, 182, 212, 0.2)",
-                }}
-              >
-                {isLoading ? (
-                  <>
-                    <CircularProgress size={20} sx={{ color: "white" }} />
-                    Authenticating...
-                  </>
-                ) : (
-                  <>
-                    Sign In <FiArrowRight size={18} />
-                  </>
-                )}
-              </Button>
-            </Stack>
-
-            <Stack direction="row" alignItems="center" spacing={2} sx={{ my: 4 }}>
-              <Box sx={{ flex: 1, h: "1px", bgcolor: "divider" }} />
-              <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", fontSize: "9px", fontWeight: "bold", letterSpacing: "0.15em" }}>
-                Secure Access
               </Typography>
-              <Box sx={{ flex: 1, h: "1px", bgcolor: "divider" }} />
-            </Stack>
-
-            <Typography variant="body2" color="text.secondary" align="center">
-              New to FinTrack?{" "}
-              <Link
-                component={RouterLink}
-                to="/signup"
-                color="primary"
-                sx={{ fontWeight: "bold", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-              >
-                Create your free account
-              </Link>
-            </Typography>
+            </Box>
           </Grid>
         </Grid>
-      </Paper>
+      </Container>
     </Box>
   );
 };

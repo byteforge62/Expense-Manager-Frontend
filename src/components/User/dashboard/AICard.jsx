@@ -26,7 +26,7 @@ const AICard = memo(
   }) => (
     <Card
       sx={{
-        borderRadius: 4,
+        borderRadius: 2,
         bgcolor: "background.paper",
         border: 1,
         borderColor: "divider",
@@ -119,14 +119,14 @@ const AIButton = ({ onClick, label, color, icon = <FiZap size={14} /> }) => (
       boxShadow: "none",
       backgroundColor:
         color === "bg-rose-500 text-white hover:bg-rose-600"
-          ? "#f07870"
+          ? "#e0564b"
           : color === "bg-violet-500 text-white hover:bg-violet-600"
-            ? "#3985ff"
+            ? "#6735c8"
             : color === "bg-cyan-500 text-white hover:bg-cyan-600"
-              ? "#3985ff"
+              ? "#6735c8"
               : color === "bg-blue-500 text-white hover:bg-blue-600"
-                ? "#3985ff"
-                : "#45b889",
+                ? "#6735c8"
+                : "#1f9d6b",
       color: "#fff",
       "&:hover": { filter: "brightness(1.08)", boxShadow: "none" },
     }}
@@ -143,7 +143,7 @@ const AIResult = ({ content }) => (
     animate={{ opacity: 1, scale: 1 }}
     sx={{
       p: 2.5,
-      borderRadius: 4,
+      borderRadius: 2,
       bgcolor: "action.hover",
       border: 1,
       borderColor: "divider",

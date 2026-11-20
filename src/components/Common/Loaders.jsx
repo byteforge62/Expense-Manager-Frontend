@@ -31,7 +31,7 @@ export const GlobalLoader = () => {
         open
         sx={{
           zIndex: (theme) => theme.zIndex.modal + 2000,
-          bgcolor: "rgba(23, 27, 35, 0.72)",
+          bgcolor: "rgba(25, 25, 34, 0.42)",
           backdropFilter: "blur(5px)",
         }}
       >
@@ -42,7 +42,7 @@ export const GlobalLoader = () => {
           sx={{
             minWidth: 240,
             p: 3,
-            borderRadius: 3,
+            borderRadius: 1.5,
             border: 1,
             borderColor: "divider",
             bgcolor: "background.paper",
@@ -116,7 +116,6 @@ export const LoadingSpinner = ({
           sx={{
             fontSize: "10px",
             fontWeight: "bold",
-            textTransform: "uppercase",
             letterSpacing: "0.15em", // Equivalent to tracking-widest
             color: color,
             opacity: 0.8,

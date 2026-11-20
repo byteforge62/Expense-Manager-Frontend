@@ -1,14 +1,8 @@
-:root {
-  --bg: var(--background);
-  --text: var(--text-primary);
-  --muted: var(--text-secondary);
-  --card: var(--surface-primary);
-  --primary: var(--accent-lavender);
-}
+/* Global minimums only. Design tokens live in App.css so there is one
+   source for the palette; redefining them here would win on load order. */
 
 html {
   min-width: 320px;
-  background: var(--background);
   color-scheme: light;
 }
 
@@ -21,8 +15,4 @@ body {
   min-height: 100vh;
   background: var(--background);
   color: var(--text-primary);
-}
-
-::selection {
-  background: color-mix(in srgb, var(--accent-lavender) 22%, transparent);
 }

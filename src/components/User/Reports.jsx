@@ -133,18 +133,18 @@ export const Reports = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="relative overflow-hidden rounded-2xl border border-[#354152] bg-[#171b23] p-6 text-[#e9e7e0] shadow-[var(--shadow-panel)] sm:p-9"
+        className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface-primary)] p-6 text-[var(--text-primary)] shadow-[var(--shadow-panel)] sm:p-9"
       >
         <div className="relative flex flex-col lg:flex-row items-center justify-between gap-10">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
-            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-[#42516a] bg-[#222a36] text-[#76aaff]">
+            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--accent-electric-soft)] text-[var(--primary)]">
               <FiFileText size={27} />
             </div>
             <div className="space-y-3">
-              <h2 className="text-2xl font-semibold tracking-tight text-[#e9e7e0]">
+              <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
                 Financial report
               </h2>
-              <p className="max-w-lg text-sm leading-relaxed text-[#b2bbc7]">
+              <p className="max-w-lg text-sm leading-relaxed text-[var(--text-secondary)]">
                 Generate a PDF with the sections listed below. The report is
                 created from your account data when you request it.
               </p>
@@ -155,7 +155,7 @@ export const Reports = () => {
                 ].map((badge) => (
                   <span
                     key={badge.text}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#354152] bg-[#222a36] px-3 py-1.5 text-xs text-[#b2bbc7]"
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-secondary)] px-3 py-1.5 text-xs text-[var(--text-secondary)]"
                   >
                     {badge.icon}
                     {badge.text}
@@ -180,10 +180,10 @@ export const Reports = () => {
             className={`inline-flex flex-shrink-0 items-center gap-3 rounded-xl px-6 py-3.5 text-sm font-semibold transition-colors disabled:cursor-wait disabled:opacity-70
                         ${
                           downloaded
-                            ? "bg-[#45b889] text-[#10271f]"
+                            ? "bg-[var(--accent-sage)] text-[var(--positive)]"
                             : loading
-                              ? "bg-[#354152] text-[#e9e7e0]"
-                              : "bg-[#3985ff] text-[#101a2b] hover:bg-[#5b9aff]"
+                              ? "bg-[var(--surface-tertiary)] text-[var(--text-secondary)]"
+                              : "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90"
                         }`}
           >
             {loading ? (

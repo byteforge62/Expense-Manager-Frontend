@@ -145,12 +145,9 @@ export const Account = () => {
             variant="h4"
             component="h1"
             sx={{
-              fontWeight: 900,
-              textTransform: "uppercase",
+              fontWeight: 600,
               letterSpacing: "-0.05em",
-              background: "linear-gradient(to right, var(--text-primary), var(--text-secondary))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              color: "text.primary",
             }}
           >
             System Identity
@@ -162,7 +159,6 @@ export const Account = () => {
               color: "text.secondary",
               display: "block",
               mt: 0.5,
-              textTransform: "uppercase",
               letterSpacing: "0.2em",
             }}
           >
@@ -177,7 +173,7 @@ export const Account = () => {
             sx={{
               px: 2,
               py: 1,
-              borderRadius: 4,
+              borderRadius: 2,
               bgcolor: "cyan.main",
               opacity: 0.1,
               border: 1,
@@ -195,7 +191,7 @@ export const Account = () => {
                 boxShadow: "0 0 8px var(--mui-palette-cyan-main)",
               }}
             />
-            <Typography variant="caption" sx={{ fontWeight: 900, letterSpacing: "0.15em", color: "cyan.main" }}>
+            <Typography variant="caption" sx={{ fontWeight: 600, letterSpacing: "0.15em", color: "cyan.main" }}>
               OPERATIONAL SESSION
             </Typography>
           </Stack>
@@ -213,7 +209,7 @@ export const Account = () => {
               transition={{ delay: 0.1 }}
               sx={{
                 p: 5,
-                borderRadius: 8,
+                borderRadius: 2,
                 bgcolor: "background.paper",
                 border: 1,
                 borderColor: "divider",
@@ -256,7 +252,7 @@ export const Account = () => {
                           borderColor: "divider",
                           color: "cyan.main",
                           boxShadow: 4,
-                          borderRadius: 3,
+                          borderRadius: 1.5,
                           "&:hover": { bgcolor: "cyan.main", color: "common.white" },
                         }}
                       >
@@ -268,7 +264,7 @@ export const Account = () => {
                 </Box>
 
                 <Box>
-                  <Typography variant="h5" sx={{ fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.02em" }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, letterSpacing: "-0.02em" }}>
                     {user.name || "UNIDENTIFIED"}
                   </Typography>
                   <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ mt: 1 }}>
@@ -283,10 +279,10 @@ export const Account = () => {
                   direction="row"
                   spacing={1}
                   alignItems="center"
-                  sx={{ px: 2, py: 0.5, borderRadius: 3, bgcolor: "action.selected", border: 1, borderColor: "divider" }}
+                  sx={{ px: 2, py: 0.5, borderRadius: 1.5, bgcolor: "action.selected", border: 1, borderColor: "divider" }}
                 >
                   <FiShield size={12} style={{ color: "var(--mui-palette-cyan-main)" }} />
-                  <Typography variant="caption" sx={{ fontWeight: 900, letterSpacing: "0.2em", color: "text.secondary" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, letterSpacing: "0.2em", color: "text.secondary" }}>
                     {user.role || "User"} NODE
                   </Typography>
                 </Stack>
@@ -298,7 +294,7 @@ export const Account = () => {
                     color="inherit"
                     onClick={() => setIsEditing(true)}
                     startIcon={<FiEdit2 />}
-                    sx={{ py: 1.5, borderRadius: 4, fontWeight: "bold", letterSpacing: "0.1em" }}
+                    sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold", letterSpacing: "0.1em" }}
                   >
                     Modify Credentials
                   </Button>
@@ -312,7 +308,7 @@ export const Account = () => {
                         onClick={handleSave}
                         disabled={loading}
                         startIcon={loading ? <FiRefreshCw className="animate-spin" /> : <FiCheck />}
-                        sx={{ py: 1.5, borderRadius: 4, fontWeight: "bold" }}
+                        sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold" }}
                       >
                         DEPLOY
                       </Button>
@@ -327,7 +323,7 @@ export const Account = () => {
                           setPreview(null);
                         }}
                         startIcon={<FiX />}
-                        sx={{ py: 1.5, borderRadius: 4, fontWeight: "bold" }}
+                        sx={{ py: 1.5, borderRadius: 2, fontWeight: "bold" }}
                       >
                         ABORT
                       </Button>
@@ -341,8 +337,8 @@ export const Account = () => {
             <Box
               sx={{
                 p: 3,
-                borderRadius: 8,
-                background: "linear-gradient(to bottom right, rgba(6, 182, 212, 0.08), transparent)",
+                borderRadius: 2,
+                background: "linear-gradient(to bottom right, rgba(74, 47, 203, 0.08), transparent)",
                 border: 1,
                 borderColor: "divider",
               }}
@@ -352,7 +348,7 @@ export const Account = () => {
                   <FiInfo size={20} />
                 </Avatar>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 900, display: "block", tracking: "0.1em", mb: 0.5 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", tracking: "0.1em", mb: 0.5 }}>
                     Encryption Protocol
                   </Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: "block", lineHeight: 1.6 }}>
@@ -371,14 +367,14 @@ export const Account = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            sx={{ p: { xs: 4, sm: 5 }, borderRadius: 8, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}
+            sx={{ p: { xs: 4, sm: 5 }, borderRadius: 2, bgcolor: "background.paper", border: 1, borderColor: "divider", boxShadow: 3 }}
           >
             <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 5 }}>
               <Avatar sx={{ bgcolor: "action.selected", border: 1, borderColor: "divider", color: "cyan.main", borderRadius: 4 }}>
                 <FiSettings size={20} />
               </Avatar>
               <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 900, letterSpacing: "0.1em" }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, letterSpacing: "0.1em" }}>
                   Global Configurations
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: "bold", tracking: "0.1em" }}>
@@ -464,7 +460,7 @@ export const Account = () => {
                 >
                   <Stack direction="row" spacing={2} alignItems="center">
                     <FiRefreshCw className="animate-spin" style={{ color: "var(--mui-palette-cyan-main)" }} />
-                    <Typography variant="caption" sx={{ fontWeight: 900, color: "cyan.main", fontStyle: "italic" }}>
+                    <Typography variant="caption" sx={{ fontWeight: 600, color: "cyan.main", fontStyle: "italic" }}>
                       Pending sync sequence detected
                     </Typography>
                   </Stack>

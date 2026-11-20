@@ -1,4 +1,11 @@
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -14,7 +21,7 @@ vi.mock("../components/Utils/axiosInstance", () => ({
   resolveApiBaseUrl: vi.fn(),
 }));
 
-import authReducer from "../redux/slices/authSlice";
+import authReducer, { loginSuccess } from "../redux/slices/authSlice";
 import budgetReducer from "../redux/slices/budgetSlice";
 import incomeReducer from "../redux/slices/incomeSlice";
 import expenseReducer from "../redux/slices/expenseSlice";
@@ -44,14 +51,15 @@ const makeStore = () => {
   });
 };
 
-const renderDashboard = () =>
-  render(
-    <Provider store={makeStore()}>
-      <MemoryRouter>
-        <UserDashboard />
-      </MemoryRouter>
-    </Provider>,
-  );
+const dashboardTree = (store) => (
+  <Provider store={store}>
+    <MemoryRouter>
+      <UserDashboard />
+    </MemoryRouter>
+  </Provider>
+);
+
+const renderDashboard = () => render(dashboardTree(makeStore()));
 
 /** Default fixture: 50k income, 20k expenses, 30k budget, no recurring items. */
 const mockHappyPath = () => {
@@ -106,7 +114,9 @@ describe("UserDashboard", () => {
     renderDashboard();
     await settle();
 
-    expect(screen.getByText("FINANCIAL WORKSPACE")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Overview" }),
+    ).toBeInTheDocument();
     // Net cash flow and the budget metric share the same value.
     expect(screen.getAllByText("₹30,000")).toHaveLength(2);
     expect(screen.getByText("60% saved")).toBeInTheDocument(); // Math.round(30k/50k*100)
@@ -284,6 +294,35 @@ describe("UserDashboard", () => {
     expect(screen.getByText("How am I doing?")).toBeInTheDocument();
   });
 
+  test("disables the composer while empty or pending and reports a failed send", async () => {
+    mockHappyPath();
+    post.mockRejectedValue(new Error("Network Error"));
+    renderDashboard();
+    await settle();
+
+    const chatCard = screen
+      .getByText("Financial assistant")
+      .closest(".MuiCard-root");
+    const send = within(chatCard).getByRole("button");
+    const input = screen.getByPlaceholderText(/ask a question about your finances/i);
+
+    expect(send).toBeDisabled();
+
+    fireEvent.change(input, { target: { value: "Where did my money go?" } });
+    expect(send).not.toBeDisabled();
+
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(
+      await screen.findByText("Communication failed. Please check your network."),
+    ).toBeInTheDocument();
+    expect(post).toHaveBeenCalledWith("/ai/ask", { message: "Where did my money go?" });
+
+    // The composer is cleared and usable again after the failure.
+    await waitFor(() => expect(input).toHaveValue(""));
+    expect(send).toBeDisabled();
+  });
+
   test("shows scheduled recurring items only when the API returns some", async () => {
     get.mockImplementation((url) => {
       if (url === "/recurring/upcoming") {
@@ -314,32 +353,109 @@ describe("UserDashboard", () => {
     expect(screen.getByText("₹15,000")).toBeInTheDocument();
   });
 
-  test("issues each dashboard request exactly once on mount", async () => {
+  test("initialization issues 6 requests, including 3 expense fetches", async () => {
     mockHappyPath();
-    const { rerender } = renderDashboard();
+    renderDashboard();
     await settle();
 
-    const mounted = get.mock.calls.map(([url]) => url);
+    const calls = get.mock.calls.map(([url]) => url);
 
-    expect(mounted.filter((url) => url === "/budgets/me")).toHaveLength(1);
-    expect(mounted.filter((url) => url === "/incomes/me")).toHaveLength(1);
-    expect(mounted.filter((url) => url === "/recurring/upcoming")).toHaveLength(1);
-    expect(mounted.filter((url) => url === "/expenses/me")).toHaveLength(3);
+    // Exact issue order of the init effect: budget pair, income pair, the
+    // full-expense thunk, then the recurring fetch.
+    expect(calls.slice(0, 6)).toEqual([
+      "/budgets/me",
+      "/expenses/me",
+      "/incomes/me",
+      "/expenses/me",
+      "/expenses/me",
+      "/recurring/upcoming",
+    ]);
 
-    rerender(
-      <Provider store={makeStore()}>
-        <MemoryRouter>
-          <UserDashboard />
-        </MemoryRouter>
-      </Provider>,
+    expect(calls.filter((url) => url === "/budgets/me")).toHaveLength(1);
+    expect(calls.filter((url) => url === "/incomes/me")).toHaveLength(1);
+    expect(calls.filter((url) => url === "/recurring/upcoming")).toHaveLength(1);
+
+    // Pre-existing duplication (not introduced here): the budget and income
+    // thunks each fetch /expenses/me and fetchAllExpenses fetches it again.
+    // Two of these three requests are redundant; it is asserted, not fixed.
+    const expenseCalls = get.mock.calls.filter(([url]) => url === "/expenses/me");
+    expect(expenseCalls).toHaveLength(3);
+    expect(expenseCalls.filter(([, config]) => config?.params)).toHaveLength(1);
+
+    expect(calls).toHaveLength(6);
+  });
+
+  test("makes no further requests after unmount", async () => {
+    mockHappyPath();
+    const { unmount } = renderDashboard();
+    await settle();
+
+    const before = get.mock.calls.length;
+    unmount();
+    await act(async () => {});
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(get.mock.calls.length).toBe(before);
+  });
+
+  test("a fresh render after unmount re-initializes the dashboard", async () => {
+    mockHappyPath();
+    const first = renderDashboard();
+    await settle();
+    first.unmount();
+
+    // A brand new instance with its own store: the counts must double exactly.
+    render(dashboardTree(makeStore()));
+    await waitFor(() =>
+      expect(
+        get.mock.calls.filter(([url]) => url === "/budgets/me"),
+      ).toHaveLength(2),
     );
 
-    await waitFor(() => expect(get).toHaveBeenCalled());
-    // Re-rendering with a new store mounts a fresh dashboard; the previous
-    // instance must not keep polling.
-    const afterRerender = get.mock.calls.length;
+    const urls = get.mock.calls.map(([url]) => url);
+    expect(urls.filter((url) => url === "/incomes/me")).toHaveLength(2);
+    expect(urls.filter((url) => url === "/expenses/me")).toHaveLength(6);
+    expect(urls.filter((url) => url === "/recurring/upcoming")).toHaveLength(2);
+    expect(urls).toHaveLength(12);
+  });
+
+  test("re-rendering the same dashboard adds no requests", async () => {
+    mockHappyPath();
+    const store = makeStore();
+    const { rerender } = render(dashboardTree(store));
+    await settle();
+
+    const before = get.mock.calls.length;
+    rerender(dashboardTree(store));
     await new Promise((resolve) => setTimeout(resolve, 50));
-    expect(get.mock.calls.length).toBe(afterRerender);
+
+    // userId and dispatch are unchanged, so the init effect must not re-run.
+    expect(get.mock.calls.length).toBe(before);
+  });
+
+  test("changing the signed-in user re-initializes exactly once", async () => {
+    mockHappyPath();
+    const store = makeStore();
+    render(dashboardTree(store));
+    await settle();
+
+    expect(
+      get.mock.calls.filter(([url]) => url === "/budgets/me"),
+    ).toHaveLength(1);
+
+    await act(async () => {
+      store.dispatch(
+        loginSuccess({ user: { _id: "user-2" }, role: "User", token: "t" }),
+      );
+    });
+
+    await waitFor(() =>
+      expect(
+        get.mock.calls.filter(([url]) => url === "/budgets/me"),
+      ).toHaveLength(2),
+    );
+    // The effect re-ran once for the new userId: 6 more requests, not a loop.
+    expect(get.mock.calls).toHaveLength(12);
   });
 
   test("keeps the section header and intelligence link", async () => {
