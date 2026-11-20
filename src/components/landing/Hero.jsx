@@ -1,17 +1,11 @@
+
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link as RouterLink } from "react-router-dom";
-import { FiArrowRight, FiPlay, FiCheck, FiChevronRight } from "react-icons/fi";
+import { FiPlay, FiCheck, FiChevronRight } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
-
-/**
- * --- PUBLIC HERO ---
- * A split statement on a lavender field: proof and promise on the left,
- * a product stage on the right. The phone is an illustrative composite;
- * the floating card is live UI so the numbers stay legible.
- */
 
 const PEOPLE = [
   { position: "0% 0%" },
@@ -75,7 +69,7 @@ export const Hero = () => (
         px: { xs: "22px", sm: "44px", md: "64px" },
         pt: { xs: 4.5, sm: 5, md: 6 },
         pb: { xs: 4, sm: 4.5, md: 5 },
-        background: "var(--pub-hero-field)",
+        background: "var(--pub-bg)",
       }}
     >
       <Box
@@ -88,7 +82,7 @@ export const Hero = () => (
           rowGap: { xs: 5, lg: 2 },
         }}
       >
-        {/* ── Statement ── */}
+        {/* Statement */}
         <Box sx={{ maxWidth: 640 }}>
           <Stack
             direction="row"
@@ -119,7 +113,10 @@ export const Hero = () => (
             >
               <FiCheck size={11} strokeWidth={3} />
             </Box>
-            <Typography sx={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.005em" }}>
+
+            <Typography
+              sx={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.005em" }}
+            >
               Faster Global Payments
             </Typography>
           </Stack>
@@ -129,7 +126,12 @@ export const Hero = () => (
             sx={{
               mt: 2.6,
               fontFamily: "var(--font-display)",
-              fontSize: { xs: "2.35rem", sm: "3.05rem", md: "3.45rem", lg: "3.65rem" },
+              fontSize: {
+                xs: "2.35rem",
+                sm: "3.05rem",
+                md: "3.45rem",
+                lg: "3.65rem",
+              },
               fontWeight: 700,
               lineHeight: 1.05,
               letterSpacing: "-0.05em",
@@ -159,16 +161,34 @@ export const Hero = () => (
             sx={{ mt: 3, flexWrap: "wrap", rowGap: 1.25 }}
           >
             <AvatarStack />
+
             <Box>
               <Stars />
-              <Typography sx={{ mt: 0.45, fontSize: 12.5, color: "var(--pub-hero-muted)" }}>
-                <Box component="span" sx={{ fontWeight: 700, color: "var(--pub-hero-title)" }}>
+
+              <Typography
+                sx={{
+                  mt: 0.45,
+                  fontSize: 12.5,
+                  color: "var(--pub-hero-muted)",
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{
+                    fontWeight: 700,
+                    color: "var(--pub-hero-title)",
+                  }}
+                >
                   4.9 · 1.2k Ratings
                 </Box>{" "}
                 <Box
                   component="a"
                   href="#questions"
-                  sx={{ color: "var(--pub-hero-muted)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                  sx={{
+                    color: "var(--pub-hero-muted)",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "2px",
+                  }}
                 >
                   400+ Reviews
                 </Box>
@@ -176,7 +196,11 @@ export const Hero = () => (
             </Box>
           </Stack>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ mt: 3.5 }}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1.25}
+            sx={{ mt: 3.5 }}
+          >
             <Button
               component={RouterLink}
               to="/signup"
@@ -194,6 +218,7 @@ export const Hero = () => (
             >
               Get Started for Free
             </Button>
+
             <Button
               component="a"
               href="#how"
@@ -222,7 +247,10 @@ export const Hero = () => (
                 color: "#0f172a",
                 border: "1px solid #e2e8f0",
                 boxShadow: "0 2px 6px -2px rgba(15,23,42,0.12)",
-                "&:hover": { bgcolor: "#ffffff", borderColor: "#c7d2fe" },
+                "&:hover": {
+                  bgcolor: "#ffffff",
+                  borderColor: "#c7d2fe",
+                },
               }}
             >
               Watch a Demo
@@ -230,7 +258,7 @@ export const Hero = () => (
           </Stack>
         </Box>
 
-        {/* ── Product stage ── */}
+        {/* Product stage */}
         <Box
           sx={{
             position: "relative",
@@ -278,10 +306,17 @@ export const Hero = () => (
                 p: { xs: 1.5, sm: 1.75 },
               }}
             >
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography sx={{ fontSize: 10.5, fontWeight: 600, color: "#64748b" }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography
+                  sx={{ fontSize: 10.5, fontWeight: 600, color: "#64748b" }}
+                >
                   This month
                 </Typography>
+
                 <Box
                   sx={{
                     px: 0.75,
@@ -291,9 +326,12 @@ export const Hero = () => (
                     color: "#059669",
                   }}
                 >
-                  <Typography sx={{ fontSize: 9.5, fontWeight: 700 }}>+12.4%</Typography>
+                  <Typography sx={{ fontSize: 9.5, fontWeight: 700 }}>
+                    +12.4%
+                  </Typography>
                 </Box>
               </Stack>
+
               <Typography
                 sx={{
                   mt: 0.6,
@@ -308,13 +346,30 @@ export const Hero = () => (
               >
                 ₹26,550 left
               </Typography>
+
               <Box
                 aria-hidden="true"
-                sx={{ mt: 1.1, height: 5, borderRadius: 999, bgcolor: "#f1f5f9", overflow: "hidden" }}
+                sx={{
+                  mt: 1.1,
+                  height: 5,
+                  borderRadius: 999,
+                  bgcolor: "#f1f5f9",
+                  overflow: "hidden",
+                }}
               >
-                <Box sx={{ width: "66%", height: "100%", borderRadius: "inherit", bgcolor: "#6366f1" }} />
+                <Box
+                  sx={{
+                    width: "66%",
+                    height: "100%",
+                    borderRadius: "inherit",
+                    bgcolor: "#6366f1",
+                  }}
+                />
               </Box>
-              <Typography sx={{ mt: 0.8, fontSize: 9.5, color: "#94a3b8" }}>
+
+              <Typography
+                sx={{ mt: 0.8, fontSize: 9.5, color: "#94a3b8" }}
+              >
                 of ₹48,000 planned
               </Typography>
             </Box>
