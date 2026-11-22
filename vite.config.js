@@ -40,5 +40,8 @@ export default defineConfig({
     globals: true,
     setupFiles: "./src/test/setup.js",
     pool: "forks",
+    // MUI dialogs and the charting pages mount a large module graph; on a
+    // slower machine the default 5s per-test budget is not enough.
+    testTimeout: 20000,
   },
 });

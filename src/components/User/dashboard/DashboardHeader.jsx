@@ -44,7 +44,7 @@ export const DashboardHeader = () => (
         to="/private/income"
         variant="contained"
         startIcon={<FiPlus size={15} />}
-        sx={{ px: 2.25, minHeight: 40 }}
+        sx={{ px: 2.25, minHeight: 40, whiteSpace: "nowrap" }}
       >
         Add income
       </Button>
@@ -53,7 +53,12 @@ export const DashboardHeader = () => (
         to="/private/expenses"
         variant="outlined"
         startIcon={<FiPlus size={15} />}
-        sx={{ px: 2.25, minHeight: 40, bgcolor: "background.paper" }}
+        sx={{
+          px: 2.25,
+          minHeight: 40,
+          bgcolor: "background.paper",
+          whiteSpace: "nowrap",
+        }}
       >
         Add expense
       </Button>

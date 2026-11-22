@@ -24,13 +24,13 @@ import { FiTrendingDown, FiBarChart2, FiPieChart } from "react-icons/fi";
 /* ── Visual analytics: 30-day trend, inflow/outflow and category split ── */
 
 const COLORS = [
-  "#6366f1",
-  "#10b981",
-  "#f59e0b",
-  "#ef4444",
-  "#a5b4fc",
-  "#94a3b8",
-  "#818cf8",
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-1)",
+  "var(--chart-2)",
 ];
 
 const ChartTooltip = ({ active, payload, label }) => {
@@ -72,22 +72,9 @@ const ChartCard = ({ children, sx }) => (
   </Card>
 );
 
-const ChartHeader = ({ icon, title, subtitle, color = "primary.main", soft = "#eef2ff" }) => (
-  <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
-    <Box
-      sx={{
-        width: 38,
-        height: 38,
-        borderRadius: "10px",
-        bgcolor: soft,
-        color,
-        display: "grid",
-        placeItems: "center",
-        flexShrink: 0,
-      }}
-    >
-      {icon}
-    </Box>
+const ChartHeader = ({ icon, title, subtitle, color = "primary.main" }) => (
+  <Stack direction="row" spacing={1.1} alignItems="center" sx={{ mb: 2.5 }}>
+    <Box sx={{ color, display: "flex", flexShrink: 0 }}>{icon}</Box>
     <Box sx={{ minWidth: 0 }}>
       <Typography sx={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em" }}>
         {title}
@@ -108,8 +95,7 @@ export const SpendingTrendChart = ({ data }) => (
         icon={<FiTrendingDown size={17} />}
         title="Spending trend"
         subtitle="Expenses over the last 30 days"
-        color="#ef4444"
-        soft="#fef2f2"
+        color="error.main"
       />
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
@@ -134,17 +120,20 @@ export const SpendingTrendChart = ({ data }) => (
             tickFormatter={(v) => `₹${v}`}
             width={54}
           />
-          <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#c7d2fe", strokeWidth: 1 }} />
+          <Tooltip
+            content={<ChartTooltip />}
+            cursor={{ stroke: "var(--border-medium)", strokeWidth: 1 }}
+          />
           <Line
             type="monotone"
             dataKey="amount"
-            stroke="#6366f1"
+            stroke="var(--chart-1)"
             strokeWidth={2.6}
             dot={false}
             activeDot={{
               r: 5,
-              fill: "#ffffff",
-              stroke: "#6366f1",
+              fill: "var(--card)",
+              stroke: "var(--chart-1)",
               strokeWidth: 2.5,
             }}
           />
@@ -161,8 +150,7 @@ export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
         icon={<FiBarChart2 size={17} />}
         title="Inflow and outflow"
         subtitle="Income against expenses"
-        color="#6366f1"
-        soft="#eef2ff"
+        color="primary.main"
       />
       <ResponsiveContainer width="100%" height={250}>
         <BarChart
@@ -191,9 +179,9 @@ export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
             content={<ChartTooltip />}
             cursor={{ fill: "rgba(99,102,241,0.05)" }}
           />
-          <Bar dataKey="amount" radius={[10, 10, 0, 0]}>
-            <Cell fill="#10b981" />
-            <Cell fill="#ef4444" />
+          <Bar dataKey="amount" radius={[3, 3, 0, 0]}>
+            <Cell fill="var(--chart-2)" />
+            <Cell fill="var(--chart-3)" />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -211,8 +199,7 @@ export const CategoryBreakdownChart = ({ data }) => {
           icon={<FiPieChart size={17} />}
           title="Spending by category"
           subtitle="Where this month went"
-          color="#6366f1"
-          soft="#eef2ff"
+          color="primary.main"
         />
         <Box sx={{ position: "relative" }}>
           <ResponsiveContainer width="100%" height={250}>

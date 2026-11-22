@@ -46,7 +46,7 @@ const RecurringTab = ({
       className="rounded-3xl bg-[var(--surface-secondary)]/30 border border-[var(--border)] p-6 shadow-inner relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-[50px] pointer-events-none" />
-      <h3 className="text-xs font-bold text-[var(--text-primary)] mb-5 flex items-center gap-2 tracking-widest">
+      <h3 className="text-xs font-bold text-[var(--text-primary)] mb-5 flex items-center gap-2 tracking-normal">
         <FiPlus size={14} className="text-cyan-500" />
         PROVISION NEW AUTOMATION
       </h3>
@@ -123,10 +123,10 @@ const RecurringTab = ({
 
     <div className="rounded-2xl bg-[var(--surface-primary)] border border-[var(--border)] overflow-hidden shadow-2xl">
       <div className="px-6 py-5 border-b border-[var(--border)] flex items-center justify-between bg-[var(--surface-secondary)]/50">
-        <h3 className="text-xs font-bold text-[var(--text-primary)] tracking-widest">
+        <h3 className="text-xs font-bold text-[var(--text-primary)] tracking-normal">
           Active Revenue Operations
         </h3>
-        <span className="text-[10px] font-extrabold text-cyan-500 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-500/20 tracking-widest">
+        <span className="text-[11px] font-extrabold text-cyan-500 bg-cyan-500/10 px-3 py-1.5 rounded-full border border-cyan-500/20 tracking-normal">
           {payments.length} RUNNING
         </span>
       </div>
@@ -155,7 +155,7 @@ const RecurringTab = ({
                   ].map((h) => (
                     <th
                       key={h}
-                      className="text-left px-6 py-4 text-[10px] font-bold text-[var(--text-muted)] tracking-[0.2em]"
+                      className="text-left px-6 py-4 text-[11px] font-bold text-[var(--text-muted)] tracking-[0.2em]"
                     >
                       {h}
                     </th>
@@ -180,7 +180,7 @@ const RecurringTab = ({
                       </span>
                     </td>
                     <td className="px-6 py-5">
-                      <span className="text-[10px] font-extrabold px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 tracking-widest">
+                      <span className="text-[11px] font-extrabold px-2.5 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 tracking-normal">
                         {pay.frequency}
                       </span>
                     </td>
@@ -232,7 +232,7 @@ const RecurringTab = ({
                     <span className="text-emerald-500 text-sm font-extrabold">
                       ₹{pay.amount.toLocaleString("en-IN")}
                     </span>
-                    <span className="text-[9px] font-extrabold px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-500">
+                    <span className="text-[10.5px] font-extrabold px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-500">
                       {pay.frequency}
                     </span>
                   </div>

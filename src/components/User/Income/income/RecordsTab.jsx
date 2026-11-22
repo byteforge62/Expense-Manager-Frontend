@@ -60,7 +60,7 @@ const RecordsTab = ({ incomes, onDelete, onAdd }) => (
               <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-500/5 rotate-45 translate-x-10 -translate-y-10" />
               <div className="flex items-start justify-between relative z-10 mb-6">
                 <span
-                  className={`inline-flex items-center gap-2 text-[10px] font-extrabold px-3 py-1.5 rounded-full border shadow-sm tracking-wider ${src.bg} ${src.color}`}
+                  className={`inline-flex items-center gap-2 text-[11px] font-extrabold px-3 py-1.5 rounded-full border shadow-sm tracking-wider ${src.bg} ${src.color}`}
                 >
                   {income.source}
                 </span>
@@ -77,7 +77,7 @@ const RecordsTab = ({ incomes, onDelete, onAdd }) => (
                 >
                   ₹{income.amount.toLocaleString("en-IN")}
                 </p>
-                <p className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-muted)] mt-2 tracking-widest">
+                <p className="flex items-center gap-2 text-[11px] font-bold text-[var(--text-muted)] mt-2 tracking-normal">
                   <FiCalendar size={12} className="text-cyan-500" />
                   {new Date(income.date).toLocaleDateString("en-IN", {
                     day: "2-digit",

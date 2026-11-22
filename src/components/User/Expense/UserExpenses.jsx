@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../Utils/axiosInstance";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +46,18 @@ export const UserExpenses = () => {
   });
 
   const userId = useMemo(() => user?._id, [user]);
+
+  // Dashboard quick action: /private/expenses?action=add opens the dialog.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("action") !== "add") return;
+
+    setIsModalOpen(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete("action");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const {
     register,

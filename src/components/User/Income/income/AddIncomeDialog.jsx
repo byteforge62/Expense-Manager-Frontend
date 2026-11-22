@@ -29,7 +29,7 @@ const AddIncomeDialog = ({
     fullWidth
     PaperProps={{
       sx: {
-        borderRadius: 2,
+        borderRadius: "16px",
         bgcolor: "background.paper",
         backgroundImage: "none",
         border: 1,
@@ -48,7 +48,7 @@ const AddIncomeDialog = ({
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
             Record income
           </h2>
-          <p className="text-[10px] font-extrabold text-[var(--text-muted)] tracking-widest mt-0.5">
+          <p className="text-[11px] font-extrabold text-[var(--text-muted)] tracking-normal mt-0.5">
             Add an income entry
           </p>
         </div>
@@ -56,7 +56,7 @@ const AddIncomeDialog = ({
       <IconButton
         onClick={() => onClose()}
         size="small"
-        sx={{ color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+        sx={{ color: "text.secondary", border: 1, borderColor: "divider", borderRadius: "8px" }}
       >
         <FiX size={18} />
       </IconButton>

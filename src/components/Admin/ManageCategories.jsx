@@ -70,7 +70,7 @@ export const ManageCategories = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     if (!window.confirm("Delete this category?")) return;
     try {
       // replace with actual delete trigger name if it named differently

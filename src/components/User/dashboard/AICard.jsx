@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { FiRefreshCw, FiZap } from "react-icons/fi";
 
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -19,23 +18,17 @@ const AICard = memo(
     title,
     icon,
     iconColor,
-    iconBg,
     children,
     isLoading,
     onRefresh,
   }) => (
     <Card
       sx={{
-        borderRadius: 2,
+        borderRadius: "12px",
         bgcolor: "background.paper",
         border: 1,
         borderColor: "divider",
-        boxShadow: "0 8px 26px rgba(26, 39, 57, 0.045)",
-        transition: "transform 180ms ease, box-shadow 180ms ease",
-        "&:hover": {
-          transform: "translateY(-2px)",
-          boxShadow: "0 14px 34px rgba(26, 39, 57, 0.085)",
-        },
+        boxShadow: "var(--shadow-panel)",
       }}
     >
       <Stack
@@ -43,33 +36,28 @@ const AICard = memo(
         justifyContent="space-between"
         alignItems="center"
         sx={{
-          px: 3,
-          py: 2.25,
+          px: 2.75,
+          py: 2,
           borderBottom: 1,
           borderColor: "divider",
           bgcolor: "transparent",
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar
+        <Stack direction="row" spacing={1.25} alignItems="center">
+          <Box sx={{ color: iconColor || "primary.main", display: "flex" }}>
+            {icon}
+          </Box>
+          <Typography
             sx={{
-              width: 40,
-              height: 40,
-              borderRadius: 2.5,
-              bgcolor: iconBg || "action.hover",
-              color: iconColor || "primary.main",
+              fontFamily: "var(--font-display)",
+              fontSize: "0.97rem",
+              fontWeight: 600,
+              letterSpacing: "-0.015em",
+              color: "text.primary",
             }}
           >
-            {icon}
-          </Avatar>
-          <Box>
-            <Typography
-              variant="subtitle2"
-              sx={{ fontWeight: 700, color: "text.primary" }}
-            >
-              {title}
-            </Typography>
-          </Box>
+            {title}
+          </Typography>
         </Stack>
         {onRefresh && (
           <IconButton
@@ -113,22 +101,16 @@ const AIButton = ({ onClick, label, color, icon = <FiZap size={14} /> }) => (
     sx={{
       py: 1,
       px: 2.25,
-      borderRadius: 2.5,
-      fontWeight: 700,
+      borderRadius: "8px",
+      fontWeight: 600,
       textTransform: "none",
       boxShadow: "none",
       backgroundColor:
         color === "bg-rose-500 text-white hover:bg-rose-600"
-          ? "#ef4444"
-          : color === "bg-violet-500 text-white hover:bg-violet-600"
-            ? "#6366f1"
-            : color === "bg-cyan-500 text-white hover:bg-cyan-600"
-              ? "#6366f1"
-              : color === "bg-blue-500 text-white hover:bg-blue-600"
-                ? "#6366f1"
-                : "#10b981",
+          ? "error.main"
+          : "primary.main",
       color: "#fff",
-      "&:hover": { filter: "brightness(1.08)", boxShadow: "none" },
+      "&:hover": { filter: "brightness(0.94)", boxShadow: "none" },
     }}
   >
     {label}
@@ -143,7 +125,7 @@ const AIResult = ({ content }) => (
     animate={{ opacity: 1, scale: 1 }}
     sx={{
       p: 2.5,
-      borderRadius: 2,
+      borderRadius: "12px",
       bgcolor: "action.hover",
       border: 1,
       borderColor: "divider",
@@ -155,8 +137,8 @@ const AIResult = ({ content }) => (
       sx={{
         color: "text.secondary",
         fontSize: "0.85rem",
-        lineHeight: 1.6,
-        "& strong": { color: "cyan.main", fontWeight: "bold" },
+        lineHeight: 1.65,
+        "& strong": { color: "primary.main", fontWeight: 600 },
       }}
     >
       <ReactMarkdown>{content}</ReactMarkdown>

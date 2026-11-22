@@ -69,7 +69,7 @@ const SummaryTab = ({ stats, tips }) => (
             >
               <span className={card.color}>{card.icon}</span>
             </div>
-            <p className="text-[11px] font-bold text-[var(--text-muted)] tracking-widest mb-1">
+            <p className="text-[11px] font-bold text-[var(--text-muted)] tracking-normal mb-1">
               {card.label}
             </p>
             <p
@@ -97,7 +97,7 @@ const SummaryTab = ({ stats, tips }) => (
           <h3 className="text-sm font-bold text-[var(--text-primary)]">
             Wealth Optimization Insights
           </h3>
-          <p className="text-[10px] font-bold text-cyan-500 tracking-widest mt-0.5">
+          <p className="text-[11px] font-bold text-cyan-500 tracking-normal mt-0.5">
             AI-Powered Recommendations
           </p>
         </div>

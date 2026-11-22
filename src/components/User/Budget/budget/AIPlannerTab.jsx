@@ -121,7 +121,7 @@ const AIPlannerTab = ({ plan, loading, onGenerate }) => (
                 transition={{ delay: i * 0.08 }}
                 className={`relative overflow-hidden rounded-2xl border p-5 ${s.bg} ${s.border} shadow-sm`}
               >
-                <p className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest mb-1">
+                <p className="text-[11px] font-bold text-[var(--text-muted)] tracking-normal mb-1">
                   {s.label}
                 </p>
                 <p
@@ -136,7 +136,7 @@ const AIPlannerTab = ({ plan, loading, onGenerate }) => (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="rounded-2xl bg-[var(--surface-secondary)]/30 border border-[var(--border)] overflow-hidden shadow-sm">
               <div className="px-5 py-4 border-b border-[var(--border)] bg-[var(--surface-secondary)]/50">
-                <h3 className="text-[11px] font-bold text-[var(--text-primary)] tracking-widest">
+                <h3 className="text-[11px] font-bold text-[var(--text-primary)] tracking-normal">
                   Recommended Allocations
                 </h3>
               </div>
@@ -171,7 +171,7 @@ const AIPlannerTab = ({ plan, loading, onGenerate }) => (
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-inner">
                   <FiZap size={14} className="text-emerald-500" />
                 </div>
-                <h3 className="text-[11px] font-bold text-emerald-500 tracking-widest">
+                <h3 className="text-[11px] font-bold text-emerald-500 tracking-normal">
                   Actionable Insights
                 </h3>
               </div>

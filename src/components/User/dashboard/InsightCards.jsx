@@ -39,8 +39,6 @@ export const AITextInsightCard = ({
   title,
   icon,
   iconColor,
-  iconBg,
-  borderColor,
   isLoading,
   value,
   onRefresh,
@@ -55,8 +53,6 @@ export const AITextInsightCard = ({
       title={title}
       icon={icon}
       iconColor={iconColor}
-      iconBg={iconBg}
-      borderColor={borderColor}
       isLoading={isLoading}
       onRefresh={onRefresh}
     >
@@ -76,7 +72,7 @@ export const AITextInsightCard = ({
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ maxW: "80%" }}
+            sx={{ maxWidth: "80%" }}
           >
             {prompt}
           </Typography>
@@ -97,8 +93,6 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => (
             title="Spending risk"
             icon={<FiAlertTriangle size={15} />}
             iconColor="error.main"
-            iconBg="rgba(239,68,68, 0.1)"
-            borderColor="rgba(239,68,68, 0.15)"
             isLoading={isLoading}
             onRefresh={onRefresh}
           >
@@ -112,7 +106,7 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => (
             ) : riskData ? (
               <Box
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   p: 3,
                   border: 1,
                   borderColor: riskColors[riskData.riskLevel]?.border,
@@ -183,11 +177,11 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => (
                     <Typography
                       variant="body2"
                       sx={{
-                        fontWeight: "bold",
+                        fontWeight: 600,
                         color: riskColors[riskData.riskLevel]?.text,
                       }}
                     >
-                      ✨ {riskData.suggestion}
+                      {riskData.suggestion}
                     </Typography>
                   </Box>
                 </Stack>
@@ -202,7 +196,7 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => (
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ maxW: "80%" }}
+                  sx={{ maxWidth: "80%" }}
                 >
                   Review recent activity for unusual spending patterns.
                 </Typography>

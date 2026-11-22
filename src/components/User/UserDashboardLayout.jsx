@@ -15,6 +15,7 @@ import {
   FiSun,
   FiMoon,
   FiUser,
+  FiSettings,
   FiX,
 } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
@@ -53,6 +54,7 @@ const navTabs = [
   { label: "Purchases", section: "Planning", path: "/private/purchases", icon: <FiShoppingBag size={17} /> },
   { label: "Intelligence", section: "Analysis", path: "/private/financial-intelligence", icon: <FiBarChart2 size={17} /> },
   { label: "Reports", section: "Analysis", path: "/private/reports", icon: <FiFileText size={17} /> },
+  { label: "Settings", section: "Account", path: "/private/settings", icon: <FiSettings size={17} /> },
 ];
 
 const RAIL_WIDTH = 244;
@@ -128,10 +130,10 @@ export const UserDashboardLayout = () => {
                       pt: i === 0 ? 0.25 : 2,
                       pb: 0.75,
                       color: "text.secondary",
-                      fontSize: 10,
+                      fontSize: 11.5,
                       fontWeight: 600,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
+                      letterSpacing: "0.005em",
+                      textTransform: "none",
                     }}
                   >
                     {tab.section}
@@ -354,7 +356,7 @@ export const UserDashboardLayout = () => {
 
                 <Button
                   component={RouterLink}
-                  to={`/private/account/${user?._id || user?.id || ""}`}
+                  to="/private/settings"
                   startIcon={<FiUser size={15} />}
                   sx={{
                     color: "text.secondary",

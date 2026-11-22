@@ -68,7 +68,7 @@ const AnalyticsTab = ({ summary }) => (
             {summary.map((s, i) => (
               <span
                 key={i}
-                className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-muted)] tracking-wider"
+                className="flex items-center gap-2 text-[11px] font-bold text-[var(--text-muted)] tracking-wider"
               >
                 <span
                   className="w-2.5 h-2.5 rounded-full shadow-sm"

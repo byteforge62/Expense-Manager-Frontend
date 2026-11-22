@@ -3,7 +3,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import {
   FiCheck,
-  FiArrowUpRight,
   FiClock,
   FiFileText,
   FiHome,
@@ -12,11 +11,9 @@ import {
   FiTarget,
   FiZap,
   FiTrendingUp,
-  FiCalendar,
   FiShoppingBag,
   FiActivity,
   FiArrowDownRight,
-  FiAlertCircle,
 } from "react-icons/fi";
 
 const CATEGORIES = [
@@ -59,10 +56,9 @@ const BUDGETS = [
 const Eyebrow = ({ children }) => (
   <Typography
     sx={{
-      fontSize: 11,
-      fontWeight: 700,
-      textTransform: "uppercase",
-      letterSpacing: "0.12em",
+      fontSize: 12.5,
+      fontWeight: 600,
+      letterSpacing: "0.005em",
       color: "var(--pub-accent)",
     }}
   >
@@ -165,7 +161,7 @@ const ExpenseVisual = () => (
         borderBottom: "1px solid var(--pub-hair)",
       }}
     >
-      <Eyebrow>Monthly ledger</Eyebrow>
+      <Eyebrow>Example ledger</Eyebrow>
       <Typography sx={{ fontSize: 11, color: "var(--pub-quiet)" }}>
         June · 2026
       </Typography>
@@ -313,7 +309,7 @@ const BudgetVisual = () => (
       alignItems="center"
       sx={{ mb: 3 }}
     >
-      <Eyebrow>Monthly allocations</Eyebrow>
+      <Eyebrow>Example allocations</Eyebrow>
       <Typography sx={{ fontSize: 11, color: "var(--pub-quiet)" }}>
         June overview
       </Typography>
@@ -341,7 +337,7 @@ const BudgetVisual = () => (
       ))}
     </Box>
 
-    {BUDGETS.map((budget, index) => {
+    {BUDGETS.map((budget) => {
       const Icon = budget.icon;
       const remaining = budget.over ? budget.note : budget.note;
 
@@ -475,173 +471,101 @@ const BudgetChapter = () => (
    Large graph / editorial annotations
 --------------------------------------------------------- */
 
+const FORECAST_INPUTS = [
+  {
+    number: 1,
+    label: "Recorded entries",
+    detail: "The income and expenses you have already logged this month.",
+  },
+  {
+    number: 2,
+    label: "Scheduled bills",
+    detail: "Recurring amounts still due before the month closes.",
+  },
+  {
+    number: 3,
+    label: "Days remaining",
+    detail: "Your recorded daily pace, carried to the end of the month.",
+  },
+];
+
 const ForecastVisual = () => (
-  <Box sx={{ width: "100%", position: "relative" }}>
+  <Box sx={{ width: "100%" }}>
     <Stack
       direction="row"
       justifyContent="space-between"
-      alignItems="flex-end"
-      flexWrap="wrap"
-      gap={1}
+      alignItems="baseline"
+      sx={{ pb: 1.5, borderBottom: "1px solid var(--pub-hair)" }}
     >
-      <Box>
-        <Eyebrow>Balance projection</Eyebrow>
+      <Typography
+        sx={{
+          fontFamily: "var(--font-display)",
+          fontSize: { xs: "1.1rem", sm: "1.24rem" },
+          fontWeight: 600,
+          letterSpacing: "-0.03em",
+          color: "var(--pub-fg)",
+        }}
+      >
+        How the projection is built
+      </Typography>
+      <Typography sx={{ fontSize: 11.5, color: "var(--pub-quiet)" }}>
+        Example
+      </Typography>
+    </Stack>
+
+    {FORECAST_INPUTS.map((input) => (
+      <Box
+        key={input.label}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "24px 1fr",
+          columnGap: 2,
+          py: 2.25,
+          borderBottom: "1px solid var(--pub-hair)",
+        }}
+      >
         <Typography
           sx={{
-            mt: 1,
-            fontFamily: "var(--font-display)",
-            fontSize: { xs: "1.8rem", sm: "2.3rem" },
-            fontWeight: 700,
-            letterSpacing: "-0.04em",
-            color: "var(--pub-fg)",
+            fontSize: 11.5,
+            color: "var(--pub-quiet)",
+            fontVariantNumeric: "tabular-nums",
+            pt: 0.25,
           }}
         >
-          The rest of the month
+          {String(input.number).padStart(2, "0")}
         </Typography>
-      </Box>
 
-      <Stack direction="row" spacing={1.5}>
-        <Stack direction="row" alignItems="center" spacing={0.7}>
-          <Box
+        <Box>
+          <Typography
+            sx={{ fontSize: 13.5, fontWeight: 600, color: "var(--pub-fg)" }}
+          >
+            {input.label}
+          </Typography>
+          <Typography
             sx={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              bgcolor: "var(--pub-accent)",
+              mt: 0.5,
+              fontSize: 12.5,
+              lineHeight: 1.65,
+              color: "var(--pub-muted)",
             }}
-          />
-          <Typography sx={{ fontSize: 10.5, color: "var(--pub-muted)" }}>
-            Recorded
+          >
+            {input.detail}
           </Typography>
-        </Stack>
+        </Box>
+      </Box>
+    ))}
 
-        <Stack direction="row" alignItems="center" spacing={0.7}>
-          <Box sx={{ width: 18, borderTop: "2px dashed var(--pub-quiet)" }} />
-          <Typography sx={{ fontSize: 10.5, color: "var(--pub-muted)" }}>
-            Projected
-          </Typography>
-        </Stack>
-      </Stack>
-    </Stack>
-
-    <Box
-      component="svg"
-      viewBox="0 0 600 300"
-      role="img"
-      aria-label="Illustrative balance projection showing recorded and projected trends"
-      sx={{
-        display: "block",
-        width: "100%",
-        height: { xs: 230, sm: 300 },
-        mt: 2,
-        overflow: "visible",
-      }}
-    >
-      <defs>
-        <linearGradient id="fintrack-forecast-area" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--pub-accent)" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="var(--pub-accent)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-
-      {[50, 110, 170, 230].map((y) => (
-        <line
-          key={y}
-          x1="0"
-          y1={y}
-          x2="600"
-          y2={y}
-          stroke="var(--pub-hair)"
-          strokeWidth="1"
-        />
-      ))}
-
-      <path
-        d="M0 210 L55 195 L110 205 L165 168 L220 177 L275 140 L330 151 L330 270 L0 270 Z"
-        fill="url(#fintrack-forecast-area)"
-      />
-
-      <path
-        d="M0 210 L55 195 L110 205 L165 168 L220 177 L275 140 L330 151"
-        fill="none"
-        stroke="var(--pub-accent)"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-
-      <path
-        d="M330 151 C375 143 390 126 430 119 S510 83 600 60"
-        fill="none"
-        stroke="var(--pub-quiet)"
-        strokeWidth="2.5"
-        strokeDasharray="7 8"
-        strokeLinecap="round"
-      />
-
-      <circle cx="330" cy="151" r="5" fill="var(--pub-accent)" />
-      <circle
-        cx="330"
-        cy="151"
-        r="12"
-        fill="var(--pub-accent)"
-        fillOpacity="0.14"
-      />
-
-      <line
-        x1="330"
-        y1="40"
-        x2="330"
-        y2="270"
-        stroke="var(--pub-accent)"
-        strokeOpacity="0.3"
-        strokeWidth="1"
-        strokeDasharray="3 5"
-      />
-
-      <text
-        x="342"
-        y="38"
-        fill="var(--pub-accent)"
-        fontSize="11"
-        fontWeight="600"
-      >
-        Projection begins
-      </text>
-    </Box>
-
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      sx={{
-        mt: -1,
-        pb: 1.5,
-        borderBottom: "1px solid var(--pub-hair)",
-      }}
-    >
-      {["01 Jun", "18 Jun", "30 Jun"].map((date) => (
-        <Typography
-          key={date}
-          sx={{ fontSize: 10.5, color: "var(--pub-quiet)" }}
-        >
-          {date}
-        </Typography>
-      ))}
-    </Stack>
-
-    <Stack
-      direction="row"
-      spacing={1.5}
-      alignItems="flex-start"
-      sx={{ mt: 2.5 }}
-    >
-      <FiTrendingUp size={17} color="var(--pub-accent)" />
+    <Stack direction="row" spacing={1.25} alignItems="flex-start" sx={{ pt: 2.5 }}>
+      <Box sx={{ color: "var(--pub-accent)", display: "flex", pt: 0.25 }}>
+        <FiTrendingUp size={16} />
+      </Box>
 
       <Typography
         sx={{ fontSize: 12, lineHeight: 1.7, color: "var(--pub-muted)" }}
       >
-        Your projection extends recorded transactions and scheduled bills.
-        Actual figures and estimates remain visually distinct.
+        The projection line starts after your last recorded entry. Actual
+        amounts and estimates stay visually distinct, so you can always tell
+        which is which.
       </Typography>
     </Stack>
   </Box>
@@ -794,8 +718,6 @@ const RecordsChapter = () => (
                 >
                   {line.label}
                 </Typography>
-
-                <FiArrowUpRight size={16} color="var(--pub-quiet)" />
               </Stack>
 
               <Typography

@@ -29,7 +29,7 @@ const AddBudgetDialog = ({
     fullWidth
     PaperProps={{
       sx: {
-        borderRadius: 2,
+        borderRadius: "16px",
         bgcolor: "background.paper",
         backgroundImage: "none",
         border: 1,
@@ -56,7 +56,7 @@ const AddBudgetDialog = ({
       <IconButton
         onClick={onClose}
         size="small"
-        sx={{ color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+        sx={{ color: "text.secondary", border: 1, borderColor: "divider", borderRadius: "8px" }}
       >
         <FiX size={18} />
       </IconButton>

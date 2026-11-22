@@ -37,9 +37,9 @@ const FinancialForecast = lazyNamed(
   () => import("./components/User/FinancialForecast"),
   "FinancialForecast",
 );
-const PurchaseIntelligence = lazyNamed(
-  () => import("./components/User/PurchaseIntelligence"),
-  "PurchaseIntelligence",
+const UserPurchases = lazyNamed(
+  () => import("./components/User/Purchase/UserPurchases"),
+  "UserPurchases",
 );
 const Bills = lazyNamed(
   () => import("./components/User/Bills"),
@@ -69,9 +69,9 @@ const Transaction = lazyNamed(
   () => import("./components/User/Transaction"),
   "Transaction",
 );
-const Account = lazyNamed(
-  () => import("./components/Admin/Account"),
-  "Account",
+const UserSettings = lazyNamed(
+  () => import("./components/User/UserSettings"),
+  "UserSettings",
 );
 
 const AdminDashboard = lazyNamed(
@@ -165,13 +165,14 @@ function App() {
             />
             <Route
               path="purchases"
-              element={<Suspense fallback={<div role="status">Loading purchase intelligence…</div>}><PurchaseIntelligence /></Suspense>}
+              element={<Suspense fallback={<div role="status">Loading purchases…</div>}><UserPurchases /></Suspense>}
             />
             <Route
               path="bills"
               element={<Suspense fallback={<div role="status">Loading bills…</div>}><Bills /></Suspense>}
             />
             <Route path="userdashboard" element={<UserDashboard />} />
+            <Route path="settings" element={<UserSettings />} />
             <Route
               path="financial-intelligence"
               element={
@@ -180,7 +181,7 @@ function App() {
                 </Suspense>
               }
             />
-            <Route path="account/:userId" element={<Account />} />
+            <Route path="account/:userId" element={<UserSettings />} />
           </Route>
         </Route>
 
@@ -195,7 +196,7 @@ function App() {
             <Route path="reportadmins" element={<ReportAdmins />} />
             <Route path="systemlogs" element={<Systemlog />} />
             <Route path="user/:userId" element={<UserDetails />} />
-            <Route path="account/:userId" element={<Account />} />
+            <Route path="account/:userId" element={<UserSettings />} />
           </Route>
         </Route>
       </Routes>

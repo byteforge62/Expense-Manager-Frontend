@@ -77,7 +77,7 @@ export const ThemeProvider = ({ children }) => {
     const isDark = theme === "dark";
     const display =
       '"Plus Jakarta Sans", "Instrument Sans", "Segoe UI", system-ui, sans-serif';
-    const sans = '"Inter", "Instrument Sans", "Segoe UI", system-ui, sans-serif';
+    const sans = '"Instrument Sans", "Segoe UI", system-ui, sans-serif';
 
     return createTheme({
       palette: {
@@ -225,7 +225,7 @@ export const ThemeProvider = ({ children }) => {
           defaultProps: { disableElevation: true },
           styleOverrides: {
             root: {
-              borderRadius: 999,
+              borderRadius: 8,
               textTransform: "none",
               fontWeight: 600,
               letterSpacing: "-0.005em",
@@ -245,24 +245,24 @@ export const ThemeProvider = ({ children }) => {
             text: {
               "&:hover": { backgroundColor: c.hover },
             },
-            sizeLarge: { minHeight: 48, paddingInline: 26, fontSize: "0.95rem" },
-            sizeSmall: { minHeight: 32, paddingInline: 14, fontSize: "0.78rem" },
+            sizeLarge: { minHeight: 48, paddingInline: 26, fontSize: "0.95rem", borderRadius: 10 },
+            sizeSmall: { minHeight: 32, paddingInline: 14, fontSize: "0.78rem", borderRadius: 6 },
           },
         },
         MuiIconButton: {
           styleOverrides: {
-            root: { borderRadius: 10, color: c.textSecondary },
+            root: { borderRadius: 8, color: c.textSecondary },
           },
         },
         MuiButtonBase: {
           styleOverrides: {
-            root: { borderRadius: 10 },
+            root: { borderRadius: 8 },
           },
         },
         MuiOutlinedInput: {
           styleOverrides: {
             root: {
-              borderRadius: 12,
+              borderRadius: 10,
               backgroundColor: c.paper,
               fontSize: "0.9rem",
               "& .MuiOutlinedInput-notchedOutline": { borderColor: c.divider },
@@ -309,10 +309,10 @@ export const ThemeProvider = ({ children }) => {
               fontSize: "0.85rem",
             },
             head: {
-              fontSize: "0.72rem",
+              fontSize: "0.79rem",
               fontWeight: 600,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
+              letterSpacing: "0.005em",
+              textTransform: "none",
               color: c.textSecondary,
               backgroundColor: "transparent",
               whiteSpace: "nowrap",

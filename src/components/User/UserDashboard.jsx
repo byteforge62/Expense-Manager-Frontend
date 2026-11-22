@@ -35,6 +35,9 @@ import {
 } from "./dashboard/AnalyticsCharts";
 import { RecurringOperationsCard } from "./dashboard/RecurringOperationsCard";
 import { InsightsHistoryCard } from "./dashboard/InsightsHistoryCard";
+import { QuickActions } from "./dashboard/QuickActions";
+import { ObligationsCard } from "./dashboard/ObligationsCard";
+import { PurchaseSnapshotCard } from "./dashboard/PurchaseSnapshotCard";
 
 /**
  * --- INTELLIGENCE HUB (USER DASHBOARD) ---
@@ -73,6 +76,9 @@ export const UserDashboard = () => {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [loadingCharts, setloadingCharts] = useState(true);
   const [loadingSecondary, setloadingSecondary] = useState(true);
+  const [upcomingBills, setUpcomingBills] = useState([]);
+  const [purchaseSummary, setPurchaseSummary] = useState(null);
+  const [loadingPlanning, setLoadingPlanning] = useState(true);
 
   // --- AI MODULES: DATA FETCHING ---
 
@@ -86,6 +92,50 @@ export const UserDashboard = () => {
     } finally {
       setloadingSecondary(false);
     }
+  };
+
+  /**
+   * Pending bills and this month's purchase summary. Both are real reads; a
+   * failure in either leaves its card in an empty state rather than blocking
+   * the rest of the dashboard.
+   */
+  const fetchPlanningSnapshot = async () => {
+    setLoadingPlanning(true);
+    const now = new Date();
+    const dueBefore = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 10);
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+      .toISOString()
+      .slice(0, 10);
+
+    const [billsResult, purchasesResult] = await Promise.allSettled([
+      axiosInstance.get("/bills/me", {
+        params: {
+          status: "pending",
+          dueBefore,
+          sortBy: "dueDate",
+          sortOrder: "asc",
+          limit: 20,
+        },
+        skipGlobalLoader: true,
+      }),
+      axiosInstance.get("/purchases/summary", {
+        params: { startDate: monthStart },
+        skipGlobalLoader: true,
+      }),
+    ]);
+
+    if (billsResult.status === "fulfilled") {
+      const items = billsResult.value?.data?.data;
+      setUpcomingBills(Array.isArray(items) ? items : []);
+    }
+
+    if (purchasesResult.status === "fulfilled") {
+      setPurchaseSummary(purchasesResult.value?.data?.data ?? null);
+    }
+
+    setLoadingPlanning(false);
   };
 
   const fetchExpenseInsights = async () => {
@@ -166,6 +216,7 @@ export const UserDashboard = () => {
       dispatch(fetchAllExpenses({ userId })),
     ]).finally(() => setloadingCharts(false));
     fetchUpcomingRecurring();
+    fetchPlanningSnapshot();
   }, [userId, dispatch]);
 
   const totalBudget = (budget || []).reduce((a, i) => a + i.amount, 0);
@@ -229,6 +280,8 @@ export const UserDashboard = () => {
 
       <DashboardHeader />
 
+      <QuickActions />
+
       <FinancialSnapshotCard
         hasActivity={hasActivity}
         netSavings={netSavings}
@@ -246,6 +299,27 @@ export const UserDashboard = () => {
         formatCurrency={formatCurrency}
       />
 
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <ObligationsCard
+            items={upcomingBills}
+            isLoading={loadingPlanning}
+            formatCurrency={formatCurrency}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <PurchaseSnapshotCard
+            summary={purchaseSummary}
+            isLoading={loadingPlanning}
+            formatCurrency={formatCurrency}
+            monthLabel={new Date().toLocaleDateString("en-IN", {
+              month: "long",
+              year: "numeric",
+            })}
+          />
+        </Grid>
+      </Grid>
+
       <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "flex-end" }} spacing={1}>
         <Box>
           <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: "-0.025em" }}>
@@ -260,7 +334,7 @@ export const UserDashboard = () => {
           to="/private/financial-intelligence"
           size="small"
           endIcon={<FiArrowUpRight size={15} />}
-          sx={{ px: 1.25, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+          sx={{ px: 1.25, textTransform: "none", fontWeight: 600 }}
         >
           Explore intelligence
         </Button>
@@ -277,8 +351,6 @@ export const UserDashboard = () => {
           title="Financial health"
           icon={<FiShield size={16} />}
           iconColor="secondary.main"
-          iconBg="rgba(245,158,11, 0.1)"
-          borderColor="rgba(245,158,11, 0.15)"
           isLoading={loadingHealth}
           value={healthScore}
           onRefresh={fetchHealthScore}
@@ -293,8 +365,6 @@ export const UserDashboard = () => {
           title="Spending patterns"
           icon={<FiBarChart2 size={16} />}
           iconColor="cyan.main"
-          iconBg="rgba(79,70,229, 0.1)"
-          borderColor="rgba(79,70,229, 0.15)"
           isLoading={loadingInsights}
           value={expenseInsights}
           onRefresh={fetchExpenseInsights}
@@ -309,8 +379,6 @@ export const UserDashboard = () => {
           title="Cash-flow forecast"
           icon={<FiTrendingUp size={16} />}
           iconColor="primary.main"
-          iconBg="rgba(245,158,11, 0.1)"
-          borderColor="rgba(245,158,11, 0.15)"
           isLoading={loadingForecast}
           value={forecast}
           onRefresh={fetchForecast}
@@ -325,8 +393,6 @@ export const UserDashboard = () => {
           title="Savings suggestions"
           icon={<FiZap size={16} />}
           iconColor="success.main"
-          iconBg="rgba(16,185,129, 0.1)"
-          borderColor="rgba(16,185,129, 0.15)"
           isLoading={loadingSavings}
           value={savingOpportunities}
           onRefresh={fetchSavingOpportunities}
@@ -347,14 +413,14 @@ export const UserDashboard = () => {
             <Skeleton
               variant="rectangular"
               height={320}
-              sx={{ borderRadius: 6 }}
+              sx={{ borderRadius: "12px" }}
             />
           </Grid>
           <Grid size={{ xs: 12, lg: 6 }}>
             <Skeleton
               variant="rectangular"
               height={320}
-              sx={{ borderRadius: 6 }}
+              sx={{ borderRadius: "12px" }}
             />
           </Grid>
         </Grid>

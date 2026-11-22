@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { motion } from "framer-motion";
 import { FiCpu, FiInbox, FiSend } from "react-icons/fi";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -68,8 +66,6 @@ export const AssistantChatCard = () => {
             title="Financial assistant"
             icon={<FiCpu size={16} />}
             iconColor="warning.main"
-            iconBg="rgba(245, 158, 11, 0.1)"
-            borderColor="rgba(245, 158, 11, 0.15)"
           >
             <Box
               sx={{
@@ -88,26 +84,11 @@ export const AssistantChatCard = () => {
                   justifyContent="center"
                   sx={{ height: "100%", opacity: 0.6 }}
                 >
-                  <Avatar
-                    sx={{
-                      bgcolor: "action.hover",
-                      border: 1,
-                      borderColor: "divider",
-                      width: 48,
-                      height: 48,
-                      mb: 1,
-                    }}
-                  >
-                    <FiInbox
-                      style={{ color: "var(--mui-palette-text-secondary)" }}
-                    />
-                  </Avatar>
+                  <Box sx={{ color: "text.secondary", display: "flex", mb: 1 }}>
+                    <FiInbox size={22} />
+                  </Box>
                   <Typography
-                    variant="caption"
-                    sx={{
-                      fontWeight: "bold",
-                      letterSpacing: "0.1em",
-                    }}
+                    sx={{ fontSize: 12.5, fontWeight: 600, color: "text.secondary" }}
                   >
                     No conversation yet
                   </Typography>
@@ -124,7 +105,7 @@ export const AssistantChatCard = () => {
                 >
                   <Box
                     sx={{
-                      maxW: "85%",
+                      maxWidth: "85%",
                       px: 2,
                       py: 1.5,
                       borderRadius: 2,
@@ -159,24 +140,9 @@ export const AssistantChatCard = () => {
                       gap: 1,
                     }}
                   >
-                    {[0, 150, 300].map((delay) => (
-                      <Box
-                        key={delay}
-                        component={motion.div}
-                        animate={{ y: [0, -6, 0] }}
-                        transition={{
-                          duration: 0.6,
-                          repeat: Infinity,
-                          delay: delay / 1000,
-                        }}
-                        sx={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: "50%",
-                          bgcolor: "cyan.main",
-                        }}
-                      />
-                    ))}
+                    <Typography sx={{ fontSize: "0.8rem", color: "text.secondary" }}>
+                      Thinking…
+                    </Typography>
                   </Box>
                 </Box>
               )}
@@ -198,17 +164,18 @@ export const AssistantChatCard = () => {
                 }}
               />
               <IconButton
-                color="warning"
+                color="primary"
                 onClick={sendMessage}
                 disabled={loadingAI || !input.trim()}
+                aria-label="Send message"
                 sx={{
-                  bgcolor: "orange.main",
-                  color: "white",
-                  borderRadius: 1.5,
+                  bgcolor: "primary.main",
+                  color: "primary.contrastText",
+                  borderRadius: "8px",
                   width: 40,
                   height: 40,
-                  background: "linear-gradient(to right, #f59e0b, #ea580c)",
-                  "&:disabled": { opacity: 0.4, color: "white" },
+                  "&:hover": { bgcolor: "primary.dark" },
+                  "&:disabled": { opacity: 0.4, color: "primary.contrastText" },
                 }}
               >
                 <FiSend size={16} />

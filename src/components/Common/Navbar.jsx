@@ -15,11 +15,9 @@ import { useTheme } from "../../context/ThemeContext";
 import fintrackMark from "../../assets/brand/fintrack-mark.svg";
 
 const links = [
-  { label: "Home", href: "/" },
-  { label: "About us", id: "how" },
-  { label: "Resources", id: "features" },
-  { label: "Solutions", id: "forecast" },
-  { label: "Pricing", id: "start" },
+  { label: "How it works", id: "how" },
+  { label: "Features", id: "features" },
+  { label: "Questions", id: "questions" },
 ];
 
 /**
@@ -79,7 +77,7 @@ export const Navbar = () => {
     fontWeight: 500,
     color: "var(--pub-muted)",
     textDecoration: "none",
-    borderRadius: 999,
+    borderRadius: 6,
     "&:hover": { color: "var(--pub-fg)", bgcolor: "var(--pub-surface-alt)" },
   };
 

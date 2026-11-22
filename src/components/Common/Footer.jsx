@@ -10,9 +10,9 @@ const COLUMNS = [
     heading: "Product",
     links: [
       { label: "How it works", href: "#how" },
-      { label: "Expense tracking", href: "#product" },
-      { label: "Forecasting", href: "#forecast" },
-      { label: "FAQ", href: "#questions" },
+      { label: "Feature tour", href: "#features" },
+      { label: "Questions", href: "#questions" },
+      { label: "Get started", href: "#start" },
     ],
   },
   {

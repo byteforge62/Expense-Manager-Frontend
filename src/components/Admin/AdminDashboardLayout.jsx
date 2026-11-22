@@ -10,10 +10,9 @@ import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import Badge from "@mui/material/Badge";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { FiBell, FiMenu, FiLogOut, FiSettings } from "react-icons/fi";
+import { FiMenu, FiLogOut, FiSettings } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { AdminSidebar } from "./AdminSidebar";
 
@@ -130,24 +129,6 @@ export const AdminDashboardLayout = () => {
             </Stack>
 
             <Stack direction="row" alignItems="center" spacing={0.5}>
-              <IconButton
-                aria-label="Notifications"
-                sx={{ width: 36, height: 36, border: 1, borderColor: "divider" }}
-              >
-                <Badge
-                  variant="dot"
-                  color="secondary"
-                  overlap="circular"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      border: "2px solid var(--mui-palette-background-default)",
-                    },
-                  }}
-                >
-                  <FiBell size={17} />
-                </Badge>
-              </IconButton>
-
               <IconButton
                 onClick={() => navigate(`/admin/account/${user?._id}`)}
                 aria-label="Account settings"

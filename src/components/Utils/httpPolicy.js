@@ -20,6 +20,8 @@ const FINANCIAL_COLLECTIONS = [
   "bill",
   "transaction",
   "recurring",
+  "purchases",
+  "purchase-intelligence",
 ];
 
 /** Auth endpoints that must never trigger a token refresh / redirect loop. */

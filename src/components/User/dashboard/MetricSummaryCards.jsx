@@ -1,11 +1,11 @@
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { FiTrendingUp, FiTrendingDown, FiTarget } from "react-icons/fi";
 
-/* ── Income / expenses / budget totals ── */
+/* ── Income / expenses / budget totals ──
+   One surface, three columns, hairline dividers. The three figures are
+   read together, so they share one frame instead of three competing cards. */
 
 export const MetricSummaryCards = ({
   totalIncome,
@@ -14,87 +14,83 @@ export const MetricSummaryCards = ({
   hasFinancialData,
   formatCurrency,
 }) => (
-  <Grid container spacing={2}>
+  <Box
+    sx={{
+      display: "grid",
+      gridTemplateColumns: { xs: "1fr", sm: "repeat(3, minmax(0, 1fr))" },
+      bgcolor: "background.paper",
+      border: 1,
+      borderColor: "divider",
+      borderRadius: "12px",
+      boxShadow: "var(--shadow-panel)",
+      overflow: "hidden",
+    }}
+  >
     {[
       {
         label: "Income received",
         value: totalIncome,
-        icon: <FiTrendingUp size={17} />,
+        icon: <FiTrendingUp size={15} />,
         color: "success.main",
-        bg: "var(--accent-sage)",
         note: "Recorded entries",
       },
       {
         label: "Expenses tracked",
         value: totalExpenses,
-        icon: <FiTrendingDown size={17} />,
+        icon: <FiTrendingDown size={15} />,
         color: "error.main",
-        bg: "var(--accent-peach)",
         note: "Recorded entries",
       },
       {
         label: "Budget planned",
         value: totalBudget,
-        icon: <FiTarget size={17} />,
+        icon: <FiTarget size={15} />,
         color: "primary.main",
-        bg: "var(--accent-electric-soft)",
         note: "Across your budgets",
       },
-    ].map((item) => (
-      <Grid size={{ xs: 12, sm: 4 }} key={item.label}>
-        <Card
-          sx={{
-            height: "100%",
-            borderRadius: "12px",
-            border: 1,
-            borderColor: "divider",
-            bgcolor: "background.paper",
-            boxShadow: "var(--shadow-panel)",
-            transition: "border-color 160ms ease",
-            "&:hover": { borderColor: "var(--border-medium)" },
-          }}
-        >
-          <Box sx={{ p: 2.5 }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-              <Box sx={{ minWidth: 0 }}>
-                <Typography sx={{ fontSize: 12.5, fontWeight: 500, color: "text.secondary" }}>
-                  {item.label}
-                </Typography>
-                <Typography
-                  sx={{
-                    mt: 0.85,
-                    fontFamily: "var(--font-display)",
-                    fontSize: "1.72rem",
-                    fontWeight: 700,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1.1,
-                    fontVariantNumeric: "tabular-nums",
-                  }}
-                >
-                  {hasFinancialData ? formatCurrency(item.value) : "—"}
-                </Typography>
-                <Typography sx={{ mt: 0.6, fontSize: 11.5, color: "text.secondary" }}>
-                  {hasFinancialData ? item.note : "Add a record to get started"}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: 36,
-                  height: 36,
-                  display: "grid",
-                  placeItems: "center",
-                  borderRadius: "10px",
-                  color: item.color,
-                  bgcolor: item.bg,
-                  flexShrink: 0,
-                }}
-              >
-                {item.icon}
-              </Box>
-            </Stack>
+    ].map((item, index) => (
+      <Box
+        key={item.label}
+        sx={{
+          p: { xs: 2.25, sm: 2.75 },
+          borderTop: { xs: index === 0 ? 0 : 1, sm: 0 },
+          borderLeft: { xs: 0, sm: index === 0 ? 0 : 1 },
+          borderColor: "divider",
+          minWidth: 0,
+        }}
+      >
+        <Stack direction="row" spacing={0.9} alignItems="center">
+          <Box sx={{ color: item.color, display: "flex", flexShrink: 0 }}>
+            {item.icon}
           </Box>
-        </Card>
-      </Grid>
+          <Typography
+            sx={{ fontSize: 12.5, fontWeight: 500, color: "text.secondary" }}
+            noWrap
+          >
+            {item.label}
+          </Typography>
+        </Stack>
+
+        <Typography
+          sx={{
+            mt: 1.25,
+            fontFamily: "var(--font-display)",
+            fontSize: { xs: "1.7rem", sm: "1.85rem" },
+            fontWeight: 700,
+            letterSpacing: "-0.04em",
+            lineHeight: 1.05,
+            fontVariantNumeric: "tabular-nums",
+            color: "text.primary",
+          }}
+          noWrap
+        >
+          {hasFinancialData ? formatCurrency(item.value) : "—"}
+        </Typography>
+
+        <Typography sx={{ mt: 0.75, fontSize: 11.5, color: "text.secondary" }}>
+          {hasFinancialData ? item.note : "Add a record to get started"}
+        </Typography>
+      </Box>
     ))}
-  </Grid>
+  </Box>
 );

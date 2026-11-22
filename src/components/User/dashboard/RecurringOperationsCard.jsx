@@ -1,7 +1,6 @@
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
@@ -17,58 +16,36 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
           sx={{
             border: 1,
             borderColor: "divider",
-            borderRadius: 6,
-            p: 4,
+            borderRadius: "12px",
+            p: { xs: 2.5, sm: 3 },
             position: "relative",
             overflow: "hidden",
-            boxShadow: 3,
+            boxShadow: "var(--shadow-panel)",
           }}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              width: 256,
-              height: 256,
-              bgcolor: "warning.main",
-              opacity: 0.03,
-              filter: "blur(96px)",
-            }}
-          />
           <Stack
             direction="row"
             justifyContent="space-between"
             alignItems="center"
             sx={{ mb: 4, position: "relative", zIndex: 1 }}
           >
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar
-                sx={{
-                  bgcolor: "rgba(245, 158, 11, 0.1)",
-                  border: 1,
-                  borderColor: "rgba(245, 158, 11, 0.2)",
-                  color: "warning.main",
-                  borderRadius: 1.5,
-                  width: 40,
-                  height: 40,
-                }}
-              >
-                <FiRepeat size={16} />
-              </Avatar>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Box sx={{ color: "warning.main", display: "flex" }}>
+                <FiRepeat size={17} />
+              </Box>
               <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                  Pending Executions
-                </Typography>
                 <Typography
-                  variant="caption"
-                  color="text.secondary"
                   sx={{
-                    fontWeight: "bold",
-                    letterSpacing: "0.1em",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "0.97rem",
+                    fontWeight: 600,
+                    letterSpacing: "-0.015em",
                   }}
                 >
-                  Upcoming Automated Events
+                  Pending Executions
+                </Typography>
+                <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+                  Due before the end of the month
                 </Typography>
               </Box>
             </Stack>
@@ -76,8 +53,8 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
               label={`${items.length} Scheduled`}
               size="small"
               sx={{
-                fontWeight: "black",
-                fontSize: "10px",
+                fontWeight: 600,
+                fontSize: "11px",
                 bgcolor: "rgba(245, 158, 11, 0.1)",
                 color: "warning.main",
                 border: 1,
@@ -101,22 +78,10 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                     borderStyle: "dashed",
                   }}
                 >
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Avatar
-                      sx={{
-                        bgcolor: "background.paper",
-                        border: 1,
-                        borderColor: "divider",
-                        borderRadius: 1.5,
-                        width: 36,
-                        height: 36,
-                      }}
-                    >
-                      <FiCalendar
-                        size={14}
-                        style={{ color: "var(--mui-palette-warning-main)" }}
-                      />
-                    </Avatar>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Box sx={{ color: "warning.main", display: "flex" }}>
+                      <FiCalendar size={15} />
+                    </Box>
                     <Box>
                       <Typography
                         variant="caption"

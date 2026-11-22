@@ -130,7 +130,7 @@ export const Transaction = () => {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Transactions</h1>
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Transactions</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">Income and expenses, grouped by date.</p>
         </div>
         <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-primary)] px-3 py-2 text-xs text-[var(--text-muted)]">
@@ -255,11 +255,11 @@ export const Transaction = () => {
                         className={`flex items-center gap-4 px-8 py-5 bg-[var(--surface-secondary)]/30`}
                       >
                         <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(79,70,229,0.4)]" />
-                        <span className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.3em]">
+                        <span className="text-[11px] font-semibold text-[var(--text-primary)] tracking-[0.3em]">
                           {date}
                         </span>
                         <div className="flex-1 h-px bg-[var(--border)]/50" />
-                        <span className="text-[9px] font-black text-[var(--text-muted)] tracking-[0.1em] border border-[var(--border)] px-2 py-1 rounded-md">
+                        <span className="text-[10.5px] font-semibold text-[var(--text-muted)] tracking-[0.1em] border border-[var(--border)] px-2 py-1 rounded-md">
                           {groupedByDate[date].length} OPERATIONS
                         </span>
                       </div>
@@ -295,20 +295,20 @@ export const Transaction = () => {
                             {/* Core Telemetry (Description/Category) */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-3">
-                                <h5 className="text-sm font-black text-[var(--text-primary)] truncate tracking-tight">
+                                <h5 className="text-sm font-semibold text-[var(--text-primary)] truncate tracking-tight">
                                   {t.description ||
                                     t.source ||
                                     "Unknown Vector"}
                                 </h5>
                                 {t.type === "Expense" && t.hasBudget && (
-                                  <span className="text-[8px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20 tracking-widest">
+                                  <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/20 tracking-normal">
                                     Strategic
                                   </span>
                                 )}
                               </div>
                               <div className="flex items-center gap-2 mt-2">
                                 {t.categoryID?.name && (
-                                  <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-muted)] tracking-widest">
+                                  <span className="text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-muted)] tracking-normal">
                                     {t.categoryID.name}
                                   </span>
                                 )}
@@ -318,7 +318,7 @@ export const Transaction = () => {
                             {/* Monetary Data */}
                             <div className="flex flex-col items-end gap-3 flex-shrink-0">
                               <p
-                                className={`text-lg font-black tracking-tighter ${t.type === "Income" ? "text-emerald-500" : "text-rose-500"}`}
+                                className={`text-lg font-semibold tracking-tighter ${t.type === "Income" ? "text-emerald-500" : "text-rose-500"}`}
                               >
                                 {t.type === "Income" ? "+" : "−"}₹
                                 {Number(t.amount || 0).toLocaleString("en-IN")}
@@ -326,7 +326,7 @@ export const Transaction = () => {
                               {t.type === "Expense" && !t.hasBudget && (
                                 <button
                                   onClick={() => handlePlanBudget(t)}
-                                  className="text-[9px] font-black tracking-widest px-3 py-1.5 rounded-xl
+                                  className="text-[10.5px] font-semibold tracking-normal px-3 py-1.5 rounded-xl
                                              bg-cyan-500/10 border border-cyan-500/20 text-cyan-500
                                              hover:bg-cyan-500 hover:text-white shadow-lg shadow-cyan-500/10
                                              transition-all duration-300 whitespace-nowrap active:scale-95"
@@ -354,7 +354,7 @@ export const Transaction = () => {
               <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                 <FiFilter size={14} className="text-cyan-500" />
               </div>
-              <h4 className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.2em]">
+              <h4 className="text-[11px] font-semibold text-[var(--text-primary)] tracking-[0.2em]">
                 Parameter Matrix
               </h4>
             </div>
@@ -363,7 +363,7 @@ export const Transaction = () => {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[10px] font-black tracking-widest transition-all
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[11px] font-semibold tracking-normal transition-all
                     ${
                       activeTab === tab.key
                         ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-500"
@@ -377,7 +377,7 @@ export const Transaction = () => {
                     {tab.label} UNIT
                   </span>
                   <span
-                    className={`text-[9px] px-2 py-0.5 rounded-md font-black
+                    className={`text-[10.5px] px-2 py-0.5 rounded-md font-semibold
                     ${activeTab === tab.key ? "bg-cyan-500/20 text-cyan-500" : "bg-[var(--surface-tertiary)] text-[var(--text-muted)]"}`}
                   >
                     {tab.count}
@@ -393,7 +393,7 @@ export const Transaction = () => {
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                 <FiDollarSign size={14} className="text-blue-500" />
               </div>
-              <h4 className="text-[10px] font-black text-[var(--text-primary)] tracking-[0.2em]">
+              <h4 className="text-[11px] font-semibold text-[var(--text-primary)] tracking-[0.2em]">
                 Totality Ledger
               </h4>
             </div>
@@ -420,11 +420,11 @@ export const Transaction = () => {
                   key={i}
                   className={`flex items-center justify-between group ${i < 2 ? "pb-4 border-b border-[var(--border)]/50" : ""}`}
                 >
-                  <span className="text-[10px] font-bold text-[var(--text-muted)] tracking-widest">
+                  <span className="text-[11px] font-bold text-[var(--text-muted)] tracking-normal">
                     {row.label}
                   </span>
                   <span
-                    className={`text-sm font-black tracking-tight ${row.color}`}
+                    className={`text-sm font-semibold tracking-tight ${row.color}`}
                   >
                     {row.value < 0 ? "−" : ""}₹
                     {Math.abs(row.value).toLocaleString("en-IN")}
@@ -434,7 +434,7 @@ export const Transaction = () => {
 
               {/* Progress Indicator */}
               <div className="pt-2">
-                <div className="flex items-center justify-between text-[10px] font-black tracking-widest mb-3">
+                <div className="flex items-center justify-between text-[11px] font-semibold tracking-normal mb-3">
                   <span className="text-[var(--text-muted)]">
                     Efficiency Score
                   </span>

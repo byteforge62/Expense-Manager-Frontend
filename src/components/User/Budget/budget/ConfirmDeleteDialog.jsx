@@ -18,7 +18,7 @@ const ConfirmDeleteDialog = ({
     fullWidth
     PaperProps={{
       sx: {
-        borderRadius: 2,
+        borderRadius: "16px",
         bgcolor: "background.paper",
         backgroundImage: "none",
         border: 1,

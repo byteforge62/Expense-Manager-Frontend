@@ -30,7 +30,7 @@ const ExpenseRecordsTab = ({
       <div className="flex items-center gap-2">
         <button
           onClick={onClearFilters}
-          className="text-[10px] font-bold text-rose-500 tracking-widest hover:underline px-2"
+          className="text-[11px] font-bold text-rose-500 tracking-normal hover:underline px-2"
         >
           Clear All
         </button>
@@ -144,7 +144,7 @@ const ExpenseRecordsTab = ({
           ].map((h, i) => (
             <span
               key={i}
-              className="text-[10px] font-bold text-[var(--text-muted)] tracking-[0.15em]"
+              className="text-[11px] font-bold text-[var(--text-muted)] tracking-[0.15em]"
             >
               {h}
             </span>
@@ -174,7 +174,7 @@ const ExpenseRecordsTab = ({
               </div>
 
               <div className="hidden sm:block">
-                <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-secondary)] tracking-wider">
+                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[var(--surface-tertiary)] border border-[var(--border)] text-[var(--text-secondary)] tracking-wider">
                   {expense.categoryID?.name || "Other"}
                 </span>
               </div>

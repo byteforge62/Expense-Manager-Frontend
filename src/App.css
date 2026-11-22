@@ -56,7 +56,7 @@
 :root {
   --radius: 0.75rem;
 
-  --font-sans: "Inter", "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Instrument Sans", "Segoe UI", system-ui, sans-serif;
   --font-serif: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
 
@@ -634,17 +634,25 @@
   line-height: 1.12 !important;
 }
 
-/* Actions are pills everywhere, like the marketing site. */
-.user-layout main button,
-.admin-layout main button {
-  border-radius: 999px !important;
+/* Radii follow the role of the element, not a house style.
+   Actions 8px · controls 10px · panels 12px · dialogs 16px.
+   Round shapes stay for status chips, avatars and radio marks. */
+.user-layout main button:not([class*="Mui"]):not([class*="rounded-full"]),
+.admin-layout main button:not([class*="Mui"]):not([class*="rounded-full"]) {
+  border-radius: 8px;
 }
 
-/* Controls keep the 12px field radius. */
 .user-layout main :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea),
 .admin-layout main :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
-  border-radius: 12px !important;
+  border-radius: 10px !important;
 }
+
+/* A filter bar and a table share one radius so rows read as one object. */
+.user-layout main table,
+.admin-layout main table {
+  border-radius: 12px;
+}
+
 
 .user-layout main .MuiCard-root,
 .admin-layout main .MuiCard-root {

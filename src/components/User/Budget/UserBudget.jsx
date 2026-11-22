@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import axiosInstance from "../../Utils/axiosInstance";
 import { AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
@@ -33,6 +34,18 @@ export const UserBudget = () => {
     (state) => state.budget,
   );
   const userId = user?._id ?? null;
+
+  // Dashboard quick action: /private/budget?action=add opens the dialog.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("action") !== "add") return;
+
+    setIsModalOpen(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete("action");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   // --- UI STATE ---
   const [activeTab, setActiveTab] = useState("overview");

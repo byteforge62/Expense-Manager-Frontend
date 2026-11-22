@@ -137,7 +137,7 @@ export const Bills = () => {
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="font-semibold">{bill.name}</h3>
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide ${overdue ? "bg-rose-500/10 text-rose-700 dark:text-rose-300" : paid ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "bg-[var(--accent-electric-soft)] text-[var(--accent-electric)]"}`}>
+                        <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold tracking-wide ${overdue ? "bg-rose-500/10 text-rose-700 dark:text-rose-300" : paid ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "bg-[var(--accent-electric-soft)] text-[var(--accent-electric)]"}`}>
                           {overdue ? "Overdue" : bill.status || "pending"}
                         </span>
                       </div>

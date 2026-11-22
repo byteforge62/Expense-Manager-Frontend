@@ -1,7 +1,6 @@
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -15,11 +14,11 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
         sx={{
           border: 1,
           borderColor: "divider",
-          borderRadius: 6,
-          p: 4,
+          borderRadius: "12px",
+          p: { xs: 2.5, sm: 3 },
           position: "relative",
           overflow: "hidden",
-          boxShadow: 3,
+          boxShadow: "var(--shadow-panel)",
         }}
       >
         <Stack
@@ -28,33 +27,23 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           alignItems="center"
           sx={{ mb: 4, position: "relative", zIndex: 1 }}
         >
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar
-              sx={{
-                bgcolor: "rgba(79,70,229, 0.1)",
-                border: 1,
-                borderColor: "rgba(79,70,229, 0.2)",
-                color: "cyan.main",
-                borderRadius: 1.5,
-                width: 40,
-                height: 40,
-              }}
-            >
-              <FiCpu size={16} />
-            </Avatar>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box sx={{ color: "primary.main", display: "flex" }}>
+              <FiCpu size={17} />
+            </Box>
             <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                Recent insights
-              </Typography>
               <Typography
-                variant="caption"
-                color="text.secondary"
                 sx={{
-                  fontWeight: "bold",
-                  letterSpacing: "0.1em",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "0.97rem",
+                  fontWeight: 600,
+                  letterSpacing: "-0.015em",
                 }}
               >
-                Analysis history
+                Recent insights
+              </Typography>
+              <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+                Saved analysis from this account
               </Typography>
             </Box>
           </Stack>
@@ -64,9 +53,9 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
               onClick={onRefresh}
               startIcon={<FiRefreshCw size={12} />}
               sx={{
-                fontWeight: "bold",
+                fontWeight: 600,
                 textTransform: "none",
-                borderRadius: 1.5,
+                borderRadius: "8px",
               }}
             >
               Refresh history
@@ -76,16 +65,8 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
 
         {isLoading ? (
           <Stack spacing={2}>
-            <Skeleton
-              variant="rectangular"
-              height={100}
-              sx={{ borderRadius: 4 }}
-            />
-            <Skeleton
-              variant="rectangular"
-              height={100}
-              sx={{ borderRadius: 4 }}
-            />
+            <Skeleton variant="rectangular" height={100} sx={{ borderRadius: "12px" }} />
+            <Skeleton variant="rectangular" height={100} sx={{ borderRadius: "12px" }} />
           </Stack>
         ) : !insights || insights.length === 0 ? (
           <Stack
@@ -94,31 +75,17 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
             spacing={2}
             sx={{ py: 6, opacity: 0.6 }}
           >
-            <Avatar
-              sx={{
-                bgcolor: "action.hover",
-                border: 1,
-                borderColor: "divider",
-                width: 48,
-                height: 48,
-              }}
-            >
-              <FiInbox style={{ color: "var(--mui-palette-text-secondary)" }} />
-            </Avatar>
+            <Box sx={{ color: "text.secondary", display: "flex" }}>
+              <FiInbox size={24} />
+            </Box>
             <Box textAlign="center">
-              <Typography
-                variant="caption"
-                sx={{
-                  fontWeight: "bold",
-                  letterSpacing: "0.1em",
-                }}
-              >
+              <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
                 No saved insights yet
               </Typography>
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{ maxW: 280, mx: "auto", mt: 0.5 }}
+                sx={{ maxWidth: 280, mx: "auto", mt: 0.5 }}
               >
                 Results from your analyses will appear here.
               </Typography>
@@ -131,7 +98,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
                 <Card
                   sx={{
                     p: 2,
-                    borderRadius: 1.5,
+                    borderRadius: "12px",
                     border: 1,
                     borderColor: "divider",
                   }}

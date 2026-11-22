@@ -116,7 +116,7 @@ export const LoadingSpinner = ({
           sx={{
             fontSize: "10px",
             fontWeight: "bold",
-            letterSpacing: "0.15em", // Equivalent to tracking-widest
+            letterSpacing: "0.15em", // Equivalent to tracking-normal
             color: color,
             opacity: 0.8,
             animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite", // Recreates Tailwind's animate-pulse inline
