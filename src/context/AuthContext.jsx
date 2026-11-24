@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateUser as updateUserAction } from "../redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  selectAuthToken,
+  selectCurrentUser,
+  updateUser as updateUserAction,
+} from "../store/slices/authSlice";
 import { logout } from "../components/Utils/Logout";
 
 /**
@@ -16,9 +20,9 @@ import { logout } from "../components/Utils/Logout";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(selectAuthToken);
 
   const updateUser = (updatedData) => dispatch(updateUserAction(updatedData));
 

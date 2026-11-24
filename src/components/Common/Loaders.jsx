@@ -1,4 +1,8 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
+import {
+  selectIsLoading,
+  selectLoadingText,
+} from "../../store/slices/uiSlice";
 
 // ================ Material UI Components ================
 import Backdrop from "@mui/material/Backdrop";
@@ -23,7 +27,8 @@ import Stack from "@mui/material/Stack";
  * It uses Redux to know when to show itself and what text to display.
  */
 export const GlobalLoader = () => {
-  const { isLoading, loadingText } = useSelector((state) => state.ui);
+  const isLoading = useAppSelector(selectIsLoading);
+  const loadingText = useAppSelector(selectLoadingText);
 
   return (
     isLoading && (

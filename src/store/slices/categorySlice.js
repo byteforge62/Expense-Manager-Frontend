@@ -47,6 +47,13 @@ const initialState = {
   error: null,
 };
 
+/* Granular selectors: consumers subscribe to the list or the flag, never to
+   the whole `state.category` object. */
+export const selectAllCategories = (state) =>
+  state.category?.categories ?? [];
+export const selectCategoriesLoading = (state) =>
+  state.category?.loading ?? false;
+
 const categorySlice = createSlice({
   name: "category",
 

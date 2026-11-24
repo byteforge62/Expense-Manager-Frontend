@@ -59,4 +59,9 @@ const logSlice = createSlice({
   },
 });
 
+export const selectAllLogs = (state) =>
+  Array.isArray(state.log?.logs) ? state.log.logs : [];
+export const selectLogsLoading = (state) => state.log?.loading ?? false;
+export const selectLogsError = (state) => state.log?.error ?? null;
+
 export default logSlice.reducer;

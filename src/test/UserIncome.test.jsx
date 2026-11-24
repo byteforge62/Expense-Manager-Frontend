@@ -46,8 +46,9 @@ vi.mock("recharts", () => {
   };
 });
 
-import authReducer from "../redux/slices/authSlice";
-import incomeReducer from "../redux/slices/incomeSlice";
+import authReducer from "../store/slices/authSlice";
+import incomeReducer from "../store/slices/incomeSlice";
+import expensesReducer from "../store/slices/expensesSlice";
 import { UserIncome } from "../components/User/Income/UserIncome";
 
 const JAN = "2025-01-15T00:00:00.000Z";
@@ -80,7 +81,11 @@ const recurring = (overrides = {}) => ({
 const makeStore = () => {
   const auth = authReducer(undefined, { type: "@@init" });
   return configureStore({
-    reducer: { auth: authReducer, income: incomeReducer },
+    reducer: {
+      auth: authReducer,
+      income: incomeReducer,
+      expenses: expensesReducer,
+    },
     preloadedState: {
       auth: { ...auth, user: { _id: "user-1", name: "Ada" } },
     },
@@ -338,7 +343,8 @@ describe("UserIncome", () => {
 
     await waitFor(() => expect(del).toHaveBeenCalledWith("/income/inc-1"));
     await waitFor(() => expect(callsTo("/incomes/me")).toBe(2));
-    expect(callsTo("/expenses/me")).toBe(2);
+    // Deleting income does not change expenses, so they are not refetched.
+    expect(callsTo("/expenses/me")).toBe(1);
   });
 
   test("creates an income entry with the exact payload and resets the form", async () => {

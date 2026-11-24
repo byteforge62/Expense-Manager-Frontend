@@ -45,4 +45,10 @@ const adminReportSlice = createSlice({
   },
 });
 
+export const selectAdminStats = (state) => state.adminReport?.stats ?? null;
+export const selectAdminReportLoading = (state) =>
+  state.adminReport?.loading ?? false;
+export const selectAdminReportError = (state) =>
+  state.adminReport?.error ?? null;
+
 export default adminReportSlice.reducer;

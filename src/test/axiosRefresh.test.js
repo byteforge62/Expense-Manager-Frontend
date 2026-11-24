@@ -38,8 +38,8 @@ vi.mock("axios", () => ({
 }));
 
 import axiosInstance, { injectStore } from "../components/Utils/axiosInstance";
-import { loginSuccess } from "../redux/slices/authSlice";
-import { store } from "../redux/store";
+import { loginSuccess } from "../store/slices/authSlice";
+import { store } from "../store/store";
 
 const unauthorized = (index) => ({
   config: { url: `/expenses/me?page=${index}`, method: "get", headers: {} },

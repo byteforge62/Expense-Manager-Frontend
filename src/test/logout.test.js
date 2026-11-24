@@ -11,8 +11,8 @@ vi.mock("../components/Utils/axiosInstance", () => ({
 }));
 
 import { logout } from "../components/Utils/Logout";
-import { loginSuccess } from "../redux/slices/authSlice";
-import { store } from "../redux/store";
+import { loginSuccess } from "../store/slices/authSlice";
+import { store } from "../store/store";
 import { resetRedirectGuard } from "../components/Utils/session";
 
 const signIn = () => {

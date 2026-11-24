@@ -1,6 +1,6 @@
 // ================ Imports ================
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { motion } from "framer-motion";
 
 // ================ Material UI Components ================
@@ -24,13 +24,19 @@ import { FaSearch } from "react-icons/fa";
 import { FiShield } from "react-icons/fi";
 
 // ================ Redux Actions ================
-import { fetchUsers, deleteUser } from "../../redux/slices/userSlice";
+import {
+  fetchUsers,
+  deleteUser,
+  selectAllUsers,
+  selectUsersStatus,
+} from "../../store/slices/userSlice";
 
 export const AccessControl = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // ================= Redux State ======================
-  const { users, loading } = useSelector((state) => state.user);
+  const users = useAppSelector(selectAllUsers);
+  const loading = useAppSelector(selectUsersStatus) === "loading";
 
   // =================== Local State ========================
   const [searchTerm, setSearchTerm] = useState("");

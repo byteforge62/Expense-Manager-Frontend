@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "./store/hooks";
+import { selectIsLoading } from "./store/slices/uiSlice";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "./components/Utils/axiosInstance";
@@ -35,7 +36,7 @@ import fintrackMark from "./assets/brand/fintrack-mark.svg";
  * Creates a standard user account; administrative roles are never issued here.
  */
 export const Signup = () => {
-  const { isLoading } = useSelector((state) => state.ui);
+  const isLoading = useAppSelector(selectIsLoading);
   const {
     register,
     handleSubmit,

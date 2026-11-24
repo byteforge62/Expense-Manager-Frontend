@@ -1,6 +1,6 @@
 import axios from "axios";
-import { startLoading, stopLoading } from "../../redux/slices/uiSlice";
-import { logout, updateToken } from "../../redux/slices/authSlice";
+import { startLoading, stopLoading } from "../../store/slices/uiSlice";
+import { logout, updateToken } from "../../store/slices/authSlice";
 import { clearLegacyAuthStorage, redirectToLogin } from "./session";
 import {
   createSingleFlight,

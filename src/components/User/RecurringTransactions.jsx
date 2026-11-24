@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../Utils/axiosInstance";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchRecurring } from "../../redux/slices/incomeSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectUserId } from "../../store/slices/authSlice";
+import {
+  fetchRecurring,
+  selectAllRecurring,
+  selectRecurringStatus,
+} from "../../store/slices/incomeSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiRepeat,
@@ -72,12 +77,10 @@ const freqConfig = {
 
 // --- MAIN COMPONENT ---
 export const RecurringTransactions = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const userId = user?._id;
-  const { recurringPayments: recurringList, loading } = useSelector(
-    (state) => state.income,
-  );
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector(selectUserId);
+  const recurringList = useAppSelector(selectAllRecurring);
+  const loading = useAppSelector(selectRecurringStatus) === "loading";
   
   // --- STATE ---
   const [submitting, setSubmitting] = useState(false);

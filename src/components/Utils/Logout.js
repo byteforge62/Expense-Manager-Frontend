@@ -1,5 +1,5 @@
-import { store } from "../../redux/store";
-import { logoutSession } from "../../redux/slices/authSlice";
+import { store } from "../../store/store";
+import { logoutSession } from "../../store/slices/authSlice";
 import { clearLegacyAuthStorage, redirectToLogin } from "./session";
 
 /**

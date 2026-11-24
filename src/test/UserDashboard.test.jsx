@@ -21,15 +21,16 @@ vi.mock("../components/Utils/axiosInstance", () => ({
   resolveApiBaseUrl: vi.fn(),
 }));
 
-import authReducer, { loginSuccess } from "../redux/slices/authSlice";
-import budgetReducer from "../redux/slices/budgetSlice";
-import incomeReducer from "../redux/slices/incomeSlice";
-import expenseReducer from "../redux/slices/expenseSlice";
+import authReducer, { loginSuccess } from "../store/slices/authSlice";
+import budgetReducer from "../store/slices/budgetSlice";
+import incomeReducer from "../store/slices/incomeSlice";
+import expensesReducer from "../store/slices/expensesSlice";
 import { UserDashboard } from "../components/User/UserDashboard";
 
-const budget = { amount: 30000 };
-const income = { amount: 50000 };
+const budget = { _id: "bud-1", amount: 30000 };
+const income = { _id: "inc-1", amount: 50000 };
 const expense = {
+  _id: "exp-1",
   amount: 20000,
   date: new Date().toISOString(),
   categoryID: { name: "Groceries" },
@@ -43,7 +44,7 @@ const makeStore = () => {
       auth: authReducer,
       budget: budgetReducer,
       income: incomeReducer,
-      expense: expenseReducer,
+      expenses: expensesReducer,
     },
     preloadedState: {
       auth: { ...auth, user: { _id: "user-1", name: "Ada" } },
@@ -353,7 +354,7 @@ describe("UserDashboard", () => {
     expect(screen.getByText("₹15,000")).toBeInTheDocument();
   });
 
-  test("initialization issues 8 requests: the financial slices plus bills and purchases", async () => {
+  test("initialization issues 6 requests: the financial slices plus bills and purchases", async () => {
     mockHappyPath();
     renderDashboard();
     await settle();
@@ -364,11 +365,11 @@ describe("UserDashboard", () => {
     // full-expense thunk, then the recurring fetch.
     expect(calls.slice(0, 6)).toEqual([
       "/budgets/me",
-      "/expenses/me",
       "/incomes/me",
       "/expenses/me",
-      "/expenses/me",
       "/recurring/upcoming",
+      "/bills/me",
+      "/purchases/summary",
     ]);
 
     expect(calls.filter((url) => url === "/budgets/me")).toHaveLength(1);
@@ -377,15 +378,14 @@ describe("UserDashboard", () => {
     expect(calls.filter((url) => url === "/bills/me")).toHaveLength(1);
     expect(calls.filter((url) => url === "/purchases/summary")).toHaveLength(1);
 
-    // Pre-existing duplication (not introduced here): the budget and income
-    // thunks each fetch /expenses/me and fetchAllExpenses fetches it again.
-    // Two of these three requests are redundant; it is asserted, not fixed.
+    // Expenses are read once and shared: the budget and income slices no
+    // longer keep their own copies of /expenses/me.
     const expenseCalls = get.mock.calls.filter(([url]) => url === "/expenses/me");
-    expect(expenseCalls).toHaveLength(3);
+    expect(expenseCalls).toHaveLength(1);
     expect(expenseCalls.filter(([, config]) => config?.params)).toHaveLength(1);
 
-    // Six slice reads, then the recurring, bills and purchase planning reads.
-    expect(calls).toHaveLength(8);
+    // Three financial reads, then recurring, bills and purchase planning.
+    expect(calls).toHaveLength(6);
   });
 
   test("makes no further requests after unmount", async () => {
@@ -417,12 +417,12 @@ describe("UserDashboard", () => {
 
     const urls = get.mock.calls.map(([url]) => url);
     expect(urls.filter((url) => url === "/incomes/me")).toHaveLength(2);
-    expect(urls.filter((url) => url === "/expenses/me")).toHaveLength(6);
+    expect(urls.filter((url) => url === "/expenses/me")).toHaveLength(2);
     expect(urls.filter((url) => url === "/recurring/upcoming")).toHaveLength(2);
     expect(urls.filter((url) => url === "/bills/me")).toHaveLength(2);
     expect(urls.filter((url) => url === "/purchases/summary")).toHaveLength(2);
-    // 8 reads per mount, two independent mounts.
-    expect(urls).toHaveLength(16);
+    // 6 reads per mount, two independent mounts.
+    expect(urls).toHaveLength(12);
   });
 
   test("re-rendering the same dashboard adds no requests", async () => {
@@ -460,8 +460,8 @@ describe("UserDashboard", () => {
         get.mock.calls.filter(([url]) => url === "/budgets/me"),
       ).toHaveLength(2),
     );
-    // The effect re-ran once for the new userId: 8 more requests, not a loop.
-    expect(get.mock.calls).toHaveLength(16);
+    // The effect re-ran once for the new userId: 6 more requests, not a loop.
+    expect(get.mock.calls).toHaveLength(12);
   });
 
   test("keeps the section header and intelligence link", async () => {

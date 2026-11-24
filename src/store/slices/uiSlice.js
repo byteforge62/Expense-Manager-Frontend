@@ -45,5 +45,11 @@ const uiSlice = createSlice({
 
 export const { startLoading, stopLoading, setLoading } = uiSlice.actions;
 
+/* Primitives only: a loader that reads a boolean and a string re-renders when
+   those change, not when an unrelated counter moves. */
+export const selectIsLoading = (state) => state.ui?.isLoading ?? false;
+export const selectLoadingText = (state) =>
+  state.ui?.loadingText ?? "Processing request...";
+
 export default uiSlice.reducer;
 

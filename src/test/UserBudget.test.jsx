@@ -42,8 +42,10 @@ vi.mock("recharts", () => {
   };
 });
 
-import authReducer from "../redux/slices/authSlice";
-import budgetReducer from "../redux/slices/budgetSlice";
+import authReducer from "../store/slices/authSlice";
+import budgetReducer from "../store/slices/budgetSlice";
+import expensesReducer from "../store/slices/expensesSlice";
+import categoryReducer from "../store/slices/categorySlice";
 import { UserBudget } from "../components/User/Budget/UserBudget";
 
 const categories = [
@@ -69,7 +71,12 @@ const expense = (overrides = {}) => ({
 const makeStore = (user = { _id: "user-1", name: "Ada" }) => {
   const auth = authReducer(undefined, { type: "@@init" });
   return configureStore({
-    reducer: { auth: authReducer, budget: budgetReducer },
+    reducer: {
+      auth: authReducer,
+      budget: budgetReducer,
+      expenses: expensesReducer,
+      category: categoryReducer,
+    },
     preloadedState: { auth: { ...auth, user } },
   });
 };
@@ -294,7 +301,8 @@ describe("UserBudget", () => {
       }),
     );
     await waitFor(() => expect(callsTo("/budgets/me")).toBe(2));
-    expect(callsTo("/expenses/me")).toBe(2);
+    // Adding a budget does not change expenses, so they are not refetched.
+    expect(callsTo("/expenses/me")).toBe(1);
 
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     fireEvent.click(screen.getByRole("button", { name: /Add Budget/i }));

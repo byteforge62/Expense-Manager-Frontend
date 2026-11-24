@@ -41,8 +41,9 @@ vi.mock("recharts", () => {
   };
 });
 
-import authReducer from "../redux/slices/authSlice";
-import expenseReducer from "../redux/slices/expenseSlice";
+import authReducer from "../store/slices/authSlice";
+import expensesReducer from "../store/slices/expensesSlice";
+import categoryReducer from "../store/slices/categorySlice";
 import { UserExpenses } from "../components/User/Expense/UserExpenses";
 
 const categories = [
@@ -72,7 +73,11 @@ const expense = (overrides = {}) => ({
 const makeStore = (user = { _id: "user-1", name: "Ada" }) => {
   const auth = authReducer(undefined, { type: "@@init" });
   return configureStore({
-    reducer: { auth: authReducer, expense: expenseReducer },
+    reducer: {
+      auth: authReducer,
+      expenses: expensesReducer,
+      category: categoryReducer,
+    },
     preloadedState: { auth: { ...auth, user } },
   });
 };
@@ -319,9 +324,10 @@ describe("UserExpenses", () => {
     fireEvent.change(categorySelect, { target: { value: "cat-1" } });
 
     await waitFor(() => expect(lastParams("/expenses/me")).toEqual({ categoryID: "cat-1" }));
-    // The filter change re-runs the whole init effect, as it does today.
-    expect(callsTo("/categories")).toBe(2);
-    expect(callsTo("/expenses/recent")).toBe(2);
+    // Filters now drive only the ledger read: categories and the recent strip
+    // are reference data and are not refetched on every filter edit.
+    expect(callsTo("/categories")).toBe(1);
+    expect(callsTo("/expenses/recent")).toBe(1);
   });
 
   test("applies the date presets and custom range exactly as implemented", async () => {
@@ -372,7 +378,7 @@ describe("UserExpenses", () => {
     );
   });
 
-  test("re-runs the init effect once per filter edit and sends no pagination params", async () => {
+  test("re-runs the ledger read once per filter edit and sends no pagination params", async () => {
     mockHappyPath();
     renderExpenses();
     await waitForOverview();
@@ -383,8 +389,8 @@ describe("UserExpenses", () => {
     fireEvent.change(minInput, { target: { value: "1" } });
 
     await waitFor(() => expect(lastParams("/expenses/me")).toEqual({ minAmount: "1" }));
-    expect(callsTo("/categories")).toBe(2);
-    expect(callsTo("/expenses/recent")).toBe(2);
+    expect(callsTo("/categories")).toBe(1);
+    expect(callsTo("/expenses/recent")).toBe(1);
     expect(callsTo("/expenses/me")).toBe(2);
 
     // Legacy list mode: the page never sends page/limit/search/sortBy.

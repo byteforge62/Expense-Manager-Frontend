@@ -1,7 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from "../../redux/slices/userSlice";
-import { fetchAllTransactions } from "../../redux/slices/transactionSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  fetchUsers,
+  selectAllUsers,
+  selectUsersStatus,
+} from "../../store/slices/userSlice";
+import {
+  fetchAllTransactions,
+  selectAdminTransactions,
+  selectAdminTransactionsStatus,
+  selectAdminTransactionSummary,
+} from "../../store/slices/transactionSlice";
 import {
   BarChart,
   Bar,
@@ -51,13 +60,12 @@ import {
 const COLORS = ["#6366f1", "#10b981", "#a78bfa", "#4c6fa8", "#ef4444"];
 
 export const AdminDashboard = () => {
-  const dispatch = useDispatch();
-  const { users, loading: userLoading } = useSelector((state) => state.user);
-  const {
-    transactions,
-    summary,
-    loading: txLoading,
-  } = useSelector((state) => state.transaction);
+  const dispatch = useAppDispatch();
+  const users = useAppSelector(selectAllUsers);
+  const userLoading = useAppSelector(selectUsersStatus) === "loading";
+  const transactions = useAppSelector(selectAdminTransactions);
+  const summary = useAppSelector(selectAdminTransactionSummary);
+  const txLoading = useAppSelector(selectAdminTransactionsStatus) === "loading";
 
   const [txSearch, setTxSearch] = useState("");
   const [filterType, setFilterType] = useState("All"); // All, Income, Expense

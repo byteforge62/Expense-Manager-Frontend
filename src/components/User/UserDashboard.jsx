@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -18,12 +18,25 @@ import {
 } from "react-icons/fi";
 
 import axiosInstance from "../Utils/axiosInstance";
-import { fetchBudgetData } from "../../redux/slices/budgetSlice";
-import { fetchIncomeData } from "../../redux/slices/incomeSlice";
-import { fetchAllExpenses } from "../../redux/slices/expenseSlice";
+import {
+  fetchBudgets,
+  selectAllBudgets,
+  selectBudgetStatus,
+} from "../../store/slices/budgetSlice";
+import {
+  fetchIncomes,
+  selectAllIncomes,
+  selectIncomeStatus,
+} from "../../store/slices/incomeSlice";
+import {
+  fetchExpenses,
+  selectAllExpenses,
+  selectExpensesStatus,
+} from "../../store/slices/expensesSlice";
 
 import { DashboardSkeleton } from "./dashboard/DashboardSkeleton";
 import { DashboardHeader } from "./dashboard/DashboardHeader";
+import { WelcomeNotice } from "./dashboard/WelcomeNotice";
 import { FinancialSnapshotCard } from "./dashboard/FinancialSnapshotCard";
 import { MetricSummaryCards } from "./dashboard/MetricSummaryCards";
 import { AITextInsightCard, SpendingRiskCard } from "./dashboard/InsightCards";
@@ -51,16 +64,18 @@ import { PurchaseSnapshotCard } from "./dashboard/PurchaseSnapshotCard";
  */
 
 export const UserDashboard = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const userId = user?._id;
-  const budget = useSelector((state) => state.budget.budgets);
-  const loadingDashboard = useSelector(
-    (state) =>
-      state.budget.loading || state.income.loading || state.expense.loading,
-  );
-  const income = useSelector((state) => state.income.incomes);
-  const expenses = useSelector((state) => state.expense.expenses);
+  const dispatch = useAppDispatch();
+  // A primitive, not the whole user object: profile edits cannot re-render
+  // the dashboard unless the id itself changes.
+  const userId = useAppSelector((state) => state.auth.user?._id);
+  const budget = useAppSelector(selectAllBudgets);
+  const income = useAppSelector(selectAllIncomes);
+  const expenses = useAppSelector(selectAllExpenses);
+
+  const budgetLoading = useAppSelector(selectBudgetStatus) === "loading";
+  const incomeLoading = useAppSelector(selectIncomeStatus) === "loading";
+  const expensesLoading = useAppSelector(selectExpensesStatus) === "loading";
+  const loadingDashboard = budgetLoading || incomeLoading || expensesLoading;
   const [expenseInsights, setExpenseInsights] = useState("");
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [forecast, setForecast] = useState("");
@@ -211,9 +226,9 @@ export const UserDashboard = () => {
   useEffect(() => {
     if (!userId) return;
     Promise.all([
-      dispatch(fetchBudgetData(userId)),
-      dispatch(fetchIncomeData(userId)),
-      dispatch(fetchAllExpenses({ userId })),
+      dispatch(fetchBudgets(userId)),
+      dispatch(fetchIncomes(userId)),
+      dispatch(fetchExpenses({ userId })),
     ]).finally(() => setloadingCharts(false));
     fetchUpcomingRecurring();
     fetchPlanningSnapshot();
@@ -277,6 +292,13 @@ export const UserDashboard = () => {
       transition={{ duration: 0.4 }}
       sx={{ display: "flex", flexDirection: "column", gap: { xs: 3, md: 4 } }}
     >
+
+      <WelcomeNotice
+        onSeeded={() => {
+          fetchUpcomingRecurring();
+          fetchPlanningSnapshot();
+        }}
+      />
 
       <DashboardHeader />
 

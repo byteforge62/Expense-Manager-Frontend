@@ -1,122 +1,208 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axiosInstance from "../../components/Utils/axiosInstance";
+import { selectAllExpenses } from "./expensesSlice";
 
-/* Fetch Categories */
+/**
+ * --- BUDGETS ---
+ * Follows the reference pattern in `expensesSlice`:
+ * - one entity adapter for the budget rows,
+ * - one thunk per read/write,
+ * - every derived figure is a memoized selector.
+ *
+ * The budget summary used to be calculated inside a thunk that also fetched
+ * `/expenses/me`. That meant two copies of the same expenses in the store and
+ * a second network read on every budget page mount. The summary is now derived
+ * from the single normalized expenses slice instead.
+ */
 
-export const fetchCategories = createAsyncThunk(
-  "budget/fetchCategories",
-  async () => {
-    const res = await axiosInstance.get("/categories");
-    return res.data.data || res.data || [];
+const budgetsAdapter = createEntityAdapter({
+  selectId: (budget) => budget._id,
+});
+
+/* ─────────────────────────── ASYNC THUNKS ─────────────────────────── */
+
+export const fetchBudgets = createAsyncThunk(
+  "budget/fetchAll",
+  async (userId, { rejectWithValue }) => {
+    if (!userId) return [];
+    try {
+      const res = await axiosInstance.get("/budgets/me");
+      return res?.data?.data || res?.data || [];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+  {
+    condition: (userId, { getState }) =>
+      Boolean(userId) && getState().budget?.status !== "loading",
   },
 );
-
-/* Fetch Budget + Expenses */
-
-export const fetchBudgetData = createAsyncThunk(
-  "budget/fetchBudgetData",
-  async (userId) => {
-    if (!userId) return { budgets: [], expenses: [], summary: [] };
-    const [bRes, eRes] = await Promise.all([
-      axiosInstance.get("/budgets/me"),
-      axiosInstance.get("/expenses/me"),
-    ]);
-
-    const budgets = bRes.data.data || bRes.data || [];
-    const expenses = eRes.data.data || eRes.data || [];
-
-    const summary = budgets.map((b) => {
-      const catId =
-        typeof b.categoryID === "object" ? b.categoryID?._id : b.categoryID;
-
-      const catName =
-        typeof b.categoryID === "object" ? b.categoryID?.name : "Unknown";
-
-      const spent = expenses
-        .filter((e) => {
-          const eCat =
-            typeof e.categoryID === "object" ? e.categoryID?._id : e.categoryID;
-          return eCat === catId;
-        })
-        .reduce((sum, e) => sum + Number(e.amount || 0), 0);
-
-      return {
-        id: b._id,
-        category: catName,
-        allocated: Number(b.amount) || 0,
-        spent,
-        remaining: Number(b.amount) - spent,
-      };
-    });
-
-    return {
-      budgets,
-      expenses,
-      summary,
-    };
-  },
-);
-
-/* AI Budget Plan */
 
 export const fetchBudgetPlan = createAsyncThunk(
-  "budget/fetchBudgetPlan",
-  async (userId) => {
+  "budget/fetchPlan",
+  async (userId, { rejectWithValue }) => {
     if (!userId) return null;
-    const res = await axiosInstance.get("/ai/budget-plan");
-    return res.data.data;
+    try {
+      const res = await axiosInstance.get("/ai/budget-plan");
+      return res?.data?.data ?? null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   },
 );
 
-const initialState = {
-  budgets: [],
+export const createBudget = createAsyncThunk(
+  "budget/create",
+  async ({ categoryID, amount, description }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("/budget", {
+        categoryID,
+        amount,
+        description,
+      });
+      return res?.data?.data ?? res?.data ?? null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
 
-  expenses: [],
+export const removeBudget = createAsyncThunk(
+  "budget/remove",
+  async (id, { rejectWithValue }) => {
+    try {
+      await axiosInstance.delete(`/budget/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
 
-  summary: [],
+/* ─────────────────────────── SLICE ─────────────────────────── */
 
-  categories: [],
-
-  budgetPlan: null,
-
-  loading: false,
-};
+const initialState = budgetsAdapter.getInitialState({
+  status: "idle",
+  error: null,
+  plan: null,
+  planStatus: "idle",
+});
 
 const budgetSlice = createSlice({
   name: "budget",
-
   initialState,
-
   reducers: {},
-
   extraReducers: (builder) => {
     builder
-
-      .addCase(fetchBudgetData.pending, (state) => {
-        state.loading = true;
+      .addCase(fetchBudgets.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchBudgets.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        budgetsAdapter.setAll(state, action.payload);
+      })
+      .addCase(fetchBudgets.rejected, (state, action) => {
+        state.status = "failed";
+        state.error =
+          action.payload?.message || action.error?.message || "Failed to load budgets";
       })
 
-      .addCase(fetchBudgetData.fulfilled, (state, action) => {
-        state.loading = false;
-
-        state.budgets = action.payload.budgets;
-
-        state.expenses = action.payload.expenses;
-
-        state.summary = action.payload.summary;
+      .addCase(fetchBudgetPlan.pending, (state) => {
+        state.planStatus = "loading";
       })
-
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.categories = action.payload;
-      })
-
       .addCase(fetchBudgetPlan.fulfilled, (state, action) => {
-        state.budgetPlan = action.payload;
+        state.planStatus = "succeeded";
+        state.plan = action.payload;
       })
-      .addCase(fetchBudgetData.rejected, (state) => {
-        state.loading = false;
+      .addCase(fetchBudgetPlan.rejected, (state) => {
+        state.planStatus = "failed";
+      })
+
+      .addCase(createBudget.fulfilled, (state, action) => {
+        if (action.payload?._id) budgetsAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(removeBudget.fulfilled, (state, action) => {
+        budgetsAdapter.removeOne(state, action.payload);
       });
   },
 });
+
+/* ─────────────────────────── SELECTORS ─────────────────────────── */
+
+const budgetSelectors = budgetsAdapter.getSelectors((state) => state.budget);
+
+export const {
+  selectAll: selectAllBudgets,
+  selectById: selectBudgetById,
+  selectTotal: selectBudgetCount,
+} = budgetSelectors;
+
+export const selectBudgetStatus = (state) => state.budget?.status ?? "idle";
+export const selectBudgetError = (state) => state.budget?.error ?? null;
+export const selectBudgetPlan = (state) => state.budget?.plan ?? null;
+export const selectBudgetPlanStatus = (state) =>
+  state.budget?.planStatus ?? "idle";
+
+/** Budget rows joined with the spend recorded against their category. */
+export const selectBudgetSummary = createSelector(
+  [selectAllBudgets, selectAllExpenses],
+  (budgets, expenses) => {
+    // One pass to total spend per category instead of a filter per budget.
+    const spentByCategory = new Map();
+    expenses.forEach((expense) => {
+      const categoryId =
+        typeof expense.categoryID === "object"
+          ? expense.categoryID?._id
+          : expense.categoryID;
+      spentByCategory.set(
+        categoryId,
+        (spentByCategory.get(categoryId) || 0) + Number(expense.amount || 0),
+      );
+    });
+
+    return budgets.map((budget) => {
+      const categoryId =
+        typeof budget.categoryID === "object"
+          ? budget.categoryID?._id
+          : budget.categoryID;
+      const categoryName =
+        typeof budget.categoryID === "object"
+          ? budget.categoryID?.name
+          : "Unknown";
+      const allocated = Number(budget.amount) || 0;
+      const spent = spentByCategory.get(categoryId) || 0;
+
+      return {
+        id: budget._id,
+        category: categoryName,
+        allocated,
+        spent,
+        remaining: allocated - spent,
+      };
+    });
+  },
+);
+
+/** The four header figures, computed in one memoized slice of work. */
+export const selectBudgetTotals = createSelector(
+  [selectBudgetSummary],
+  (summary) =>
+    summary.reduce(
+      (totals, item) => ({
+        allocated: totals.allocated + item.allocated,
+        spent: totals.spent + item.spent,
+        remaining: totals.remaining + item.remaining,
+        overBudgetCount:
+          totals.overBudgetCount + (item.spent > item.allocated ? 1 : 0),
+      }),
+      { allocated: 0, spent: 0, remaining: 0, overBudgetCount: 0 },
+    ),
+);
 
 export default budgetSlice.reducer;

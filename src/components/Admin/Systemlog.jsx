@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchLogs } from "../../redux/slices/logSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  fetchLogs,
+  selectAllLogs,
+  selectLogsError,
+  selectLogsLoading,
+} from "../../store/slices/logSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -33,8 +38,10 @@ import {
 } from "react-icons/fi";
 
 export const Systemlog = () => {
-  const dispatch = useDispatch();
-  const { logs, loading, error } = useSelector((state) => state.log);
+  const dispatch = useAppDispatch();
+  const logs = useAppSelector(selectAllLogs);
+  const loading = useAppSelector(selectLogsLoading);
+  const error = useAppSelector(selectLogsError);
   // Defensive: a malformed payload must never break the audit table.
   const safeLogs = Array.isArray(logs) ? logs : [];
   const [search, setSearch] = useState("");

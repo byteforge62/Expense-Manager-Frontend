@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import axiosInstance from "../../Utils/axiosInstance";
 import { AnimatePresence } from "framer-motion";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
+  createBudget,
   fetchBudgetPlan,
-  fetchBudgetData,
+  fetchBudgets,
+  removeBudget,
+  selectAllBudgets,
+  selectBudgetPlan,
+  selectBudgetSummary,
+  selectBudgetTotals,
+} from "../../../store/slices/budgetSlice";
+import {
   fetchCategories,
-} from "../../../redux/slices/budgetSlice";
+  selectAllCategories,
+} from "../../../store/slices/categorySlice";
+import { fetchExpenses } from "../../../store/slices/expensesSlice";
 import { FiGrid, FiPieChart, FiCpu, FiSettings } from "react-icons/fi";
 
 import { Shimmer } from "./budget/budgetUi";
@@ -28,12 +37,13 @@ import ConfirmDeleteDialog from "./budget/ConfirmDeleteDialog";
 
 // --- MAIN COMPONENT ---
 export const UserBudget = () => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const { budgets, summary, categories, budgetPlan } = useSelector(
-    (state) => state.budget,
-  );
-  const userId = user?._id ?? null;
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.auth.user?._id ?? null);
+  const budgets = useAppSelector(selectAllBudgets);
+  const summary = useAppSelector(selectBudgetSummary);
+  const totals = useAppSelector(selectBudgetTotals);
+  const categories = useAppSelector(selectAllCategories);
+  const budgetPlan = useAppSelector(selectBudgetPlan);
 
   // Dashboard quick action: /private/budget?action=add opens the dialog.
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,13 +89,17 @@ export const UserBudget = () => {
     if (!userId) return;
     try {
       setIsSubmitting(true);
-      await axiosInstance.post("/budget", {
-        ...newBudget,
-        amount: Number(newBudget.amount),
-      });
+      await dispatch(
+        createBudget({
+          categoryID: newBudget.categoryID,
+          amount: Number(newBudget.amount),
+          description: newBudget.description,
+        }),
+      ).unwrap();
       setIsModalOpen(false);
       setNewBudget({ categoryID: "", amount: "", description: "" });
-      dispatch(fetchBudgetData(userId));
+      // Refetch so the new row carries its populated category.
+      dispatch(fetchBudgets(userId));
     } catch (error) {
       console.error("Add budget error:", error);
     } finally {
@@ -98,10 +112,10 @@ export const UserBudget = () => {
     if (!selectedBudget) return;
     try {
       setIsDeleting(true);
-      await axiosInstance.delete(`/budget/${selectedBudget._id}`);
+      await dispatch(removeBudget(selectedBudget._id)).unwrap();
       setConfirmDeleteOpen(false);
       setSelectedBudget(null);
-      dispatch(fetchBudgetData(userId));
+      dispatch(fetchBudgets(userId));
     } catch (error) {
       console.error("Delete error:", error);
     } finally {
@@ -110,17 +124,21 @@ export const UserBudget = () => {
   };
 
   // --- LIFECYCLE ---
+  // Budgets and expenses are separate reads with one owner each; the summary
+  // is derived from both, so neither page stores its own copy of expenses.
   useEffect(() => {
     if (!userId) return;
     dispatch(fetchCategories());
-    dispatch(fetchBudgetData(userId));
+    dispatch(fetchBudgets(userId));
+    dispatch(fetchExpenses({ userId }));
   }, [dispatch, userId]);
 
   // --- ANALYTICS DERIVATION ---
-  const totalAllocated = summary.reduce((s, i) => s + i.allocated, 0);
-  const totalSpent = summary.reduce((s, i) => s + i.spent, 0);
-  const totalRemaining = summary.reduce((s, i) => s + i.remaining, 0);
-  const overBudgetCount = summary.filter((i) => i.spent > i.allocated).length;
+  // One memoized pass in the store; nothing is recomputed per render.
+  const totalAllocated = totals.allocated;
+  const totalSpent = totals.spent;
+  const totalRemaining = totals.remaining;
+  const overBudgetCount = totals.overBudgetCount;
 
   const tabs = [
     { id: "overview", label: "Overview", icon: <FiGrid size={14} /> },

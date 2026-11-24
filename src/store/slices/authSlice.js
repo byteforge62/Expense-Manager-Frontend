@@ -129,4 +129,12 @@ const authSlice = createSlice({
 });
 export const { loginSuccess, logout, setLoading, updateToken, updateUser } =
   authSlice.actions;
+
+/* Granular selectors. Components subscribe to the field they render, so a
+   profile edit does not re-render anything that only needs the user id. */
+export const selectCurrentUser = (state) => state.auth?.user ?? null;
+export const selectUserId = (state) => state.auth?.user?._id ?? null;
+export const selectAuthToken = (state) => state.auth?.token ?? null;
+export const selectIsAuthenticated = (state) => Boolean(state.auth?.user);
+
 export default authSlice.reducer;

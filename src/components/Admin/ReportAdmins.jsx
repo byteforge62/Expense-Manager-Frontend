@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchAdminReport } from "../../redux/slices/adminReportSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  fetchAdminReport,
+  selectAdminReportLoading,
+  selectAdminStats,
+} from "../../store/slices/adminReportSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -39,8 +43,9 @@ import {
 const COLORS = ["#a78bfa", "#10b981", "#f59e0b", "#ef4444", "#3E6BB5"];
 
 export const ReportAdmins = () => {
-  const dispatch = useDispatch();
-  const { stats, loading } = useSelector((state) => state.adminReport);
+  const dispatch = useAppDispatch();
+  const stats = useAppSelector(selectAdminStats);
+  const loading = useAppSelector(selectAdminReportLoading);
 
   useEffect(() => {
     dispatch(fetchAdminReport());

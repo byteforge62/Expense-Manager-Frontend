@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 // =============== STATE MANAGEMENT ===============
 // Redux setup for global state handling
 import { Provider } from "react-redux";
-import { store } from "./redux/store.js";
+import { store } from "./store/store.js";
 
 // We inject the store into axios so we can handle 401s and loading 
 // states globally without being inside a React component.

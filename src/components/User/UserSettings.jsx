@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../store/hooks";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -23,7 +23,7 @@ import {
 import axiosInstance from "../Utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
-import { updateUser as updateAuthUser } from "../../redux/slices/authSlice";
+import { updateUser as updateAuthUser } from "../../store/slices/authSlice";
 
 /**
  * Settings — the single place where account, appearance, notification and
@@ -79,7 +79,7 @@ const Section = ({ title, description, children }) => (
 
 export const UserSettings = () => {
   const { userId } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { user: authUser, updateUser: updateContextUser } = useAuth();
   const { theme, setTheme } = useTheme();
 

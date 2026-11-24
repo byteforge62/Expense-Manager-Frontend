@@ -1,7 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactions } from "../../redux/slices/transactionSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  selectTransactionSummary,
+  selectTransactions,
+  selectTransactionsLoading,
+} from "../../store/slices/transactionSlice";
+import { fetchExpenses } from "../../store/slices/expensesSlice";
+import { fetchIncomes } from "../../store/slices/incomeSlice";
+import { fetchBudgets } from "../../store/slices/budgetSlice";
 import {
   FiTrendingUp,
   FiTrendingDown,
@@ -51,20 +58,26 @@ const TransactionSkeleton = () => (
 
 // --- MAIN COMPONENT ---
 export const Transaction = () => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const { transactions, summary, loading } = useSelector(
-    (state) => state.transaction,
-  );
-  
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.auth.user?._id);
+
+  // The ledger is derived from the normalized slices, so this page owns no
+  // copy of the data and no merge thunk: one selector, already memoized.
+  const transactions = useAppSelector(selectTransactions);
+  const summary = useAppSelector(selectTransactionSummary);
+  const loading = useAppSelector(selectTransactionsLoading);
+
   // --- STATE & CONFIG ---
   const [activeTab, setActiveTab] = useState("All");
-  const userId = useMemo(() => user?._id, [user]);
 
   // --- LIFECYCLE ---
+  // Make sure the three source slices are populated on a direct visit. Each
+  // thunk is a no-op while its own request is already in flight.
   useEffect(() => {
     if (!userId) return;
-    dispatch(fetchTransactions(userId));
+    dispatch(fetchExpenses({ userId }));
+    dispatch(fetchIncomes(userId));
+    dispatch(fetchBudgets(userId));
   }, [dispatch, userId]);
 
   // --- DATA PROCESSING ---

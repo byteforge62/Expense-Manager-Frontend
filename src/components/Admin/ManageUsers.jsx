@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchUsers, deleteUser } from "../../redux/slices/userSlice";
+import {
+  fetchUsers,
+  deleteUser,
+  selectAllUsers,
+  selectUsersStatus,
+} from "../../store/slices/userSlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -32,8 +37,9 @@ import { IoSearch } from "react-icons/io5";
 import { FiUsers, FiFilter, FiActivity } from "react-icons/fi";
 
 export const ManageUsers = () => {
-  const dispatch = useDispatch();
-  const { users = [], loading } = useSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const users = useAppSelector(selectAllUsers);
+  const loading = useAppSelector(selectUsersStatus) === "loading";
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");

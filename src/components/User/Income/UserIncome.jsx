@@ -1,12 +1,24 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../../Utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
-  fetchIncomeData,
+  fetchIncomes,
   fetchRecurring,
-} from "../../../redux/slices/incomeSlice";
+  selectAllIncomes,
+  selectAllRecurring,
+  selectAverageIncome,
+  selectIncomeStats,
+  selectIncomeStatus,
+  selectIncomeTips,
+  selectMonthlyIncomeExpense,
+  selectMonthlyIncomeTrend,
+} from "../../../store/slices/incomeSlice";
+import {
+  fetchExpenses,
+  selectExpensesStatus,
+} from "../../../store/slices/expensesSlice";
 import { AnimatePresence } from "framer-motion";
 import {
   FiBarChart2,
@@ -30,24 +42,25 @@ import AddIncomeDialog from "./income/AddIncomeDialog";
 
 // --- MAIN COMPONENT ---
 export const UserIncome = () => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
-  const { incomes, expenses, recurringPayments, loading } = useSelector(
-    (state) => state.income,
-  );
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.auth.user?._id);
+
+  const incomes = useAppSelector(selectAllIncomes);
+  const recurringPayments = useAppSelector(selectAllRecurring);
+
+  // Every figure below is computed once in the store and memoized.
+  const stats = useAppSelector(selectIncomeStats);
+  const tips = useAppSelector(selectIncomeTips);
+  const monthlyIncomeExpense = useAppSelector(selectMonthlyIncomeExpense);
+  const monthlyIncomeTrend = useAppSelector(selectMonthlyIncomeTrend);
+  const avgIncome = useAppSelector(selectAverageIncome);
+
+  const incomeLoading = useAppSelector(selectIncomeStatus) === "loading";
+  const expensesLoading = useAppSelector(selectExpensesStatus) === "loading";
+  const loading = incomeLoading || expensesLoading;
 
   // --- UI STATE ---
   const [activeTab, setActiveTab] = useState("summary");
-  const [stats, setStats] = useState({
-    totalIncome: 0,
-    totalExpense: 0,
-    netSavings: 0,
-    savingsRate: 0,
-  });
-  const [tips, setTips] = useState([]);
-  const [monthlyIncomeExpense, setMonthlyIncomeExpense] = useState([]);
-  const [monthlyIncomeTrend, setMonthlyIncomeTrend] = useState([]);
-  const [avgIncome, setAvgIncome] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -58,7 +71,6 @@ export const UserIncome = () => {
     formState: { errors },
   } = useForm();
 
-  const userId = useMemo(() => user?._id, [user]);
 
   // Dashboard quick action: /private/income?action=add opens the dialog.
   const [searchParams, setSearchParams] = useSearchParams();
@@ -81,73 +93,6 @@ export const UserIncome = () => {
   });
   const [recurringLoading, setRecurringLoading] = useState(false);
 
-  // --- ANALYTICS DERIVATION ---
-
-  // Processes raw transaction data into human-readable analytics and chart data
-  const computeAnalytics = (incomesData, expensesData) => {
-    const totalIncome = incomesData.reduce((sum, i) => sum + i.amount, 0);
-    const totalExpense = expensesData.reduce((sum, e) => sum + e.amount, 0);
-    const netSavings = totalIncome - totalExpense;
-    const savingsRate =
-      totalIncome > 0 ? ((netSavings / totalIncome) * 100).toFixed(2) : 0;
-
-    setStats({ totalIncome, totalExpense, netSavings, savingsRate });
-
-    const months = Array.from({ length: 12 }, () => ({
-      income: 0,
-      expense: 0,
-    }));
-    incomesData.forEach((inc) => {
-      const date = new Date(inc.date);
-      if (!isNaN(date)) {
-        const m = date.getMonth();
-        months[m].income += inc.amount;
-      }
-    });
-    expensesData.forEach((exp) => {
-      const date = new Date(exp.date);
-      if (!isNaN(date)) {
-        const m = date.getMonth();
-        months[m].expense += exp.amount;
-      }
-    });
-
-    const monthly = months.map((m, idx) => ({
-      month: new Date(0, idx).toLocaleString("default", { month: "short" }),
-      income: m.income,
-      expense: m.expense,
-    }));
-
-    setMonthlyIncomeExpense(monthly);
-    setMonthlyIncomeTrend(
-      monthly.map((m) => ({ month: m.month, amount: m.income })),
-    );
-    setAvgIncome(months.reduce((a, b) => a + b.income, 0) / 12);
-
-    // Generate AI-driven financial coaching tips based on savings rate
-    let suggestedTips = [];
-    if (savingsRate < 20) {
-      suggestedTips = [
-        "Your savings rate is below 20%. Consider auditing small recurring expenses.",
-        "The 50/30/20 rule suggests 20% for savings. You're almost there!",
-        "Try a 'no-spend' weekend once a month to boost your net savings.",
-      ];
-    } else if (savingsRate < 40) {
-      suggestedTips = [
-        "Excellent! Your savings rate is healthy. Consider an emergency fund.",
-        "Automate your savings to move money before you have a chance to spend it.",
-        "Review your investments; you have enough surplus to start compounding.",
-      ];
-    } else {
-      suggestedTips = [
-        "Super saver! You are building wealth rapidly. Keep it up!",
-        "Look for tax-advantaged investment vehicles for your high surplus.",
-        "Consider diversifying into low-risk assets to protect your gains.",
-      ];
-    }
-    setTips(suggestedTips);
-  };
-
   // --- ACTIONS & HANDLERS ---
 
   // Handle addition of a new income stream
@@ -162,7 +107,7 @@ export const UserIncome = () => {
       if (res.status === 201) {
         setIsModalOpen(false);
         reset();
-        dispatch(fetchIncomeData(userId));
+        dispatch(fetchIncomes(userId));
       }
     } catch (error) {
       console.error("Failed to record income:", error);
@@ -175,7 +120,7 @@ export const UserIncome = () => {
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/income/${id}`);
-      dispatch(fetchIncomeData(userId));
+      dispatch(fetchIncomes(userId));
     } catch (error) {
       console.error("Failed to remove record:", error);
     }
@@ -225,14 +170,11 @@ export const UserIncome = () => {
   // --- LIFECYCLE ---
   useEffect(() => {
     if (!userId) return;
-    dispatch(fetchIncomeData(userId));
+    dispatch(fetchIncomes(userId));
+    // Expenses are shared state, owned by the expenses slice.
+    dispatch(fetchExpenses({ userId }));
     dispatch(fetchRecurring(userId));
   }, [dispatch, userId]);
-
-  useEffect(() => {
-    if (!incomes.length && !expenses.length) return;
-    computeAnalytics(incomes, expenses);
-  }, [incomes, expenses]);
 
   const tabs = [
     { id: "summary", label: "Summary", icon: <FiAlignLeft size={14} /> },

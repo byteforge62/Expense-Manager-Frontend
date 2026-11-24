@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
+import { selectCurrentUser } from "../../store/slices/authSlice";
 import { motion } from "framer-motion";
 import Box from "@mui/material/Box";
 import { Navbar } from "../Common/Navbar";
@@ -10,7 +11,7 @@ import { Navbar } from "../Common/Navbar";
  */
 
 export const PrivateRoutes = () => {
-  const { user } = useSelector((state) => state.auth);
+  const user = useAppSelector(selectCurrentUser);
 
   if (!user) {
     return <Navigate to="/login" replace />;

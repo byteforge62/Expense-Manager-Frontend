@@ -13,7 +13,7 @@ vi.mock("../components/Utils/axiosInstance", () => ({
   resolveApiBaseUrl: vi.fn(),
 }));
 
-import logReducer, { extractLogs } from "../redux/slices/logSlice";
+import logReducer, { extractLogs } from "../store/slices/logSlice";
 import { Systemlog } from "../components/Admin/Systemlog";
 
 const buildLogs = () => [

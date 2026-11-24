@@ -2,14 +2,16 @@ import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   fetchCategories,
+  selectAllCategories,
+  selectCategoriesLoading,
   addCategory,
   updateCategory,
   // Ensure this is correctly imported or managed in your slice:
   // deleteCategory as deleteCategoryAction 
-} from "../../redux/slices/categorySlice";
+} from "../../store/slices/categorySlice";
 
 // ================ Material UI Components ================
 import Box from "@mui/material/Box";
@@ -36,8 +38,9 @@ import Avatar from "@mui/material/Avatar";
 import { FiGrid, FiActivity, FiFileText, FiSearch, FiX, FiCheck, FiEdit2, FiTrash2 } from "react-icons/fi";
 
 export const ManageCategories = () => {
-  const { categories = [], loading } = useSelector((state) => state.category);
-  const dispatch = useDispatch();
+  const categories = useAppSelector(selectAllCategories);
+  const loading = useAppSelector(selectCategoriesLoading);
+  const dispatch = useAppDispatch();
 
   const {
     register,

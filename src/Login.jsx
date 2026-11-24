@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "./redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { selectIsLoading } from "./store/slices/uiSlice";
+import { loginSuccess } from "./store/slices/authSlice";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,8 +31,8 @@ import fintrackMark from "./assets/brand/fintrack-mark.svg";
  * Authenticates the user and routes them to the right dashboard.
  */
 export const Login = () => {
-  const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.ui);
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(selectIsLoading);
   const {
     register,
     handleSubmit,
@@ -67,6 +68,7 @@ export const Login = () => {
           null;
         const role = user?.role || responseData?.role || res.data?.role;
         const token = responseData?.token || res.data?.token;
+        const welcome = responseData?.welcome || null;
 
         const loginData = { user, role, token };
 
@@ -79,9 +81,12 @@ export const Login = () => {
           return;
         }
 
-        toast.success("Login successful! Welcome back.", {
+        // The server greets the account on every login and points a brand-new
+        // (empty) ledger at its first expense. Older responses fall back to a
+        // plain welcome.
+        toast.success(welcome?.message || "Login successful! Welcome back.", {
           position: "top-center",
-          autoClose: 2000,
+          autoClose: 4000,
         });
 
         dispatch(loginSuccess(loginData));
