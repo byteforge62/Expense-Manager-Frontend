@@ -152,7 +152,7 @@ describe("UserExpenses", () => {
     vi.stubGlobal("confirm", vi.fn(() => true));
   });
 
-  test("renders the header, stat cards, tabs and the Overview tab by default", async () => {
+  test("renders the header, the spend statement and every section on one page", async () => {
     mockHappyPath();
     renderExpenses();
     await waitForOverview();
@@ -163,31 +163,31 @@ describe("UserExpenses", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Add Expense/i })).toBeInTheDocument();
 
-    for (const label of ["Overview", "Analytics", "Records"]) {
-      expect(screen.getByRole("button", { name: new RegExp(label) })).toBeInTheDocument();
-    }
+    // No tab strip: every section is mounted together.
+    expect(screen.queryByRole("tab")).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Overview/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Analytics/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Records/ })).toBeNull();
 
     expect(screen.getByText("Total Expenses")).toBeInTheDocument();
+    expect(screen.getByText("Monthly trend")).toBeInTheDocument();
+    expect(screen.getByText("Spending Breakdown")).toBeInTheDocument();
+    expect(screen.getByText("Financial Ledger")).toBeInTheDocument();
+    expect(screen.getByText("Recent Expenses")).toBeInTheDocument();
     expect(screen.getByText("2 Entries")).toBeInTheDocument();
     expect(screen.getByText("Coffee")).toBeInTheDocument();
-    expect(screen.queryByText("Monthly trend")).toBeNull();
-    expect(screen.queryByText("Financial Ledger")).toBeNull();
   });
 
-  test("renders every empty state", async () => {
+  test("renders every empty state at once", async () => {
     mockApi();
     renderExpenses();
     await waitForOverview();
 
     expect(screen.getByText("No recent expenses found.")).toBeInTheDocument();
     expect(screen.getByText("0 Entries")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-    expect(await screen.findByText("Your records are empty")).toBeInTheDocument();
+    expect(screen.getByText("Your records are empty")).toBeInTheDocument();
     expect(screen.getByText("0 Records")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
-    expect(await screen.findByText("No categorization data available.")).toBeInTheDocument();
+    expect(screen.getByText("No categorization data available.")).toBeInTheDocument();
   });
 
   test("computes totals, average, top category and chart data with the existing windows", async () => {
@@ -199,12 +199,11 @@ describe("UserExpenses", () => {
     expect(screen.getByText(inr(1800))).toBeInTheDocument();
     // (1000 + 500 + 300) / 3 = 600
     expect(screen.getByText(inr(600))).toBeInTheDocument();
-    // This-month card only counts the current-month row.
-    expect(screen.getByText(inr(1000))).toBeInTheDocument();
+    // This-month figure also appears as a ledger row amount.
+    expect(screen.getAllByText(inr(1000)).length).toBeGreaterThanOrEqual(1);
     // Groceries 1300 > Rent 500 (the invalid-date row still counts here).
-    expect(screen.getByText("Groceries")).toBeInTheDocument();
+    expect(screen.getAllByText("Groceries").length).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
     const [bar, pie] = await screen.findAllByTestId("chart");
 
     const trend = JSON.parse(bar.getAttribute("data-json"));
@@ -268,7 +267,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     expect(await screen.findByText("3 Records")).toBeInTheDocument();
 
     expect(screen.queryByText(/edit/i)).toBeNull();
@@ -289,7 +287,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     await screen.findByText("3 Records");
 
     fireEvent.click(screen.getAllByTitle("Delete Record")[0]);
@@ -305,7 +302,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     fireEvent.click((await screen.findAllByTitle("Delete Record"))[0]);
 
     expect(confirm).toHaveBeenCalled();
@@ -318,7 +314,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     const categorySelect = await screen.findByDisplayValue("All Categories");
 
     fireEvent.change(categorySelect, { target: { value: "cat-1" } });
@@ -335,7 +330,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     const preset = await screen.findByDisplayValue("All Time");
 
     // Mirrors the component's own (timezone-sensitive) computation.
@@ -383,7 +377,6 @@ describe("UserExpenses", () => {
     renderExpenses();
     await waitForOverview();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     const minInput = await screen.findByPlaceholderText("Min ₹");
 
     fireEvent.change(minInput, { target: { value: "1" } });
@@ -416,7 +409,6 @@ describe("UserExpenses", () => {
     fireEvent.click(within(dialog).getAllByRole("button")[0]);
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
     await screen.findByText("3 Records");
     expect(screen.queryByText(/recurring/i)).toBeNull();
     expect(screen.queryByRole("button", { name: /recurring/i })).toBeNull();
@@ -469,27 +461,25 @@ describe("UserExpenses", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  test("switches tabs and opens the dialog from every existing trigger", async () => {
+  test("opens the dialog from every existing trigger without leaving the page", async () => {
     mockApi();
     renderExpenses();
     await waitForOverview();
 
-    // Overview empty-state CTA.
-    fireEvent.click(screen.getByRole("button", { name: /\+ Add New Expense/i }));
+    // Header action.
+    fireEvent.click(screen.getByRole("button", { name: /Add Expense/i }));
     let dialog = await screen.findByRole("dialog");
     expect(within(dialog).getByText("New Expense")).toBeInTheDocument();
     fireEvent.click(within(dialog).getAllByRole("button")[0]);
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
-    expect(await screen.findByText("Monthly trend")).toBeInTheDocument();
-    expect(screen.getByText("Spending Breakdown")).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByText("Recent Expenses")).toBeNull());
+    // Recent list empty-state CTA.
+    fireEvent.click(screen.getByRole("button", { name: /\+ Add New Expense/i }));
+    dialog = await screen.findByRole("dialog");
+    fireEvent.click(within(dialog).getAllByRole("button")[0]);
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-    expect(await screen.findByText("Financial Ledger")).toBeInTheDocument();
-
-    // Records empty-state CTA and the header "NEW RECORD" button both open it.
+    // Ledger empty-state CTA and the ledger header button both open it too.
     fireEvent.click(screen.getByRole("button", { name: /REGISTER EXPENSE/i }));
     dialog = await screen.findByRole("dialog");
     fireEvent.click(within(dialog).getAllByRole("button")[0]);
@@ -500,8 +490,9 @@ describe("UserExpenses", () => {
     fireEvent.click(within(dialog).getAllByRole("button")[0]);
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
 
-    fireEvent.click(screen.getByRole("button", { name: /Overview/ }));
-    expect(await screen.findByText("Recent Expenses")).toBeInTheDocument();
+    // Still the same single page: no view switch happened.
+    expect(screen.getByText("Financial Ledger")).toBeInTheDocument();
+    expect(screen.getByText("Recent Expenses")).toBeInTheDocument();
   });
 
   test("issues one request per endpoint on mount, in the existing order", async () => {
@@ -542,7 +533,6 @@ describe("UserExpenses", () => {
     expect(screen.getByText("2 Entries")).toBeInTheDocument();
     expect(screen.getAllByText("Uncategorized")).toHaveLength(2);
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
     const [bar, pie] = await screen.findAllByTestId("chart");
     expect(JSON.parse(bar.getAttribute("data-json"))).toHaveLength(12);
     // Both zero rows fall into "Other" because one category is unpopulated.

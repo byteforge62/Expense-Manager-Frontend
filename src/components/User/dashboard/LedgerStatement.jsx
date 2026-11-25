@@ -62,7 +62,7 @@ export const LedgerStatement = ({
         position: "relative",
         border: 1,
         borderColor: "divider",
-        borderRadius: "14px",
+        borderRadius: "12px",
         bgcolor: "background.paper",
         boxShadow: "var(--shadow-panel)",
         overflow: "hidden",
@@ -71,7 +71,7 @@ export const LedgerStatement = ({
       <Box
         aria-hidden
         sx={{
-          height: 3,
+          height: 2,
           background:
             "linear-gradient(90deg, var(--primary) 0%, var(--primary) 22%, color-mix(in srgb, var(--primary) 18%, transparent) 62%, transparent 100%)",
         }}
@@ -80,11 +80,11 @@ export const LedgerStatement = ({
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { xs: "1fr", lg: "minmax(0, 1.32fr) minmax(0, 0.68fr)" },
+          gridTemplateColumns: { xs: "1fr", lg: "minmax(0, 1.4fr) minmax(0, 0.6fr)" },
         }}
       >
         {/* ── The balance ── */}
-        <Box sx={{ p: { xs: 2.5, sm: 3.25, md: 3.75 } }}>
+        <Box sx={{ p: { xs: 1.75, sm: 2, md: 2.2 } }}>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -94,7 +94,7 @@ export const LedgerStatement = ({
             <Typography
               id="ledger-statement-heading"
               sx={{
-                fontSize: 12,
+                fontSize: 11.5,
                 fontWeight: 600,
                 letterSpacing: "0.01em",
                 color: "text.secondary",
@@ -102,19 +102,19 @@ export const LedgerStatement = ({
             >
               Net position
             </Typography>
-            <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+            <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
               This month
             </Typography>
           </Stack>
 
           <Typography
             sx={{
-              mt: 1.25,
+              mt: 0.6,
               fontFamily: "var(--font-display)",
-              fontSize: { xs: "2.7rem", sm: "3.35rem", md: "3.7rem" },
+              fontSize: { xs: "1.9rem", sm: "2.1rem", md: "2.25rem" },
               fontWeight: 700,
-              letterSpacing: "-0.055em",
-              lineHeight: 0.98,
+              letterSpacing: "-0.05em",
+              lineHeight: 1,
               fontVariantNumeric: "tabular-nums",
               color: hasActivity
                 ? netSavings >= 0
@@ -132,9 +132,9 @@ export const LedgerStatement = ({
             direction="row"
             alignItems="center"
             spacing={1.25}
-            sx={{ mt: 1.5, flexWrap: "wrap", rowGap: 1 }}
+            sx={{ mt: 0.9, flexWrap: "wrap", rowGap: 0.5 }}
           >
-            <Typography sx={{ fontSize: 12.5, color: "text.secondary" }}>
+            <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
               {hasActivity
                 ? `${formatCurrency(totalIncome)} income · ${formatCurrency(totalExpenses)} expenses`
                 : "Record your first transaction to see your cash flow here."}
@@ -145,8 +145,8 @@ export const LedgerStatement = ({
                 size="small"
                 label={`${savingsRate}% saved`}
                 sx={{
-                  height: 22,
-                  fontSize: 11,
+                  height: 20,
+                  fontSize: 10.5,
                   fontWeight: 600,
                   bgcolor: "var(--accent-sage)",
                   color: "success.main",
@@ -164,7 +164,7 @@ export const LedgerStatement = ({
                 ? `Recorded cash flow: income ${formatCurrency(totalIncome)}, expenses ${formatCurrency(totalExpenses)}`
                 : undefined
             }
-            sx={{ mt: 3.25 }}
+            sx={{ mt: 1.2 }}
           >
             <Stack
               direction="row"
@@ -173,7 +173,7 @@ export const LedgerStatement = ({
               spacing={2}
             >
               <Typography
-                sx={{ fontSize: 11.5, fontWeight: 600, color: "text.secondary" }}
+                sx={{ fontSize: 10.5, fontWeight: 600, color: "text.secondary" }}
               >
                 Cash flow
               </Typography>
@@ -183,28 +183,28 @@ export const LedgerStatement = ({
                   <Stack direction="row" spacing={0.5} alignItems="baseline">
                     <Typography
                       sx={{
-                        fontSize: 11.5,
+                        fontSize: 10.5,
                         fontWeight: 600,
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
                       {formatCurrency(totalIncome)}
                     </Typography>
-                    <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
+                    <Typography sx={{ fontSize: 10, color: "text.secondary" }}>
                       in
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={0.5} alignItems="baseline">
                     <Typography
                       sx={{
-                        fontSize: 11.5,
+                        fontSize: 10.5,
                         fontWeight: 600,
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
                       {formatCurrency(totalExpenses)}
                     </Typography>
-                    <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
+                    <Typography sx={{ fontSize: 10, color: "text.secondary" }}>
                       out
                     </Typography>
                   </Stack>
@@ -217,7 +217,7 @@ export const LedgerStatement = ({
                 mt: 1,
                 display: "flex",
                 gap: "2px",
-                height: 7,
+                height: 5,
                 borderRadius: "999px",
                 overflow: "hidden",
                 bgcolor: "var(--surface-tertiary)",
@@ -247,7 +247,7 @@ export const LedgerStatement = ({
               <Stack
                 direction="row"
                 justifyContent="space-between"
-                sx={{ mt: 1 }}
+                sx={{ mt: 0.7 }}
               >
                 <Stack direction="row" spacing={0.65} alignItems="center">
                   <Box
@@ -301,8 +301,8 @@ export const LedgerStatement = ({
             <Box
               key={row.label}
               sx={{
-                px: { xs: 2.5, sm: 3 },
-                py: 1.9,
+                px: { xs: 1.75, sm: 2 },
+                py: 0.9,
                 borderTop: index === 0 ? 0 : 1,
                 borderColor: "divider",
                 flex: 1,
@@ -327,7 +327,7 @@ export const LedgerStatement = ({
                     {row.icon}
                   </Box>
                   <Typography
-                    sx={{ fontSize: 12.5, fontWeight: 500, color: "text.secondary" }}
+                    sx={{ fontSize: 11.5, fontWeight: 500, color: "text.secondary" }}
                     noWrap
                   >
                     {row.label}
@@ -337,7 +337,7 @@ export const LedgerStatement = ({
                 <Typography
                   sx={{
                     fontFamily: "var(--font-display)",
-                    fontSize: { xs: "1.1rem", sm: "1.22rem" },
+                    fontSize: { xs: "0.98rem", sm: "1.08rem" },
                     fontWeight: 700,
                     letterSpacing: "-0.03em",
                     lineHeight: 1,
@@ -351,9 +351,9 @@ export const LedgerStatement = ({
 
               <Typography
                 sx={{
-                  mt: 0.6,
-                  pl: 2.6,
-                  fontSize: 10.5,
+                  mt: 0.3,
+                  pl: 2.3,
+                  fontSize: 10,
                   color: "text.secondary",
                 }}
               >

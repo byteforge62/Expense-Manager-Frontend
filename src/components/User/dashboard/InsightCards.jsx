@@ -35,10 +35,10 @@ const RowAction = ({ onClick, label, icon = <FiZap size={13} /> }) => (
     onClick={onClick}
     startIcon={icon}
     sx={{
-      px: 1.5,
-      py: 0.55,
-      minHeight: 30,
-      fontSize: 11.5,
+      px: 1.1,
+      py: 0.35,
+      minHeight: 26,
+      fontSize: 10.8,
       fontWeight: 600,
       textTransform: "none",
       whiteSpace: "nowrap",
@@ -59,13 +59,13 @@ const InsightHeader = ({ icon, iconColor, title, action }) => (
     direction="row"
     justifyContent="space-between"
     alignItems="center"
-    spacing={2}
+    spacing={1.25}
   >
-    <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
+    <Stack direction="row" spacing={0.85} alignItems="center" sx={{ minWidth: 0 }}>
       <Box sx={{ color: iconColor || "primary.main", display: "flex", flexShrink: 0 }}>
         {icon}
       </Box>
-      <Typography sx={{ fontSize: 13.5, fontWeight: 600 }}>{title}</Typography>
+      <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>{title}</Typography>
     </Stack>
     {action}
   </Stack>
@@ -78,14 +78,13 @@ export const AITextInsightCard = ({
   isLoading,
   value,
   onRefresh,
-  prompt,
   loadingLabel,
   buttonLabel,
 }) => (
   <Box
     component="li"
     sx={{
-      py: 2.15,
+      py: 0.65,
       borderTop: 1,
       borderColor: "divider",
     }}
@@ -95,16 +94,16 @@ export const AITextInsightCard = ({
       icon={icon}
       iconColor={iconColor}
       action={
-        !isLoading && value ? (
+        isLoading ? null : value ? (
           <Button
             type="button"
             size="small"
             onClick={onRefresh}
-            startIcon={<FiRefreshCw size={12} />}
+            startIcon={<FiRefreshCw size={11} />}
             sx={{
-              minHeight: 28,
-              px: 1,
-              fontSize: 11,
+              minHeight: 22,
+              px: 0.6,
+              fontSize: 10,
               fontWeight: 600,
               textTransform: "none",
               color: "text.secondary",
@@ -112,19 +111,21 @@ export const AITextInsightCard = ({
           >
             Refresh
           </Button>
-        ) : null
+        ) : (
+          <RowAction onClick={onRefresh} label={buttonLabel} />
+        )
       }
     />
 
     {isLoading ? (
-      <Box sx={{ display: "flex", justifyContent: "flex-start", py: 2.5 }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-start", py: 1.25 }}>
         <LoadingSpinner color={iconColor === "secondary.main" ? "secondary" : "primary"} label={loadingLabel} />
       </Box>
     ) : value ? (
       <Box
         sx={{
-          mt: 1.25,
-          pl: 2.25,
+          mt: 0.65,
+          pl: 1.5,
           borderLeft: "2px solid",
           borderColor: "divider",
           "& p": { my: 0.6 },
@@ -132,26 +133,7 @@ export const AITextInsightCard = ({
       >
         <AIResult content={value} />
       </Box>
-    ) : (
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={1.5}
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        sx={{ mt: 0.85 }}
-      >
-        <Typography
-          sx={{
-            fontSize: 12,
-            lineHeight: 1.6,
-            color: "text.secondary",
-            maxWidth: 470,
-          }}
-        >
-          {prompt}
-        </Typography>
-        <RowAction onClick={onRefresh} label={buttonLabel} />
-      </Stack>
-    )}
+    ) : null}
   </Box>
 );
 
@@ -162,7 +144,7 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => {
     <Box
       component="li"
       sx={{
-        py: 2.15,
+        py: 0.65,
         borderTop: 1,
         borderColor: "divider",
       }}
@@ -177,49 +159,51 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => {
               label={`Risk: ${riskData.riskLevel}`}
               size="small"
               sx={{
-                height: 22,
-                fontSize: 10.5,
+                height: 20,
+                fontSize: 10,
                 fontWeight: 600,
                 bgcolor: tone?.soft,
                 color: tone?.color,
               }}
             />
-          ) : null
+          ) : (
+            <RowAction onClick={onRefresh} label="Review spending" />
+          )
         }
       />
 
       {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "flex-start", py: 2.5 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-start", py: 1.25 }}>
           <LoadingSpinner color="error" label="Reviewing transactions..." />
         </Box>
       ) : riskData ? (
         <Box
           sx={{
-            mt: 1.35,
+            mt: 0.75,
             display: "grid",
             gridTemplateColumns: { xs: "1fr", sm: "repeat(2, minmax(0, 1fr))" },
-            columnGap: 3,
-            rowGap: 1.5,
+            columnGap: 2,
+            rowGap: 1,
           }}
         >
           <Box>
             <Typography
-              sx={{ fontSize: 10.5, fontWeight: 600, color: "text.secondary" }}
+              sx={{ fontSize: 10, fontWeight: 600, color: "text.secondary" }}
             >
               Observation category
             </Typography>
-            <Typography sx={{ mt: 0.25, fontSize: 13, fontWeight: 600 }}>
+            <Typography sx={{ mt: 0.15, fontSize: 12, fontWeight: 600 }}>
               {riskData.category}
             </Typography>
           </Box>
           <Box>
             <Typography
-              sx={{ fontSize: 10.5, fontWeight: 600, color: "text.secondary" }}
+              sx={{ fontSize: 10, fontWeight: 600, color: "text.secondary" }}
             >
               Detective logic
             </Typography>
             <Typography
-              sx={{ mt: 0.25, fontSize: 12.5, color: "text.secondary", lineHeight: 1.55 }}
+              sx={{ mt: 0.15, fontSize: 11.5, color: "text.secondary", lineHeight: 1.5 }}
             >
               {riskData.reason}
             </Typography>
@@ -227,36 +211,17 @@ export const SpendingRiskCard = ({ riskData, isLoading, onRefresh }) => {
           <Box
             sx={{
               gridColumn: "1 / -1",
-              pt: 1.35,
+              pt: 0.75,
               borderTop: 1,
               borderColor: "divider",
             }}
           >
-            <Typography sx={{ fontSize: 12.5, fontWeight: 600, color: tone?.color }}>
+            <Typography sx={{ fontSize: 11.5, fontWeight: 600, color: tone?.color }}>
               {riskData.suggestion}
             </Typography>
           </Box>
         </Box>
-      ) : (
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={1.5}
-          alignItems={{ xs: "flex-start", sm: "center" }}
-          sx={{ mt: 0.85 }}
-        >
-          <Typography
-            sx={{
-              fontSize: 12,
-              lineHeight: 1.6,
-              color: "text.secondary",
-              maxWidth: 470,
-            }}
-          >
-            Review recent activity for unusual spending patterns.
-          </Typography>
-          <RowAction onClick={onRefresh} label="Review spending" />
-        </Stack>
-      )}
+      ) : null}
     </Box>
   );
 };

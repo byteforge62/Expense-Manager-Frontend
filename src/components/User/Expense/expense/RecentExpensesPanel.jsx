@@ -1,84 +1,73 @@
-import { motion } from "framer-motion";
 import { FiShoppingBag } from "react-icons/fi";
 
 const RecentExpensesPanel = ({ recentExpenses, onAdd }) => (
-  <motion.div
-    key="overview"
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -8 }}
-    transition={{ duration: 0.25 }}
-    className="space-y-5"
+  <section
+    aria-labelledby="recent-expenses-heading"
+    className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-primary)] shadow-sm"
   >
-    <div className="rounded-xl bg-[var(--surface-primary)] border border-[var(--border)] overflow-hidden">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2">
-          <FiShoppingBag size={15} className="text-rose-500" />
-          <h3 className="text-[13.5px] font-semibold text-[var(--text-primary)]">
-            Recent Expenses
-          </h3>
-        </div>
-        <span className="text-[11px] font-medium text-[var(--text-muted)] bg-[var(--surface-tertiary)] px-2 py-0.5 rounded-md">
-          {recentExpenses.length} Entries
-        </span>
+    <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-2">
+      <div className="flex items-center gap-1.5">
+        <FiShoppingBag size={12} className="text-rose-500" />
+        <h3
+          id="recent-expenses-heading"
+          className="text-[11.5px] font-semibold text-[var(--text-primary)]"
+        >
+          Recent Expenses
+        </h3>
       </div>
-
-      {recentExpenses.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 py-16 text-center">
-          <FiShoppingBag size={24} className="text-[var(--text-muted)]" />
-          <p className="text-sm text-[var(--text-muted)] font-medium">
-            No recent expenses found.
-          </p>
-          <button
-            onClick={onAdd}
-            className="text-xs font-semibold text-rose-500 hover:text-rose-400 transition-colors"
-          >
-            + Add New Expense
-          </button>
-        </div>
-      ) : (
-        <ul className="divide-y divide-[var(--border)]">
-          {recentExpenses.map((exp, i) => (
-            <motion.li
-              key={exp._id}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.04 }}
-              className="flex items-center justify-between px-6 py-4 hover:bg-[var(--surface-secondary)] transition-colors group"
-            >
-              <div className="flex items-center gap-4 min-w-0">
-                <FiShoppingBag
-                  size={15}
-                  className="flex-shrink-0 text-[var(--text-muted)] group-hover:text-rose-500"
-                />
-                <div className="min-w-0">
-                  <p className="text-[13.5px] font-semibold text-[var(--text-primary)] truncate">
-                    {exp.description}
-                  </p>
-                  <p className="text-[11.5px] text-[var(--text-muted)] mt-0.5">
-                    {exp.categoryID?.name || "Uncategorized"}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 flex-shrink-0 ml-4">
-                <div className="text-right">
-                  <p className="text-[13.5px] font-semibold text-rose-500">
-                    ₹{exp.amount.toLocaleString("en-IN")}
-                  </p>
-                  <p className="text-[11px] font-medium text-[var(--text-muted)] mt-0.5">
-                    {new Date(exp.date).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </p>
-                </div>
-              </div>
-            </motion.li>
-          ))}
-        </ul>
-      )}
+      <span className="text-[10px] font-medium text-[var(--text-muted)] tabular-nums">
+        {recentExpenses.length} Entries
+      </span>
     </div>
-  </motion.div>
+
+    {recentExpenses.length === 0 ? (
+      <div className="flex flex-col items-center gap-1.5 py-6 text-center">
+        <FiShoppingBag size={18} className="text-[var(--text-muted)] opacity-30" />
+        <p className="text-[11px] font-medium text-[var(--text-muted)]">
+          No recent expenses found.
+        </p>
+        <button
+          onClick={onAdd}
+          className="text-[10px] font-semibold text-rose-500 transition-colors hover:text-rose-400"
+        >
+          + Add New Expense
+        </button>
+      </div>
+    ) : (
+      <ul className="max-h-[calc(100vh-760px)] min-h-[120px] overflow-y-auto">
+        {recentExpenses.map((exp) => (
+          <li
+            key={exp._id}
+            className="flex items-center gap-2 border-b border-[var(--border)] px-3 py-1.5 last:border-b-0 hover:bg-[var(--surface-secondary)]"
+          >
+            <span className="grid h-6 w-6 flex-shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-tertiary)]">
+              <FiShoppingBag size={11} className="text-[var(--text-muted)]" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[11.5px] font-semibold text-[var(--text-primary)]">
+                {exp.description}
+              </p>
+              <p className="flex min-w-0 items-center gap-1 text-[9.5px] text-[var(--text-muted)]">
+                <span className="truncate">
+                  {exp.categoryID?.name || "Uncategorized"}
+                </span>
+                <span aria-hidden="true">·</span>
+                <span className="whitespace-nowrap">
+                  {new Date(exp.date).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </span>
+              </p>
+            </div>
+            <span className="whitespace-nowrap text-[11.5px] font-bold text-rose-500 tabular-nums">
+              ₹{exp.amount.toLocaleString("en-IN")}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
 );
 
 export default RecentExpensesPanel;

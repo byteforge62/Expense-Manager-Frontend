@@ -162,6 +162,41 @@ export const uploadPurchaseImage = async (file) => {
   return response.data.data?.url;
 };
 
+/**
+ * Store connections: the shops a user has linked and their order imports.
+ * The server owns the catalog, so a store added there appears here too.
+ */
+export const fetchStoreConnections = async () => {
+  const response = await axiosInstance.get("/store-connections");
+  const payload = response.data?.data;
+
+  if (Array.isArray(payload)) return { stores: [], connections: [] };
+
+  return {
+    stores: Array.isArray(payload?.stores) ? payload.stores : [],
+    connections: Array.isArray(payload?.connections) ? payload.connections : [],
+  };
+};
+
+export const linkStoreAccount = async ({ provider, accountLabel }) => {
+  const response = await axiosInstance.post("/store-connections", {
+    provider,
+    accountLabel,
+  });
+  return response.data.data;
+};
+
+export const unlinkStoreAccount = async (id) => {
+  await axiosInstance.delete(`/store-connections/${id}`);
+};
+
+export const importStoreOrders = async (id, orders) => {
+  const response = await axiosInstance.post(`/store-connections/${id}/import`, {
+    orders,
+  });
+  return response.data.data;
+};
+
 export const fetchExpenseCategories = async () => {
   const response = await axiosInstance.get("/categories");
   const categories = response.data.data || response.data || [];

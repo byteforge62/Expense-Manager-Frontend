@@ -19,13 +19,6 @@ import {
   fetchExpenses,
   selectExpensesStatus,
 } from "../../../store/slices/expensesSlice";
-import { AnimatePresence } from "framer-motion";
-import {
-  FiBarChart2,
-  FiList,
-  FiAlignLeft,
-  FiRepeat,
-} from "react-icons/fi";
 import { Shimmer } from "./income/incomeUi";
 import IncomeHeader from "./income/IncomeHeader";
 import SummaryTab from "./income/SummaryTab";
@@ -36,8 +29,8 @@ import AddIncomeDialog from "./income/AddIncomeDialog";
 
 /**
  * --- INCOME CENTER ---
- * Central hub for tracking incoming liquidity, analyzing revenue trends,
- * and managing automated recurring payments.
+ * A single-page overview of incoming liquidity, revenue trends, the income
+ * ledger and recurring automation. Every section is visible at once.
  */
 
 // --- MAIN COMPONENT ---
@@ -60,7 +53,6 @@ export const UserIncome = () => {
   const loading = incomeLoading || expensesLoading;
 
   // --- UI STATE ---
-  const [activeTab, setActiveTab] = useState("summary");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,7 +62,6 @@ export const UserIncome = () => {
     reset,
     formState: { errors },
   } = useForm();
-
 
   // Dashboard quick action: /private/income?action=add opens the dialog.
   const [searchParams, setSearchParams] = useSearchParams();
@@ -176,72 +167,55 @@ export const UserIncome = () => {
     dispatch(fetchRecurring(userId));
   }, [dispatch, userId]);
 
-  const tabs = [
-    { id: "summary", label: "Summary", icon: <FiAlignLeft size={14} /> },
-    { id: "analytics", label: "Analytics", icon: <FiBarChart2 size={14} /> },
-    { id: "records", label: "Records", icon: <FiList size={14} /> },
-    { id: "recurring", label: "Recurring", icon: <FiRepeat size={14} /> },
-  ];
-
   return (
-    <div className="space-y-6 text-[var(--text-primary)]">
+    <div className="space-y-3 text-[var(--text-primary)]">
       {/* ── HEADER ── */}
-      <IncomeHeader
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        tabs={tabs}
-        onAdd={() => setIsModalOpen(true)}
-      />
+      <IncomeHeader onAdd={() => setIsModalOpen(true)} />
 
       {/* ── LOADING ── */}
       {loading && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
-              <Shimmer key={i} className="h-28 rounded-2xl" />
+              <Shimmer key={i} className="h-16 rounded-xl" />
             ))}
           </div>
-          <Shimmer className="h-64 rounded-2xl" />
+          <Shimmer className="h-56 rounded-xl" />
         </div>
       )}
 
-      {/* ── TAB CONTENT ── */}
+      {/* ── SINGLE-PAGE OVERVIEW ── */}
       {!loading && (
-        <AnimatePresence mode="wait">
-          {activeTab === "summary" && (
-            <SummaryTab key="summary" stats={stats} tips={tips} />
-          )}
+        <>
+          <SummaryTab stats={stats} tips={tips} />
 
-          {activeTab === "analytics" && (
-            <AnalyticsTab
-              key="analytics"
-              monthlyIncomeExpense={monthlyIncomeExpense}
-              monthlyIncomeTrend={monthlyIncomeTrend}
-              avgIncome={avgIncome}
-            />
-          )}
+          <div className="grid items-start gap-2.5 xl:grid-cols-12">
+            <div className="space-y-2.5 xl:col-span-8">
+              <AnalyticsTab
+                monthlyIncomeExpense={monthlyIncomeExpense}
+                monthlyIncomeTrend={monthlyIncomeTrend}
+                avgIncome={avgIncome}
+              />
 
-          {activeTab === "records" && (
-            <RecordsTab
-              key="records"
-              incomes={incomes}
-              onDelete={handleDelete}
-              onAdd={() => setIsModalOpen(true)}
-            />
-          )}
+              <RecordsTab
+                incomes={incomes}
+                onDelete={handleDelete}
+                onAdd={() => setIsModalOpen(true)}
+              />
+            </div>
 
-          {activeTab === "recurring" && (
-            <RecurringTab
-              key="recurring"
-              form={recurringForm}
-              onChange={handleRecurringChange}
-              onSubmit={handleRecurringSubmit}
-              isLoading={recurringLoading}
-              payments={recurringPayments}
-              onDelete={handleRecurringDelete}
-            />
-          )}
-        </AnimatePresence>
+            <div className="xl:col-span-4">
+              <RecurringTab
+                form={recurringForm}
+                onChange={handleRecurringChange}
+                onSubmit={handleRecurringSubmit}
+                isLoading={recurringLoading}
+                payments={recurringPayments}
+                onDelete={handleRecurringDelete}
+              />
+            </div>
+          </div>
+        </>
       )}
 
       {/* ── ADD INCOME MODAL ── */}

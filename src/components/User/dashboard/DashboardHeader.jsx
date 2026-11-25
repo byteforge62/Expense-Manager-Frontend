@@ -23,22 +23,22 @@ export const DashboardHeader = () => {
         direction={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
         alignItems={{ xs: "stretch", sm: "flex-end" }}
-        spacing={2.5}
+        spacing={1.5}
       >
         <Box sx={{ minWidth: 0 }}>
           <Typography
             component="h1"
             sx={{
               fontFamily: "var(--font-display)",
-              fontSize: { xs: "2rem", md: "2.3rem" },
+              fontSize: { xs: "1.4rem", md: "1.6rem" },
               fontWeight: 700,
-              lineHeight: 1.05,
-              letterSpacing: "-0.035em",
+              lineHeight: 1.1,
+              letterSpacing: "-0.03em",
             }}
           >
             Overview
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.85 }}>
+          <Typography sx={{ mt: 0.4, fontSize: 11.5, color: "text.secondary" }}>
             {today.toLocaleDateString("en-IN", {
               weekday: "long",
               year: "numeric",
@@ -55,11 +55,11 @@ export const DashboardHeader = () => {
             to="/private/income"
             startIcon={<FiPlus size={14} />}
             sx={{
-              minHeight: 40,
-              px: 1.75,
+              minHeight: 32,
+              px: 1.3,
               color: "text.primary",
               fontWeight: 600,
-              fontSize: 12.5,
+              fontSize: 11.5,
               border: 1,
               borderColor: "divider",
               bgcolor: "background.paper",
@@ -73,8 +73,8 @@ export const DashboardHeader = () => {
             component={RouterLink}
             to="/private/expenses"
             variant="contained"
-            startIcon={<FiPlus size={14} />}
-            sx={{ minHeight: 40, px: 2, whiteSpace: "nowrap" }}
+            startIcon={<FiPlus size={13} />}
+            sx={{ minHeight: 32, px: 1.5, fontSize: 11.5, whiteSpace: "nowrap" }}
           >
             Add expense
           </Button>
@@ -85,8 +85,8 @@ export const DashboardHeader = () => {
       <Stack
         direction="row"
         alignItems="center"
-        spacing={1.5}
-        sx={{ mt: 2.5 }}
+        spacing={1.25}
+        sx={{ mt: 1.4 }}
       >
         <Box
           aria-hidden
@@ -110,8 +110,8 @@ export const DashboardHeader = () => {
               position: "absolute",
               left: `${monthProgress}%`,
               top: "50%",
-              width: 7,
-              height: 7,
+              width: 6,
+              height: 6,
               borderRadius: "50%",
               bgcolor: "primary.main",
               transform: "translate(-50%, -50%)",
@@ -121,7 +121,7 @@ export const DashboardHeader = () => {
         </Box>
         <Typography
           sx={{
-            fontSize: 11,
+            fontSize: 10.5,
             color: "text.secondary",
             fontVariantNumeric: "tabular-nums",
             whiteSpace: "nowrap",

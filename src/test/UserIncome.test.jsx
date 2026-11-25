@@ -143,7 +143,7 @@ describe("UserIncome", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
-  test("renders the header, the tab strip, and the summary tab by default", async () => {
+  test("renders the header and every income section on one page without tabs", async () => {
     mockHappyPath();
     renderIncome();
     await waitForSummary();
@@ -156,12 +156,12 @@ describe("UserIncome", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Add Income/i })).toBeInTheDocument();
 
-    for (const label of ["Summary", "Analytics", "Records", "Recurring"]) {
-      expect(screen.getByRole("button", { name: new RegExp(label) })).toBeInTheDocument();
-    }
-
     expect(screen.getByText("Wealth Optimization Insights")).toBeInTheDocument();
-    expect(screen.queryByText("Monthly Cash Flow")).toBeNull();
+    expect(screen.getByText("Monthly Cash Flow")).toBeInTheDocument();
+    expect(screen.getByText("Financial Records")).toBeInTheDocument();
+    expect(screen.getByText("Recurring income")).toBeInTheDocument();
+    expect(screen.queryByRole("tablist")).toBeNull();
+    expect(screen.queryByRole("tab")).toBeNull();
   });
 
   test("shows the loading shimmer while the income slice is pending", async () => {
@@ -204,12 +204,8 @@ describe("UserIncome", () => {
     expect(screen.getAllByText(inr(0))).toHaveLength(3);
     expect(screen.getByText("0%")).toBeInTheDocument();
     expect(screen.queryByRole("listitem")).toBeNull();
-
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-    expect(await screen.findByText("Income ledger is empty")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /Recurring/ }));
-    expect(await screen.findByText("No active schedules")).toBeInTheDocument();
+    expect(screen.getByText("Income ledger is empty")).toBeInTheDocument();
+    expect(screen.getByText("No active schedules")).toBeInTheDocument();
   });
 
   test("keeps the three savings-rate tip tiers", async () => {
@@ -254,8 +250,6 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
-
     const [bar] = await screen.findAllByTestId("chart");
     const months = JSON.parse(bar.getAttribute("data-json"));
 
@@ -268,25 +262,17 @@ describe("UserIncome", () => {
     ).toBe(1800); // the invalid-dated 999 was skipped
   });
 
-  test("switches tabs and only keeps the active panel mounted", async () => {
+  test("keeps every income section mounted on the same page", async () => {
     mockHappyPath();
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
-    expect(await screen.findByText("Monthly Cash Flow")).toBeInTheDocument();
-    expect(
-      screen.getByText("Income Projection & Baseline"),
-    ).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByText("Total Wealth")).toBeNull());
-
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-    expect(await screen.findByText("Financial Records")).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByText("Monthly Cash Flow")).toBeNull());
-
-    fireEvent.click(screen.getByRole("button", { name: /Recurring/ }));
-    expect(await screen.findByText("Recurring income")).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByText("Financial Records")).toBeNull());
+    expect(screen.getByText("Monthly Cash Flow")).toBeInTheDocument();
+    expect(screen.getByText("Income Projection & Baseline")).toBeInTheDocument();
+    expect(screen.getByText("Financial Records")).toBeInTheDocument();
+    expect(screen.getByText("Recurring income")).toBeInTheDocument();
+    expect(screen.getByText("Total Wealth")).toBeInTheDocument();
+    expect(screen.queryByRole("tab")).toBeNull();
   });
 
   test("feeds both charts and the average-income reference line", async () => {
@@ -294,7 +280,6 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Analytics/ }));
     const charts = await screen.findAllByTestId("chart");
     expect(charts).toHaveLength(2);
 
@@ -316,13 +301,12 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-
     expect(await screen.findByText("2 Entries")).toBeInTheDocument();
-    expect(screen.getByText(inr(1000))).toBeInTheDocument();
-    expect(screen.getByText(inr(500))).toBeInTheDocument();
-    expect(screen.getByText(inrDate(JAN))).toBeInTheDocument();
-    expect(screen.getByText(inrDate(FEB))).toBeInTheDocument();
+    const records = screen.getByText("Financial Records").closest("section");
+    expect(within(records).getByText(inr(1000))).toBeInTheDocument();
+    expect(within(records).getByText(inr(500))).toBeInTheDocument();
+    expect(within(records).getByText(inrDate(JAN))).toBeInTheDocument();
+    expect(within(records).getByText(inrDate(FEB))).toBeInTheDocument();
 
     // Known source keeps its configured styling; unknown sources print raw.
     expect(screen.getByText("Salary")).toHaveClass("text-emerald-500");
@@ -337,8 +321,7 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Records/ }));
-    const card = (await screen.findByText("Salary")).closest("div.group");
+    const card = (await screen.findByText("Salary")).closest("li");
     fireEvent.click(within(card).getByRole("button"));
 
     await waitFor(() => expect(del).toHaveBeenCalledWith("/income/inc-1"));
@@ -403,7 +386,6 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Recurring/ }));
     const form = (await screen.findByText("PROVISION NEW AUTOMATION")).closest("form");
 
     fireEvent.change(within(form).getByPlaceholderText("Wealth description"), {
@@ -442,18 +424,15 @@ describe("UserIncome", () => {
     renderIncome();
     await waitForSummary();
 
-    fireEvent.click(screen.getByRole("button", { name: /Recurring/ }));
-
     expect(await screen.findByText("1 RUNNING")).toBeInTheDocument();
-    // The schedule is rendered once for the desktop table and once for mobile.
-    expect(screen.getAllByText("Monthly retainer")).toHaveLength(2);
-    expect(screen.getAllByText(inr(2500))).toHaveLength(2);
-    expect(screen.getAllByText(inrDate(JAN))).toHaveLength(1);
+    const active = screen
+      .getByText("Active Revenue Operations")
+      .closest("section");
+    expect(within(active).getByText("Monthly retainer")).toBeInTheDocument();
+    expect(within(active).getByText(inr(2500))).toBeInTheDocument();
+    expect(within(active).getByText(inrDate(JAN))).toBeInTheDocument();
 
-    const row = screen
-      .getAllByText("Monthly retainer")
-      .find((node) => node.closest("tr"))
-      .closest("tr");
+    const row = within(active).getByText("Monthly retainer").closest("li");
     fireEvent.click(within(row).getAllByRole("button")[1]);
 
     await waitFor(() => expect(del).toHaveBeenCalledWith("/recurring/rec-1"));

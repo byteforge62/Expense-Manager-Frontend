@@ -13,7 +13,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
     <Box
       component="section"
       aria-labelledby="recurring-heading"
-      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 3, md: 3.5 } }}
+      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
     >
       <Stack
         direction="row"
@@ -27,20 +27,20 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
             component="h2"
             sx={{
               fontFamily: "var(--font-display)",
-              fontSize: "1.05rem",
+              fontSize: "0.98rem",
               fontWeight: 700,
               letterSpacing: "-0.02em",
             }}
           >
             Pending Executions
           </Typography>
-          <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.25 }}>
+          <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.15 }}>
             Due before the end of the month
           </Typography>
         </Box>
         <Typography
           sx={{
-            fontSize: 11.5,
+            fontSize: 11,
             fontWeight: 600,
             color: "text.secondary",
             whiteSpace: "nowrap",
@@ -50,7 +50,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
         </Typography>
       </Stack>
 
-      <Box sx={{ position: "relative", mt: 2.5 }}>
+      <Box sx={{ position: "relative", mt: 0.75 }}>
         <Box
           aria-hidden
           sx={{
@@ -58,7 +58,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
             position: "absolute",
             left: 0,
             right: 0,
-            top: 4,
+            top: 3,
             height: 1,
             bgcolor: "divider",
           }}
@@ -71,14 +71,14 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
               xs: "1fr",
               sm: `repeat(${visible.length}, minmax(0, 1fr))`,
             },
-            columnGap: 3,
-            rowGap: 2.25,
+            columnGap: 1.5,
+            rowGap: 1,
           }}
         >
           {visible.map((item) => (
             <Box
               key={item._id}
-              sx={{ position: "relative", pt: { sm: 2.5 }, minWidth: 0 }}
+              sx={{ position: "relative", pt: { sm: 1.25 }, minWidth: 0 }}
             >
               <Box
                 aria-hidden
@@ -87,8 +87,8 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                   position: "absolute",
                   top: 0,
                   left: 0,
-                  width: 9,
-                  height: 9,
+                  width: 7,
+                  height: 7,
                   borderRadius: "50%",
                   bgcolor: "warning.main",
                   boxShadow: "0 0 0 4px var(--background)",
@@ -97,7 +97,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
 
               <Typography
                 sx={{
-                  fontSize: 10.5,
+                  fontSize: 10,
                   fontWeight: 600,
                   color: "text.secondary",
                   fontVariantNumeric: "tabular-nums",
@@ -109,15 +109,15 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
                 })}
               </Typography>
               <Typography
-                sx={{ mt: 0.35, fontSize: 13, fontWeight: 600 }}
+                sx={{ mt: 0.25, fontSize: 12, fontWeight: 600 }}
                 noWrap
               >
                 {item.title}
               </Typography>
               <Typography
                 sx={{
-                  mt: 0.2,
-                  fontSize: 12.5,
+                  mt: 0.15,
+                  fontSize: 11.5,
                   color: "text.secondary",
                   fontVariantNumeric: "tabular-nums",
                 }}

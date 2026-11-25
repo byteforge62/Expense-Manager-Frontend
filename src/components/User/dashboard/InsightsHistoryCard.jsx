@@ -25,7 +25,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
   <Box
     component="section"
     aria-labelledby="insights-history-heading"
-    sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 3, md: 3.5 } }}
+    sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
   >
     <Stack
       direction="row"
@@ -39,14 +39,14 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           component="h2"
           sx={{
             fontFamily: "var(--font-display)",
-            fontSize: "1.05rem",
+            fontSize: "0.98rem",
             fontWeight: 700,
             letterSpacing: "-0.02em",
           }}
         >
           Recent insights
         </Typography>
-        <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.25 }}>
+        <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.15 }}>
           Saved analysis from this account
         </Typography>
       </Box>
@@ -57,9 +57,9 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           onClick={onRefresh}
           startIcon={<FiRefreshCw size={12} />}
           sx={{
-            minHeight: 30,
-            px: 1.25,
-            fontSize: 11.5,
+            minHeight: 26,
+            px: 1,
+            fontSize: 10.8,
             fontWeight: 600,
             textTransform: "none",
             color: "text.secondary",
@@ -71,46 +71,46 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
     </Stack>
 
     {isLoading ? (
-      <Stack spacing={1.5} sx={{ mt: 2 }}>
-        <Skeleton height={54} />
-        <Skeleton height={54} width="84%" />
+      <Stack spacing={0.75} sx={{ mt: 0.75 }}>
+        <Skeleton height={34} />
+        <Skeleton height={34} width="84%" />
       </Stack>
     ) : !insights || insights.length === 0 ? (
       <Stack
         direction="row"
         spacing={1.25}
         alignItems="center"
-        sx={{ mt: 2, color: "text.secondary" }}
+        sx={{ mt: 0.5, color: "text.secondary" }}
       >
-        <FiInbox size={17} />
+        <FiInbox size={14} />
         <Box>
-          <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+          <Typography sx={{ fontSize: 11.5, fontWeight: 600 }}>
             No saved insights yet
           </Typography>
-          <Typography sx={{ fontSize: 11.5 }}>
+          <Typography sx={{ fontSize: 11 }}>
             Results from your analyses will appear here.
           </Typography>
         </Box>
       </Stack>
     ) : (
-      <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, mt: 1.25 }}>
+      <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, mt: 0.75 }}>
         {insights.map((item, index) => (
           <Box
             component="li"
             key={item._id || index}
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", sm: "112px minmax(0, 1fr)" },
-              columnGap: 2.5,
-              rowGap: 0.5,
-              py: 1.65,
+              gridTemplateColumns: { xs: "1fr", sm: "100px minmax(0, 1fr)" },
+              columnGap: 2,
+              rowGap: 0.35,
+              py: 0.65,
               borderTop: 1,
               borderColor: "divider",
             }}
           >
             <Typography
               sx={{
-                fontSize: 10.5,
+                fontSize: 10,
                 fontWeight: 600,
                 color: "text.secondary",
                 pt: 0.2,
@@ -121,8 +121,8 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
             </Typography>
             <Typography
               sx={{
-                fontSize: 12.5,
-                lineHeight: 1.65,
+                fontSize: 11.5,
+                lineHeight: 1.5,
                 color: "text.primary",
                 "& p": { my: 0.3 },
               }}

@@ -77,10 +77,10 @@ const SectionHead = ({ title, subtitle, aside }) => (
     spacing={2}
   >
     <Box sx={{ minWidth: 0 }}>
-      <Typography component="h3" sx={{ fontSize: 13.5, fontWeight: 600 }}>
+      <Typography component="h3" sx={{ fontSize: 12.5, fontWeight: 600 }}>
         {title}
       </Typography>
-      <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.2 }}>
+      <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.15 }}>
         {subtitle}
       </Typography>
     </Box>
@@ -88,7 +88,7 @@ const SectionHead = ({ title, subtitle, aside }) => (
   </Stack>
 );
 
-const axisTick = { fill: "var(--text-muted)", fontSize: 10, fontWeight: 500 };
+const axisTick = { fill: "var(--text-muted)", fontSize: 9.5, fontWeight: 500 };
 
 const TrendBlock = ({ data }) => (
   <Box>
@@ -97,14 +97,14 @@ const TrendBlock = ({ data }) => (
       subtitle="Expenses over the last 30 days"
       aside={
         <Typography
-          sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
+          sx={{ fontSize: 10, color: "text.secondary", whiteSpace: "nowrap" }}
         >
           Daily total
         </Typography>
       }
     />
-    <Box sx={{ mt: 1.5, ml: -1 }}>
-      <ResponsiveContainer width="100%" height={248}>
+    <Box sx={{ mt: 0.75, ml: -1 }}>
+      <ResponsiveContainer width="100%" height={85}>
         <LineChart data={data} margin={{ top: 10, right: 8, left: -10, bottom: 0 }}>
           <CartesianGrid
             strokeDasharray="2 6"
@@ -134,7 +134,7 @@ const TrendBlock = ({ data }) => (
             type="monotone"
             dataKey="amount"
             stroke="var(--primary)"
-            strokeWidth={2.2}
+            strokeWidth={2}
             dot={false}
             activeDot={{
               r: 4,
@@ -159,21 +159,21 @@ const CategoryBlock = ({ data }) => {
         subtitle="Where this month went"
         aside={
           <Typography
-            sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
+            sx={{ fontSize: 10, color: "text.secondary", whiteSpace: "nowrap" }}
           >
             All recorded
           </Typography>
         }
       />
 
-      <Box sx={{ position: "relative", mt: 0.75 }}>
-        <ResponsiveContainer width="100%" height={206}>
+      <Box sx={{ position: "relative", mt: 0.25 }}>
+        <ResponsiveContainer width="100%" height={78}>
           <PieChart>
             <Pie
               data={data}
               dataKey="value"
-              outerRadius={78}
-              innerRadius={54}
+              outerRadius={36}
+              innerRadius={26}
               paddingAngle={2}
               stroke="none"
             >
@@ -197,12 +197,12 @@ const CategoryBlock = ({ data }) => {
           }}
         >
           <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ fontSize: 9.5, color: "text.secondary" }}>
+            <Typography sx={{ fontSize: 9, color: "text.secondary" }}>
               Recorded
             </Typography>
             <Typography
               sx={{
-                fontSize: 14,
+                fontSize: 12.5,
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
                 fontVariantNumeric: "tabular-nums",
@@ -214,50 +214,41 @@ const CategoryBlock = ({ data }) => {
         </Box>
       </Box>
 
-      <Stack spacing={0.9} sx={{ mt: 0.5 }}>
-        {data.slice(0, 4).map((item, index) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          columnGap: 1.5,
+          rowGap: 0.5,
+          mt: 0.5,
+        }}
+      >
+        {data.slice(0, 3).map((item, index) => (
           <Stack
             key={item.name || index}
             direction="row"
-            justifyContent="space-between"
+            spacing={0.4}
             alignItems="center"
-            spacing={1.5}
           >
-            <Stack
-              direction="row"
-              spacing={0.85}
-              alignItems="center"
-              sx={{ minWidth: 0 }}
-            >
-              <Box
-                sx={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: "2px",
-                  bgcolor: COLORS[index % COLORS.length],
-                  flexShrink: 0,
-                }}
-              />
-              <Typography
-                sx={{ fontSize: 11.5, color: "text.secondary" }}
-                noWrap
-              >
-                {item.name}
-              </Typography>
-            </Stack>
-            <Typography
+            <Box
               sx={{
-                fontSize: 11,
-                color: "text.secondary",
-                fontVariantNumeric: "tabular-nums",
-                whiteSpace: "nowrap",
+                width: 6,
+                height: 6,
+                borderRadius: "2px",
+                bgcolor: COLORS[index % COLORS.length],
+                flexShrink: 0,
               }}
+            />
+            <Typography
+              sx={{ fontSize: 9.5, color: "text.secondary" }}
+              noWrap
             >
+              {item.name}{" "}
               {total > 0 ? Math.round((item.value / total) * 100) : 0}%
             </Typography>
           </Stack>
         ))}
-      </Stack>
+      </Box>
     </Box>
   );
 };
@@ -269,19 +260,25 @@ const BalanceBlock = ({ totalIncome, totalExpenses }) => {
 
   return (
     <Box>
-      <SectionHead
-        title="Inflow and outflow"
-        subtitle="Income against expenses"
-        aside={
-          <Typography
-            sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
-          >
-            {total > 0 ? `${Math.round(incomeShare)}% in` : "No activity"}
-          </Typography>
-        }
-      />
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="baseline"
+        spacing={1}
+      >
+        <Typography component="h3" sx={{ fontSize: 12.5, fontWeight: 600 }}>
+          Inflow and outflow
+        </Typography>
+        <Typography sx={{ fontSize: 10, color: "text.secondary", whiteSpace: "nowrap" }}>
+          Income against expenses
+        </Typography>
+      </Stack>
 
-      <Stack spacing={1.5} sx={{ mt: 1.75 }}>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1}
+        sx={{ mt: 0.5 }}
+      >
         {[
           {
             label: "Income",
@@ -296,14 +293,14 @@ const BalanceBlock = ({ totalIncome, totalExpenses }) => {
             color: "var(--negative)",
           },
         ].map((row) => (
-          <Box key={row.label}>
+          <Box key={row.label} sx={{ flex: 1 }}>
             <Stack
               direction="row"
               justifyContent="space-between"
               alignItems="baseline"
-              sx={{ mb: 0.65 }}
+              sx={{ mb: 0.2 }}
             >
-              <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+              <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
                 {row.label}
               </Typography>
               <Typography
@@ -318,7 +315,7 @@ const BalanceBlock = ({ totalIncome, totalExpenses }) => {
             </Stack>
             <Box
               sx={{
-                height: 4,
+                height: 3.5,
                 borderRadius: 99,
                 bgcolor: "var(--surface-tertiary)",
                 overflow: "hidden",
@@ -351,27 +348,27 @@ export const AnalysisSheet = ({
     <Box
       component="section"
       aria-labelledby="analysis-heading"
-      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 3, md: 3.5 } }}
+      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
     >
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="baseline"
-        sx={{ mb: 2.5 }}
+        sx={{ mb: 0.5 }}
       >
         <Typography
           id="analysis-heading"
           component="h2"
           sx={{
             fontFamily: "var(--font-display)",
-            fontSize: "1.05rem",
+            fontSize: "0.98rem",
             fontWeight: 700,
             letterSpacing: "-0.02em",
           }}
         >
           Analysis
         </Typography>
-        <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+        <Typography sx={{ fontSize: 11, color: "text.secondary" }}>
           The shape behind the numbers
         </Typography>
       </Stack>
@@ -385,8 +382,8 @@ export const AnalysisSheet = ({
               ? "minmax(0, 1.5fr) minmax(0, 0.85fr)"
               : "minmax(0, 1fr)",
           },
-          columnGap: 5,
-          rowGap: 3,
+          columnGap: 3.5,
+          rowGap: 2,
           alignItems: "start",
         }}
       >
@@ -394,7 +391,7 @@ export const AnalysisSheet = ({
         {hasCategories && <CategoryBlock data={categoryData} />}
       </Box>
 
-      <Box sx={{ mt: 3.5, pt: 3, borderTop: 1, borderColor: "divider" }}>
+      <Box sx={{ mt: 1.5, pt: 1.25, borderTop: 1, borderColor: "divider" }}>
         <BalanceBlock totalIncome={totalIncome} totalExpenses={totalExpenses} />
       </Box>
     </Box>

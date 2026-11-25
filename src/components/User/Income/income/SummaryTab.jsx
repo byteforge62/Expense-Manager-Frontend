@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   FiTrendingUp,
   FiTrendingDown,
@@ -8,15 +7,8 @@ import {
 } from "react-icons/fi";
 
 const SummaryTab = ({ stats, tips }) => (
-  <motion.div
-    key="summary"
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -8 }}
-    transition={{ duration: 0.25 }}
-    className="space-y-6"
-  >
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div className="space-y-2.5">
+    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
       {[
         {
           label: "Total Wealth",
@@ -24,8 +16,7 @@ const SummaryTab = ({ stats, tips }) => (
           color: "text-emerald-500",
           bg: "bg-emerald-500/5",
           border: "border-emerald-500/20",
-          glow: "bg-emerald-500",
-          icon: <FiTrendingUp size={18} />,
+          icon: <FiTrendingUp size={14} />,
         },
         {
           label: "Withdrawals",
@@ -33,8 +24,7 @@ const SummaryTab = ({ stats, tips }) => (
           color: "text-rose-500",
           bg: "bg-rose-500/5",
           border: "border-rose-500/20",
-          glow: "bg-rose-500",
-          icon: <FiTrendingDown size={18} />,
+          icon: <FiTrendingDown size={14} />,
         },
         {
           label: "Net Surplus",
@@ -42,8 +32,7 @@ const SummaryTab = ({ stats, tips }) => (
           color: "text-cyan-500",
           bg: "bg-cyan-500/5",
           border: "border-cyan-500/20",
-          glow: "bg-cyan-500",
-          icon: <FiDollarSign size={18} />,
+          icon: <FiDollarSign size={14} />,
         },
         {
           label: "Efficiency",
@@ -51,70 +40,57 @@ const SummaryTab = ({ stats, tips }) => (
           color: "text-amber-500",
           bg: "bg-amber-500/5",
           border: "border-amber-500/20",
-          glow: "bg-amber-500",
-          icon: <FiPercent size={18} />,
+          icon: <FiPercent size={14} />,
         },
-      ].map((card, idx) => (
-        <motion.div
-          key={idx}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: idx * 0.05 }}
-          whileHover={{ y: -3 }}
-          className={`relative overflow-hidden rounded-2xl border p-5 bg-[var(--surface-primary)] ${card.border} shadow-sm backdrop-blur-sm`}
+      ].map((card) => (
+        <div
+          key={card.label}
+          className={`rounded-xl border bg-[var(--surface-primary)] p-2.5 shadow-sm ${card.border}`}
         >
-          <div className="relative">
-            <div
-              className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${card.bg} border ${card.border} shadow-inner`}
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`flex h-6 w-6 items-center justify-center rounded-lg border ${card.bg} ${card.border} ${card.color}`}
             >
-              <span className={card.color}>{card.icon}</span>
-            </div>
-            <p className="text-[11px] font-bold text-[var(--text-muted)] tracking-normal mb-1">
+              {card.icon}
+            </span>
+            <p className="text-[10px] font-semibold text-[var(--text-muted)]">
               {card.label}
             </p>
-            <p
-              className={`text-2xl font-bold tracking-tight ${card.color}`}
-            >
-              {card.value}
-            </p>
           </div>
-        </motion.div>
+          <p className={`mt-1 text-lg font-bold tracking-tight ${card.color}`}>
+            {card.value}
+          </p>
+        </div>
       ))}
     </div>
 
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      className="rounded-2xl bg-cyan-500/5 border border-cyan-500/10 p-6 shadow-xl relative overflow-hidden"
-    >
-      <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-cyan-500/5 blur-[80px]" />
-      <div className="flex items-center gap-3 mb-5 relative z-10">
-        <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-inner">
-          <FiZap size={18} className="text-cyan-500" />
-        </div>
-        <div>
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">
+    <div className="rounded-xl border border-cyan-500/15 bg-cyan-500/5 p-2.5">
+      <div className="flex items-center gap-2">
+        <span className="flex h-6 w-6 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10">
+          <FiZap size={13} className="text-cyan-500" />
+        </span>
+        <div className="min-w-0">
+          <h3 className="text-[11.5px] font-semibold text-[var(--text-primary)]">
             Wealth Optimization Insights
           </h3>
-          <p className="text-[11px] font-bold text-cyan-500 tracking-normal mt-0.5">
+          <p className="text-[9.5px] font-semibold text-cyan-500">
             AI-Powered Recommendations
           </p>
         </div>
       </div>
-      <ul className="space-y-4 relative z-10">
+      <ul className="mt-2 grid gap-x-4 gap-y-1 sm:grid-cols-2">
         {tips.map((tip, idx) => (
           <li
             key={idx}
-            className="flex items-start gap-4 text-xs font-medium text-[var(--text-secondary)] leading-relaxed"
+            className="flex items-start gap-1.5 text-[10.5px] leading-snug text-[var(--text-secondary)]"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-500 flex-shrink-0 mt-1 shadow-lg shadow-cyan-500/50" />
+            <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cyan-500" />
             {tip}
           </li>
         ))}
       </ul>
-    </motion.div>
-  </motion.div>
+    </div>
+  </div>
 );
 
 export default SummaryTab;

@@ -30,8 +30,8 @@ const AICard = memo(
         justifyContent="space-between"
         alignItems="center"
         sx={{
-          px: 2.25,
-          py: 1.65,
+          px: 1.6,
+          py: 1.1,
           borderBottom: 1,
           borderColor: "divider",
         }}
@@ -43,7 +43,7 @@ const AICard = memo(
           <Typography
             sx={{
               fontFamily: "var(--font-display)",
-              fontSize: "0.95rem",
+              fontSize: "0.88rem",
               fontWeight: 600,
               letterSpacing: "-0.015em",
               color: "text.primary",
@@ -76,7 +76,7 @@ const AICard = memo(
 
       <Box
         sx={{
-          p: 2.25,
+          p: 1.2,
           flex: 1,
           minHeight: 0,
           display: "flex",
@@ -96,8 +96,8 @@ const AIResult = ({ content }) => (
   <Box
     sx={{
       color: "text.secondary",
-      fontSize: "0.82rem",
-      lineHeight: 1.68,
+      fontSize: "0.78rem",
+      lineHeight: 1.6,
       "& p": { mt: 0 },
       "& p + p": { mt: 1 },
       "& strong": { color: "text.primary", fontWeight: 600 },
@@ -105,7 +105,7 @@ const AIResult = ({ content }) => (
       "& li": { mb: 0.35 },
       "& h1, & h2, & h3": {
         fontFamily: "var(--font-display)",
-        fontSize: "0.9rem",
+        fontSize: "0.88rem",
         fontWeight: 700,
         color: "text.primary",
         mt: 1,

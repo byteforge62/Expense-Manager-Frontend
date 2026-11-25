@@ -1,7 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import {
   FiCalendar,
   FiFileText,
@@ -12,152 +10,82 @@ import {
 } from "react-icons/fi";
 
 /**
- * Dashboard quick actions, set as a ledger index: label on the left, hint on
- * the right, joined by a dotted leader. No tiles, no repeated card chrome.
- *
- * Each entry links to the page that owns the workflow (and opens its create
- * dialog where the page supports it), so there are no dead buttons.
+ * A single compact strip of the workflows used most. The page header already
+ * owns the two primary create actions; these are the secondary ones, kept on
+ * one line instead of a multi-row index.
  */
 const ACTIONS = [
   {
     label: "Record expense",
     to: "/private/expenses?action=add",
-    icon: <FiPlusCircle size={14} />,
-    hint: "Log money going out",
+    icon: <FiPlusCircle size={13} />,
   },
   {
     label: "Record income",
     to: "/private/income?action=add",
-    icon: <FiTrendingUp size={14} />,
-    hint: "Log money coming in",
+    icon: <FiTrendingUp size={13} />,
   },
   {
     label: "Create budget",
     to: "/private/budget?action=add",
-    icon: <FiTarget size={14} />,
-    hint: "Set a category limit",
+    icon: <FiTarget size={13} />,
   },
   {
     label: "Add a bill",
     to: "/private/bills",
-    icon: <FiCalendar size={14} />,
-    hint: "Track an upcoming payment",
+    icon: <FiCalendar size={13} />,
   },
   {
     label: "Track a purchase",
     to: "/private/purchases?action=add",
-    icon: <FiShoppingBag size={14} />,
-    hint: "Save an item and its cost",
+    icon: <FiShoppingBag size={13} />,
   },
   {
     label: "Open reports",
     to: "/private/reports",
-    icon: <FiFileText size={14} />,
-    hint: "Export a summary",
+    icon: <FiFileText size={13} />,
   },
 ];
 
 export const QuickActions = () => (
-  <Box component="section" aria-labelledby="quick-actions-heading">
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      alignItems={{ xs: "flex-start", sm: "baseline" }}
-      justifyContent="space-between"
-      spacing={0.5}
-    >
-      <Typography
-        id="quick-actions-heading"
-        component="h2"
-        sx={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em" }}
+  <Box
+    component="nav"
+    aria-label="Quick actions"
+    sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}
+  >
+    {ACTIONS.map((action) => (
+      <Box
+        component={RouterLink}
+        key={action.to}
+        to={action.to}
+        sx={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 0.6,
+          minHeight: 30,
+          px: 1.1,
+          border: 1,
+          borderColor: "divider",
+          borderRadius: "999px",
+          bgcolor: "background.paper",
+          color: "text.secondary",
+          fontSize: 11.5,
+          fontWeight: 500,
+          textDecoration: "none",
+          whiteSpace: "nowrap",
+          transition: "color 140ms ease, border-color 140ms ease",
+          "& svg": { flexShrink: 0 },
+          "&:hover": {
+            color: "primary.main",
+            borderColor: "color-mix(in srgb, var(--primary) 40%, var(--border))",
+          },
+          "&:focus-visible": { outlineOffset: 2 },
+        }}
       >
-        Quick actions
-      </Typography>
-      <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
-        The workflows you use most, one step away.
-      </Typography>
-    </Stack>
-
-    <Box
-      component="ul"
-      sx={{
-        listStyle: "none",
-        m: 0,
-        p: 0,
-        mt: 1,
-        display: "grid",
-        gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))" },
-        columnGap: 5,
-      }}
-    >
-      {ACTIONS.map((action) => (
-        <Box component="li" key={action.to}>
-          <Box
-            component={RouterLink}
-            to={action.to}
-            sx={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 1,
-              py: 1.15,
-              borderBottom: 1,
-              borderColor: "divider",
-              color: "text.primary",
-              textDecoration: "none",
-              "&:hover .quick-action-label": { color: "primary.main" },
-              "&:hover .quick-action-icon": { color: "primary.main" },
-              "&:hover .quick-action-leader": {
-                borderColor: "color-mix(in srgb, var(--primary) 55%, transparent)",
-              },
-              "&:focus-visible": { outlineOffset: 4 },
-            }}
-          >
-            <Box
-              className="quick-action-icon"
-              sx={{
-                color: "text.secondary",
-                display: "flex",
-                alignSelf: "center",
-                flexShrink: 0,
-              }}
-            >
-              {action.icon}
-            </Box>
-            <Typography
-              className="quick-action-label"
-              sx={{
-                fontSize: 13,
-                fontWeight: 600,
-                whiteSpace: "nowrap",
-                transition: "color 140ms ease",
-              }}
-            >
-              {action.label}
-            </Typography>
-            <Box
-              aria-hidden
-              className="quick-action-leader"
-              sx={{
-                flex: 1,
-                minWidth: 18,
-                borderBottom: "1px dotted",
-                borderColor: "var(--border-medium)",
-                transform: "translateY(-3px)",
-              }}
-            />
-            <Typography
-              sx={{
-                display: { xs: "none", sm: "block" },
-                fontSize: 11.5,
-                color: "text.secondary",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {action.hint}
-            </Typography>
-          </Box>
-        </Box>
-      ))}
-    </Box>
+        {action.icon}
+        {action.label}
+      </Box>
+    ))}
   </Box>
 );
 

@@ -80,9 +80,10 @@ export const UserDashboardLayout = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        overflow: "hidden",
       }}
     >
-      <Box>
+      <Box sx={{ minHeight: 0, flex: 1, display: "flex", flexDirection: "column" }}>
         <Stack
           direction="row"
           alignItems="center"
@@ -115,7 +116,10 @@ export const UserDashboardLayout = () => {
           </IconButton>
         </Stack>
 
-        <List sx={{ px: 1.25, py: 1.75 }} disablePadding>
+        <List
+          sx={{ px: 1.25, py: 1.25, flex: 1, minHeight: 0, overflowY: "auto" }}
+          disablePadding
+        >
           {navTabs.map((tab, i) => {
             const isActive = location.pathname === tab.path;
             const startsSection = tab.section !== navTabs[i - 1]?.section;
@@ -127,10 +131,10 @@ export const UserDashboardLayout = () => {
                     sx={{
                       display: "block",
                       px: 1.5,
-                      pt: i === 0 ? 0.25 : 2,
-                      pb: 0.75,
+                      pt: i === 0 ? 0.25 : 1.25,
+                      pb: 0.5,
                       color: "text.secondary",
-                      fontSize: 11.5,
+                      fontSize: 11,
                       fontWeight: 600,
                       letterSpacing: "0.005em",
                       textTransform: "none",
@@ -146,8 +150,8 @@ export const UserDashboardLayout = () => {
                     selected={isActive}
                     onClick={() => setMobileOpen(false)}
                     sx={{
-                      minHeight: 38,
-                      px: 1.5,
+                      minHeight: 36,
+                      px: 1.25,
                       borderRadius: "10px",
                       color: isActive ? "var(--sidebar-accent-foreground)" : "text.secondary",
                       bgcolor: isActive ? "var(--sidebar-accent)" : "transparent",
@@ -167,7 +171,7 @@ export const UserDashboardLayout = () => {
                     <ListItemText
                       primary={tab.label}
                       primaryTypographyProps={{
-                        fontSize: 13.5,
+                        fontSize: 13,
                         fontWeight: isActive ? 600 : 500,
                         letterSpacing: "-0.005em",
                       }}
@@ -405,10 +409,10 @@ export const UserDashboardLayout = () => {
         <Box
           component="main"
           sx={{
-            maxWidth: 1420,
+            maxWidth: 1480,
             mx: "auto",
-            py: { xs: 2.5, md: 3.5 },
-            pb: 8,
+            pt: { xs: 1.5, md: 1.75 },
+            pb: 1,
             px: { xs: 2, sm: 3, lg: 4 },
           }}
         >

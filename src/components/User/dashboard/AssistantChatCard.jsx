@@ -69,22 +69,22 @@ export const AssistantChatCard = () => {
       <Box
         sx={{
           flex: 1,
-          minHeight: 250,
-          maxHeight: 330,
+          minHeight: 60,
+          maxHeight: 110,
           overflowY: "auto",
           pr: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 2,
+          gap: 1.25,
         }}
       >
         {messages.length === 0 && (
           <Box sx={{ my: "auto", px: 1 }}>
-            <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+            <Typography sx={{ fontSize: 11.5, fontWeight: 600 }}>
               No conversation yet
             </Typography>
             <Typography
-              sx={{ mt: 0.5, fontSize: 11.5, color: "text.secondary", lineHeight: 1.6 }}
+              sx={{ mt: 0.35, fontSize: 11, color: "text.secondary", lineHeight: 1.5 }}
             >
               Ask about a category, a budget or the month so far. Replies are
               based on the records in your account.
@@ -112,7 +112,7 @@ export const AssistantChatCard = () => {
           >
             <Typography
               sx={{
-                fontSize: 9.5,
+                fontSize: 9,
                 fontWeight: 600,
                 color: "text.secondary",
                 mb: 0.35,
@@ -122,8 +122,8 @@ export const AssistantChatCard = () => {
             </Typography>
             <Box
               sx={{
-                fontSize: 12.5,
-                lineHeight: 1.6,
+                fontSize: 11.5,
+                lineHeight: 1.5,
                 color: msg.role === "user" ? "text.primary" : "text.secondary",
                 "& p": { my: 0.35 },
                 "& ul, & ol": { pl: 2, my: 0.5, textAlign: "left" },
@@ -135,7 +135,7 @@ export const AssistantChatCard = () => {
         ))}
 
         {loadingAI && (
-          <Typography sx={{ fontSize: 11.5, color: "text.secondary", pl: 1.75 }}>
+          <Typography sx={{ fontSize: 11, color: "text.secondary", pl: 1.5 }}>
             Thinking…
           </Typography>
         )}
@@ -143,7 +143,7 @@ export const AssistantChatCard = () => {
         <div ref={chatEndRef} />
       </Box>
 
-      <Stack direction="row" spacing={0.75} sx={{ mt: 2, alignItems: "center" }}>
+      <Stack direction="row" spacing={0.75} sx={{ mt: 0.6, alignItems: "center" }}>
         <TextField
           fullWidth
           size="small"
@@ -156,8 +156,8 @@ export const AssistantChatCard = () => {
             input: {
               disableUnderline: false,
               sx: {
-                fontSize: "0.8rem",
-                pb: 0.75,
+                fontSize: "0.78rem",
+                pb: 0.5,
                 "&:before": { borderColor: "divider" },
               },
             },
@@ -168,8 +168,8 @@ export const AssistantChatCard = () => {
           disabled={loadingAI || !input.trim()}
           aria-label="Send message"
           sx={{
-            width: 36,
-            height: 36,
+            width: 32,
+            height: 32,
             borderRadius: "8px",
             bgcolor: "primary.main",
             color: "primary.contrastText",

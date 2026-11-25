@@ -38,7 +38,7 @@ const SectionHeading = ({ id, children, aside }) => (
     alignItems="baseline"
     spacing={2}
   >
-    <Typography id={id} component="h2" sx={{ fontSize: 14, fontWeight: 600 }}>
+    <Typography id={id} component="h2" sx={{ fontSize: 13, fontWeight: 600 }}>
       {children}
     </Typography>
     {aside}
@@ -53,8 +53,8 @@ const SectionLink = ({ to, children }) => (
       display: "inline-flex",
       alignItems: "center",
       gap: 0.5,
-      mt: 1.75,
-      fontSize: 12,
+      mt: 1,
+      fontSize: 11.5,
       fontWeight: 600,
       color: "primary.main",
       textDecoration: "none",
@@ -79,11 +79,6 @@ export const MoneyFlow = ({
   );
   const totals = purchaseSummary?.totals;
   const topMerchant = purchaseSummary?.byMerchant?.[0];
-  const categories = (purchaseSummary?.byCategory || []).slice(0, 3);
-  const categoryTotal = categories.reduce(
-    (sum, row) => sum + Number(row.spend || 0),
-    0,
-  );
 
   return (
     <Box
@@ -91,8 +86,8 @@ export const MoneyFlow = ({
       sx={{
         display: "grid",
         gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) minmax(0, 1fr)" },
-        columnGap: { md: 5 },
-        rowGap: 4,
+        columnGap: { md: 4 },
+        rowGap: 2,
       }}
     >
       {/* ── Bills, on a date rail ── */}
@@ -102,7 +97,7 @@ export const MoneyFlow = ({
           aside={
             <Typography
               sx={{
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 600,
                 fontVariantNumeric: "tabular-nums",
                 whiteSpace: "nowrap",
@@ -114,30 +109,30 @@ export const MoneyFlow = ({
         >
           Upcoming bills
         </SectionHeading>
-        <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.35 }}>
+        <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.2 }}>
           Pending, due in the next 30 days
         </Typography>
 
         {billsLoading ? (
-          <Stack spacing={1.25} sx={{ mt: 2 }}>
-            <Skeleton height={40} />
-            <Skeleton height={40} width="82%" />
+          <Stack spacing={1} sx={{ mt: 1.25 }}>
+            <Skeleton height={32} />
+            <Skeleton height={32} width="82%" />
           </Stack>
         ) : bills.length === 0 ? (
           <Stack
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ mt: 2, color: "text.secondary" }}
+            sx={{ mt: 1.25, color: "text.secondary" }}
           >
-            <FiCalendar size={15} />
-            <Typography sx={{ fontSize: 12.5 }}>
+            <FiCalendar size={14} />
+            <Typography sx={{ fontSize: 11.5 }}>
               No pending bills in the next 30 days.
             </Typography>
           </Stack>
         ) : (
-          <Box component="ol" sx={{ listStyle: "none", m: 0, p: 0, mt: 1.25 }}>
-            {bills.slice(0, 4).map((bill) => {
+          <Box component="ol" sx={{ listStyle: "none", m: 0, p: 0, mt: 0.75 }}>
+            {bills.slice(0, 2).map((bill) => {
               const due = new Date(bill.dueDate);
 
               return (
@@ -148,8 +143,8 @@ export const MoneyFlow = ({
                     display: "grid",
                     gridTemplateColumns: "42px minmax(0, 1fr) auto",
                     alignItems: "center",
-                    columnGap: 2,
-                    py: 1.35,
+                    columnGap: 1.5,
+                    py: 0.75,
                     borderTop: 1,
                     borderColor: "divider",
                   }}
@@ -165,7 +160,7 @@ export const MoneyFlow = ({
                     <Typography
                       sx={{
                         fontFamily: "var(--font-display)",
-                        fontSize: 19,
+                        fontSize: 16,
                         fontWeight: 700,
                         lineHeight: 1,
                         letterSpacing: "-0.03em",
@@ -175,17 +170,17 @@ export const MoneyFlow = ({
                       {String(due.getDate()).padStart(2, "0")}
                     </Typography>
                     <Typography
-                      sx={{ mt: 0.35, fontSize: 9.5, color: "text.secondary" }}
+                      sx={{ mt: 0.2, fontSize: 9, color: "text.secondary" }}
                     >
                       {MONTHS[due.getMonth()]}
                     </Typography>
                   </Box>
 
                   <Box sx={{ minWidth: 0 }}>
-                    <Typography sx={{ fontSize: 13, fontWeight: 500 }} noWrap>
+                    <Typography sx={{ fontSize: 12, fontWeight: 500 }} noWrap>
                       {bill.name}
                     </Typography>
-                    <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
+                    <Typography sx={{ fontSize: 10, color: "text.secondary" }}>
                       Due{" "}
                       {due.toLocaleDateString("en-IN", {
                         day: "2-digit",
@@ -196,7 +191,7 @@ export const MoneyFlow = ({
 
                   <Typography
                     sx={{
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: 600,
                       fontVariantNumeric: "tabular-nums",
                       whiteSpace: "nowrap",
@@ -219,8 +214,8 @@ export const MoneyFlow = ({
           borderTop: { xs: 1, md: 0 },
           borderLeft: { md: 1 },
           borderColor: "divider",
-          pt: { xs: 3.5, md: 0 },
-          pl: { md: 5 },
+          pt: { xs: 2.5, md: 0 },
+          pl: { md: 4 },
         }}
       >
         <SectionHeading
@@ -229,17 +224,17 @@ export const MoneyFlow = ({
         >
           Purchases
         </SectionHeading>
-        <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.35 }}>
+        <Typography sx={{ fontSize: 11, color: "text.secondary", mt: 0.2 }}>
           {monthLabel}
         </Typography>
 
         {purchasesLoading ? (
-          <Stack spacing={1.25} sx={{ mt: 2 }}>
-            <Skeleton height={46} width="55%" />
-            <Skeleton height={20} width="78%" />
+          <Stack spacing={1} sx={{ mt: 1.25 }}>
+            <Skeleton height={36} width="55%" />
+            <Skeleton height={16} width="78%" />
           </Stack>
         ) : !totals || totals.purchaseCount === 0 ? (
-          <Typography sx={{ mt: 2, fontSize: 12.5, color: "text.secondary" }}>
+          <Typography sx={{ mt: 1.25, fontSize: 11.5, color: "text.secondary" }}>
             No purchases recorded this month.
           </Typography>
         ) : (
@@ -248,12 +243,12 @@ export const MoneyFlow = ({
               direction="row"
               alignItems="baseline"
               spacing={2}
-              sx={{ mt: 1.5 }}
+              sx={{ mt: 0.9 }}
             >
               <Typography
                 sx={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "1.9rem",
+                  fontSize: "1.35rem",
                   fontWeight: 700,
                   letterSpacing: "-0.045em",
                   lineHeight: 1,
@@ -262,7 +257,7 @@ export const MoneyFlow = ({
               >
                 {formatCurrency(totals.totalSpend)}
               </Typography>
-              <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+              <Typography sx={{ fontSize: 11, color: "text.secondary" }}>
                 {totals.purchaseCount} purchase
                 {totals.purchaseCount === 1 ? "" : "s"} · {totals.itemCount} item
                 {totals.itemCount === 1 ? "" : "s"}
@@ -270,7 +265,7 @@ export const MoneyFlow = ({
             </Stack>
 
             {topMerchant && (
-              <Typography sx={{ mt: 1.25, fontSize: 11.5, color: "text.secondary" }}>
+              <Typography sx={{ mt: 0.5, fontSize: 11, color: "text.secondary" }}>
                 Top store{" "}
                 <Box component="span" sx={{ color: "text.primary", fontWeight: 600 }}>
                   {topMerchant.merchant}
@@ -279,63 +274,7 @@ export const MoneyFlow = ({
               </Typography>
             )}
 
-            {categories.length > 0 && (
-              <Box sx={{ mt: 2 }}>
-                <Typography
-                  sx={{
-                    fontSize: 10.5,
-                    fontWeight: 600,
-                    color: "text.secondary",
-                    mb: 1,
-                  }}
-                >
-                  Where the money went
-                </Typography>
-                <Stack spacing={1}>
-                  {categories.map((row) => (
-                    <Box key={row.category}>
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        sx={{ mb: 0.45 }}
-                      >
-                        <Typography
-                          sx={{ fontSize: 11.5, color: "text.secondary" }}
-                        >
-                          {row.category}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 11,
-                            color: "text.secondary",
-                            fontVariantNumeric: "tabular-nums",
-                          }}
-                        >
-                          {Math.round((row.spend / categoryTotal) * 100)}%
-                        </Typography>
-                      </Stack>
-                      <Box
-                        sx={{
-                          height: 3,
-                          borderRadius: 99,
-                          bgcolor: "var(--surface-tertiary)",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: `${(row.spend / categoryTotal) * 100}%`,
-                            height: "100%",
-                            bgcolor: "primary.main",
-                            opacity: 0.85,
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  ))}
-                </Stack>
-              </Box>
-            )}
+            
           </>
         )}
 

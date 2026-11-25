@@ -4,17 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
-import { Link as RouterLink } from "react-router-dom";
-import {
-  FiArrowUpRight,
-  FiShield,
-  FiBarChart2,
-  FiTrendingUp,
-  FiZap,
-} from "react-icons/fi";
 
 import axiosInstance from "../Utils/axiosInstance";
 import {
@@ -37,7 +27,7 @@ import { DashboardSkeleton } from "./dashboard/DashboardSkeleton";
 import { DashboardHeader } from "./dashboard/DashboardHeader";
 import { WelcomeNotice } from "./dashboard/WelcomeNotice";
 import { LedgerStatement } from "./dashboard/LedgerStatement";
-import { AITextInsightCard, SpendingRiskCard } from "./dashboard/InsightCards";
+import { InsightsPanel } from "./dashboard/InsightsPanel";
 import { AssistantChatCard } from "./dashboard/AssistantChatCard";
 import { AnalysisSheet } from "./dashboard/AnalyticsCharts";
 import { RecurringOperationsCard } from "./dashboard/RecurringOperationsCard";
@@ -283,7 +273,7 @@ export const UserDashboard = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      sx={{ display: "flex", flexDirection: "column", gap: { xs: 3, md: 4 } }}
+      sx={{ display: "flex", flexDirection: "column", gap: { xs: 1.25, md: 1.5 } }}
     >
 
       <WelcomeNotice
@@ -297,179 +287,92 @@ export const UserDashboard = () => {
 
       <QuickActions />
 
-      <LedgerStatement
-        hasActivity={hasActivity}
-        netSavings={netSavings}
-        totalIncome={totalIncome}
-        totalExpenses={totalExpenses}
-        savingsRate={savingsRate}
-        totalBudget={totalBudget}
-        hasFinancialData={hasFinancialData}
-        formatCurrency={formatCurrency}
-      />
-
-      <MoneyFlow
-        bills={upcomingBills}
-        billsLoading={loadingPlanning}
-        purchaseSummary={purchaseSummary}
-        purchasesLoading={loadingPlanning}
-        formatCurrency={formatCurrency}
-        monthLabel={new Date().toLocaleDateString("en-IN", {
-          month: "long",
-          year: "numeric",
-        })}
-      />
-
-      <Box component="section" aria-labelledby="insights-heading">
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "flex-end" }}
-          spacing={1}
-        >
-          <Box>
-            <Typography
-              id="insights-heading"
-              component="h2"
-              sx={{
-                fontFamily: "var(--font-display)",
-                fontSize: "1.05rem",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Insights & planning
-            </Typography>
-            <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.3 }}>
-              Helpful tools when you’re ready to take a closer look.
-            </Typography>
-          </Box>
-          <Button
-            component={RouterLink}
-            to="/private/financial-intelligence"
-            size="small"
-            endIcon={<FiArrowUpRight size={15} />}
-            sx={{ px: 1.25, textTransform: "none", fontWeight: 600 }}
-          >
-            Explore intelligence
-          </Button>
-        </Stack>
-
-        <Box
-          sx={{
-            mt: 1,
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              lg: "minmax(0, 1.42fr) minmax(0, 0.58fr)",
-            },
-            columnGap: { lg: 4 },
-            rowGap: 3,
-            alignItems: "start",
-          }}
-        >
-          <Box
-            component="ul"
-            sx={{
-              listStyle: "none",
-              m: 0,
-              p: 0,
-              borderBottom: 1,
-              borderColor: "divider",
-            }}
-          >
-            <SpendingRiskCard
-              riskData={riskData}
-              isLoading={loadingRisk}
-              onRefresh={fetchRisk}
-            />
-
-            <AITextInsightCard
-              title="Financial health"
-              icon={<FiShield size={15} />}
-              iconColor="secondary.main"
-              isLoading={loadingHealth}
-              value={healthScore}
-              onRefresh={fetchHealthScore}
-              prompt="Review your income, expenses, and available budget data."
-              loadingLabel="Reviewing financial health..."
-              loadingColor="secondary"
-              buttonLabel="Check health"
-            />
-
-            <AITextInsightCard
-              title="Spending patterns"
-              icon={<FiBarChart2 size={15} />}
-              iconColor="cyan.main"
-              isLoading={loadingInsights}
-              value={expenseInsights}
-              onRefresh={fetchExpenseInsights}
-              prompt="Compare recent spending by category and over time."
-              loadingLabel="Analyzing spending..."
-              loadingColor="primary"
-              buttonLabel="Analyze patterns"
-            />
-
-            <AITextInsightCard
-              title="Cash-flow forecast"
-              icon={<FiTrendingUp size={15} />}
-              iconColor="primary.main"
-              isLoading={loadingForecast}
-              value={forecast}
-              onRefresh={fetchForecast}
-              prompt="Estimate the next three months using your available financial data."
-              loadingLabel="Preparing forecast..."
-              loadingColor="primary"
-              buttonLabel="Generate forecast"
-            />
-
-            <AITextInsightCard
-              title="Savings suggestions"
-              icon={<FiZap size={15} />}
-              iconColor="success.main"
-              isLoading={loadingSavings}
-              value={savingOpportunities}
-              onRefresh={fetchSavingOpportunities}
-              prompt="Identify specific budget optimizations to maximize your monthly net surplus."
-              loadingLabel="Preparing suggestions..."
-              loadingColor="success"
-              buttonLabel="View suggestions"
-            />
-          </Box>
-
-          <Box sx={{ position: { lg: "sticky" }, top: { lg: 88 } }}>
-            <AssistantChatCard />
-          </Box>
-        </Box>
-      </Box>
-
-      {loadingCharts ? (
-        <Skeleton
-          variant="rectangular"
-          height={300}
-          sx={{ borderRadius: "12px" }}
-        />
-      ) : (
-        (totalIncome > 0 || totalExpenses > 0) && (
-          <AnalysisSheet
-            trendData={trendData}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "minmax(0, 1fr)",
+            lg: "minmax(0, 1.55fr) minmax(0, 0.95fr)",
+          },
+          gap: { xs: 1.75, md: 2 },
+          alignItems: "start",
+        }}
+      >
+        <Stack spacing={{ xs: 1.75, md: 2 }} sx={{ minWidth: 0 }}>
+          <LedgerStatement
+            hasActivity={hasActivity}
+            netSavings={netSavings}
             totalIncome={totalIncome}
             totalExpenses={totalExpenses}
-            categoryData={categoryData}
+            savingsRate={savingsRate}
+            totalBudget={totalBudget}
+            hasFinancialData={hasFinancialData}
+            formatCurrency={formatCurrency}
           />
-        )
-      )}
 
-      <RecurringOperationsCard
-        items={upcomingRecurring}
-        isLoading={loadingSecondary}
-      />
+          {loadingCharts ? (
+            <Skeleton
+              variant="rectangular"
+              height={220}
+              sx={{ borderRadius: "12px" }}
+            />
+          ) : (
+            (totalIncome > 0 || totalExpenses > 0) && (
+              <AnalysisSheet
+                trendData={trendData}
+                totalIncome={totalIncome}
+                totalExpenses={totalExpenses}
+                categoryData={categoryData}
+              />
+            )
+          )}
 
-      <InsightsHistoryCard
-        insights={allInsights}
-        isLoading={loadingHistory}
-        onRefresh={fetchAllInsights}
-      />
+          <MoneyFlow
+            bills={upcomingBills}
+            billsLoading={loadingPlanning}
+            purchaseSummary={purchaseSummary}
+            purchasesLoading={loadingPlanning}
+            formatCurrency={formatCurrency}
+            monthLabel={new Date().toLocaleDateString("en-IN", {
+              month: "long",
+              year: "numeric",
+            })}
+          />
+        </Stack>
+
+        <Stack spacing={{ xs: 1.75, md: 2 }} sx={{ minWidth: 0 }}>
+          <InsightsPanel
+            riskData={riskData}
+            loadingRisk={loadingRisk}
+            fetchRisk={fetchRisk}
+            healthScore={healthScore}
+            loadingHealth={loadingHealth}
+            fetchHealthScore={fetchHealthScore}
+            expenseInsights={expenseInsights}
+            loadingInsights={loadingInsights}
+            fetchExpenseInsights={fetchExpenseInsights}
+            forecast={forecast}
+            loadingForecast={loadingForecast}
+            fetchForecast={fetchForecast}
+            savingOpportunities={savingOpportunities}
+            loadingSavings={loadingSavings}
+            fetchSavingOpportunities={fetchSavingOpportunities}
+          />
+
+          <AssistantChatCard />
+
+          <RecurringOperationsCard
+            items={upcomingRecurring}
+            isLoading={loadingSecondary}
+          />
+
+          <InsightsHistoryCard
+            insights={allInsights}
+            isLoading={loadingHistory}
+            onRefresh={fetchAllInsights}
+          />
+        </Stack>
+      </Box>
     </Box>
   );
 };

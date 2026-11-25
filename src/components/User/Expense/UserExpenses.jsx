@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { AnimatePresence } from "framer-motion";
-import { FiList, FiBarChart2, FiAlignLeft } from "react-icons/fi";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -27,22 +25,22 @@ import {
 import ExpenseHeader from "./expense/ExpenseHeader";
 import ExpenseStatCards from "./expense/ExpenseStatCards";
 import RecentExpensesPanel from "./expense/RecentExpensesPanel";
-import ExpenseAnalyticsTab from "./expense/ExpenseAnalyticsTab";
+import { MonthlyTrendCard, CategoryMixCard } from "./expense/ExpenseAnalyticsTab";
 import ExpenseRecordsTab from "./expense/ExpenseRecordsTab";
 import AddExpenseDialog from "./expense/AddExpenseDialog";
 
 /**
  * --- EXPENSE CENTER ---
- * The primary dashboard for tracking outgoing capital and analyzing spending habits.
- * Features: Recent Activity, Deep Analytics, and a Filterable Ledger.
+ * One screen: the spend statement, the trend, the category mix, recent
+ * activity and the filterable ledger all render together. There is no tab
+ * switching and no duplicated summary — the ledger is the only full list.
  *
  * State split (important for render cost):
  * - Redux owns the ledger, the recent list, status flags and every derived
  *   figure. Those selectors are memoized, so unrelated updates do not
  *   recompute totals or charts.
- * - Local state owns everything only this screen cares about: the active tab,
- *   the dialog, the submit lock and the filter inputs. None of that belongs in
- *   a global store.
+ * - Local state owns only what this screen cares about: the dialog, the submit
+ *   lock and the filter inputs.
  */
 
 const EMPTY_FILTERS = {
@@ -74,7 +72,6 @@ export const UserExpenses = () => {
   const categoryBreakdown = useAppSelector(selectCategoryBreakdown);
 
   // --- UI STATE ---
-  const [activeTab, setActiveTab] = useState("overview");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
@@ -184,49 +181,23 @@ export const UserExpenses = () => {
     dispatch(fetchExpenses({ userId, filters }));
   }, [dispatch, userId, filters]);
 
-  const tabs = [
-    { id: "overview", label: "Overview", icon: <FiAlignLeft size={14} /> },
-    { id: "analytics", label: "Analytics", icon: <FiBarChart2 size={14} /> },
-    { id: "records", label: "Records", icon: <FiList size={14} /> },
-  ];
-
   return (
-    <div className="space-y-6 text-[var(--text-primary)]">
-      <ExpenseHeader
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        tabs={tabs}
-        onAdd={() => setIsModalOpen(true)}
-      >
-        <ExpenseStatCards
-          totalExpenses={totalExpenses}
-          thisMonthTotal={thisMonthTotal}
-          avgExpense={avgExpense}
-          topCategory={topCategory}
-        />
-      </ExpenseHeader>
+    <div className="space-y-2.5 text-[var(--text-primary)]">
+      <ExpenseHeader onAdd={() => setIsModalOpen(true)} />
 
-      {/* ── TAB PANELS ── */}
-      <AnimatePresence mode="wait">
-        {activeTab === "overview" && (
-          <RecentExpensesPanel
-            key="overview"
-            recentExpenses={recentExpenses}
-            onAdd={() => setIsModalOpen(true)}
-          />
-        )}
+      <ExpenseStatCards
+        totalExpenses={totalExpenses}
+        thisMonthTotal={thisMonthTotal}
+        avgExpense={avgExpense}
+        topCategory={topCategory}
+      />
 
-        {activeTab === "analytics" && (
-          <ExpenseAnalyticsTab
-            key="analytics"
-            chartData={chartData}
-            categoryBreakdown={categoryBreakdown}
-          />
-        )}
+      <div className="grid items-start gap-2.5 xl:grid-cols-12">
+        {/* ── Trend and ledger ── */}
+        <div className="min-w-0 space-y-2.5 xl:col-span-7">
+          <MonthlyTrendCard chartData={chartData} />
 
-        {activeTab === "records" && (
           <ExpenseRecordsTab
-            key="records"
             filters={filters}
             categories={categories}
             expenses={expenses}
@@ -235,8 +206,18 @@ export const UserExpenses = () => {
             onAdd={() => setIsModalOpen(true)}
             onDelete={deleteExpense}
           />
-        )}
-      </AnimatePresence>
+        </div>
+
+        {/* ── Category mix and recent activity ── */}
+        <div className="min-w-0 space-y-2.5 xl:col-span-5">
+          <CategoryMixCard categoryBreakdown={categoryBreakdown} />
+
+          <RecentExpensesPanel
+            recentExpenses={recentExpenses}
+            onAdd={() => setIsModalOpen(true)}
+          />
+        </div>
+      </div>
 
       <AddExpenseDialog
         open={isModalOpen}
@@ -250,3 +231,5 @@ export const UserExpenses = () => {
     </div>
   );
 };
+
+export default UserExpenses;

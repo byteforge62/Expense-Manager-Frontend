@@ -2,41 +2,44 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
 
-/* ── Loading placeholder shaped like the statement, not a KPI grid ── */
+/* ── Loading placeholder shaped like the compact statement and side panels ── */
 
 export const DashboardSkeleton = () => (
-  <Stack spacing={4}>
+  <Stack spacing={2.5}>
     <Box>
-      <Skeleton variant="text" height={44} width="34%" />
-      <Skeleton variant="text" height={18} width="52%" />
+      <Skeleton variant="text" height={30} width="24%" />
+      <Skeleton variant="text" height={15} width="42%" />
     </Box>
 
-    <Skeleton variant="rectangular" height={286} sx={{ borderRadius: "14px" }} />
-
-    <Stack spacing={1.25}>
-      <Skeleton variant="text" height={20} width="18%" />
-      {[1, 2, 3].map((row) => (
-        <Skeleton key={row} variant="text" height={34} />
+    <Stack direction="row" spacing={0.75} sx={{ flexWrap: "wrap" }}>
+      {[1, 2, 3, 4].map((item) => (
+        <Skeleton
+          key={item}
+          variant="rounded"
+          height={30}
+          width={118}
+          sx={{ borderRadius: "999px" }}
+        />
       ))}
     </Stack>
 
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-        columnGap: 5,
-        rowGap: 4,
+        gridTemplateColumns: { xs: "1fr", lg: "minmax(0, 1.55fr) minmax(0, 0.95fr)" },
+        gap: 3,
+        alignItems: "start",
       }}
     >
-      {[1, 2].map((column) => (
-        <Stack key={column} spacing={1.5}>
-          <Skeleton variant="text" height={22} width="38%" />
-          <Skeleton variant="text" height={16} width="60%" />
-          <Skeleton variant="rectangular" height={128} sx={{ borderRadius: "8px" }} />
-        </Stack>
-      ))}
-    </Box>
+      <Stack spacing={3}>
+        <Skeleton variant="rectangular" height={196} sx={{ borderRadius: "12px" }} />
+        <Skeleton variant="rectangular" height={240} sx={{ borderRadius: "12px" }} />
+      </Stack>
 
-    <Skeleton variant="rectangular" height={260} sx={{ borderRadius: "12px" }} />
+      <Stack spacing={3}>
+        <Skeleton variant="rectangular" height={210} sx={{ borderRadius: "12px" }} />
+        <Skeleton variant="rectangular" height={190} sx={{ borderRadius: "12px" }} />
+      </Stack>
+    </Box>
   </Stack>
 );

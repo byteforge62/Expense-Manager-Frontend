@@ -20,6 +20,7 @@ import { PurchaseIntelligence } from "../PurchaseIntelligence";
 import { PurchaseSummary } from "./PurchaseSummary";
 import { PurchaseDialog } from "./PurchaseDialog";
 import { PurchaseDetailDialog } from "./PurchaseDetailDialog";
+import { StoreConnections } from "./StoreConnections";
 import {
   PURCHASE_CATEGORIES,
   PURCHASE_STATUSES,
@@ -266,6 +267,13 @@ export const UserPurchases = () => {
           Record purchase
         </Button>
       </header>
+
+      <StoreConnections
+        onRecordsChanged={() => {
+          loadPurchases();
+          loadSummary();
+        }}
+      />
 
       <div className="flex gap-1 border-b border-[var(--border)]" role="tablist" aria-label="Purchase views">
         {[
