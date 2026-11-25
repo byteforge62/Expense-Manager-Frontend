@@ -1,6 +1,4 @@
 import {
-  BarChart,
-  Bar,
   LineChart,
   Line,
   XAxis,
@@ -10,18 +8,14 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
-import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import { FiTrendingDown, FiBarChart2, FiPieChart } from "react-icons/fi";
 
-/* ── Visual analytics: 30-day trend, inflow/outflow and category split ── */
+/* ── One analysis sheet: trend, category ring and the inflow/outflow balance ── */
 
 const COLORS = [
   "var(--chart-1)",
@@ -33,22 +27,41 @@ const COLORS = [
   "var(--chart-2)",
 ];
 
+const compactINR = (value) => {
+  const amount = Number(value || 0);
+
+  if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(1)}Cr`;
+  if (amount >= 100000) return `₹${(amount / 100000).toFixed(1)}L`;
+  if (amount >= 1000) return `₹${Math.round(amount / 1000)}k`;
+  return `₹${amount}`;
+};
+
 const ChartTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
+
   return (
     <Paper
       sx={{
         px: 1.5,
         py: 1.1,
-        border: 0,
+        border: 1,
+        borderColor: "divider",
         borderRadius: "8px",
-        bgcolor: "#0f172a",
-        boxShadow: "0 12px 24px -12px rgba(15,23,42,0.5)",
+        bgcolor: "background.paper",
+        boxShadow: "var(--shadow-panel)",
       }}
     >
-      <Typography sx={{ fontSize: 10.5, color: "#94a3b8" }}>{label}</Typography>
+      <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
+        {label}
+      </Typography>
       <Typography
-        sx={{ fontSize: 13, fontWeight: 600, color: "#ffffff", mt: 0.2 }}
+        sx={{
+          fontSize: 13,
+          fontWeight: 600,
+          color: "text.primary",
+          mt: 0.2,
+          fontVariantNumeric: "tabular-nums",
+        }}
       >
         ₹{payload[0].value?.toLocaleString("en-IN")}
       </Typography>
@@ -56,69 +69,62 @@ const ChartTooltip = ({ active, payload, label }) => {
   );
 };
 
-const ChartCard = ({ children, sx }) => (
-  <Card
-    sx={{
-      border: 1,
-      borderColor: "divider",
-      borderRadius: "12px",
-      p: { xs: 2, sm: 2.75 },
-      bgcolor: "background.paper",
-      boxShadow: "var(--shadow-panel)",
-      ...sx,
-    }}
+const SectionHead = ({ title, subtitle, aside }) => (
+  <Stack
+    direction="row"
+    justifyContent="space-between"
+    alignItems="baseline"
+    spacing={2}
   >
-    {children}
-  </Card>
-);
-
-const ChartHeader = ({ icon, title, subtitle, color = "primary.main" }) => (
-  <Stack direction="row" spacing={1.1} alignItems="center" sx={{ mb: 2.5 }}>
-    <Box sx={{ color, display: "flex", flexShrink: 0 }}>{icon}</Box>
     <Box sx={{ minWidth: 0 }}>
-      <Typography sx={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em" }}>
+      <Typography component="h3" sx={{ fontSize: 13.5, fontWeight: 600 }}>
         {title}
       </Typography>
-      <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.15 }}>
+      <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.2 }}>
         {subtitle}
       </Typography>
     </Box>
+    {aside}
   </Stack>
 );
 
-const axisTick = { fill: "#94a3b8", fontSize: 10, fontWeight: 500 };
+const axisTick = { fill: "var(--text-muted)", fontSize: 10, fontWeight: 500 };
 
-export const SpendingTrendChart = ({ data }) => (
-  <Grid size={12}>
-    <ChartCard>
-      <ChartHeader
-        icon={<FiTrendingDown size={17} />}
-        title="Spending trend"
-        subtitle="Expenses over the last 30 days"
-        color="error.main"
-      />
-      <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+const TrendBlock = ({ data }) => (
+  <Box>
+    <SectionHead
+      title="Spending trend"
+      subtitle="Expenses over the last 30 days"
+      aside={
+        <Typography
+          sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
+        >
+          Daily total
+        </Typography>
+      }
+    />
+    <Box sx={{ mt: 1.5, ml: -1 }}>
+      <ResponsiveContainer width="100%" height={248}>
+        <LineChart data={data} margin={{ top: 10, right: 8, left: -10, bottom: 0 }}>
           <CartesianGrid
-            strokeDasharray="4 6"
-            stroke="var(--border)"
+            strokeDasharray="2 6"
+            stroke="var(--border-subtle)"
             vertical={false}
-            opacity={0.7}
           />
           <XAxis
             dataKey="date"
             tick={axisTick}
             axisLine={false}
             tickLine={false}
-            interval={2}
+            interval={4}
             dy={6}
           />
           <YAxis
             tick={axisTick}
             axisLine={false}
             tickLine={false}
-            tickFormatter={(v) => `₹${v}`}
-            width={54}
+            tickFormatter={compactINR}
+            width={46}
           />
           <Tooltip
             content={<ChartTooltip />}
@@ -127,133 +133,272 @@ export const SpendingTrendChart = ({ data }) => (
           <Line
             type="monotone"
             dataKey="amount"
-            stroke="var(--chart-1)"
-            strokeWidth={2.6}
+            stroke="var(--primary)"
+            strokeWidth={2.2}
             dot={false}
             activeDot={{
-              r: 5,
+              r: 4,
               fill: "var(--card)",
-              stroke: "var(--chart-1)",
-              strokeWidth: 2.5,
+              stroke: "var(--primary)",
+              strokeWidth: 2,
             }}
           />
         </LineChart>
       </ResponsiveContainer>
-    </ChartCard>
-  </Grid>
+    </Box>
+  </Box>
 );
 
-export const CashEquilibriumChart = ({ totalIncome, totalExpenses }) => (
-  <Grid size={{ xs: 12, lg: 6 }}>
-    <ChartCard>
-      <ChartHeader
-        icon={<FiBarChart2 size={17} />}
-        title="Inflow and outflow"
-        subtitle="Income against expenses"
-        color="primary.main"
-      />
-      <ResponsiveContainer width="100%" height={250}>
-        <BarChart
-          data={[
-            { name: "Income", amount: totalIncome },
-            { name: "Expenses", amount: totalExpenses },
-          ]}
-          barSize={44}
-          margin={{ top: 8, right: 8, left: -14, bottom: 0 }}
-        >
-          <XAxis
-            dataKey="name"
-            tick={axisTick}
-            axisLine={false}
-            tickLine={false}
-            dy={6}
-          />
-          <YAxis
-            tick={axisTick}
-            axisLine={false}
-            tickLine={false}
-            tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
-            width={52}
-          />
-          <Tooltip
-            content={<ChartTooltip />}
-            cursor={{ fill: "rgba(99,102,241,0.05)" }}
-          />
-          <Bar dataKey="amount" radius={[3, 3, 0, 0]}>
-            <Cell fill="var(--chart-2)" />
-            <Cell fill="var(--chart-3)" />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </ChartCard>
-  </Grid>
-);
-
-export const CategoryBreakdownChart = ({ data }) => {
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+const CategoryBlock = ({ data }) => {
+  const total = data.reduce((sum, item) => sum + Number(item.value || 0), 0);
 
   return (
-    <Grid size={{ xs: 12, lg: 6 }}>
-      <ChartCard>
-        <ChartHeader
-          icon={<FiPieChart size={17} />}
-          title="Spending by category"
-          subtitle="Where this month went"
-          color="primary.main"
-        />
-        <Box sx={{ position: "relative" }}>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey="value"
-                outerRadius={88}
-                innerRadius={58}
-                paddingAngle={3}
-                stroke="none"
-              >
-                {data.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip content={<ChartTooltip />} />
-              <Legend
-                iconType="circle"
-                iconSize={7}
-                wrapperStyle={{
-                  fontSize: 11,
-                  color: "var(--text-secondary)",
-                  paddingTop: 12,
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <Box
-            sx={{
-              position: "absolute",
-              top: 86,
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              pointerEvents: "none",
-            }}
+    <Box>
+      <SectionHead
+        title="Spending by category"
+        subtitle="Where this month went"
+        aside={
+          <Typography
+            sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
           >
-            <Typography sx={{ fontSize: 10.5, color: "text.secondary" }}>
-              Total
+            All recorded
+          </Typography>
+        }
+      />
+
+      <Box sx={{ position: "relative", mt: 0.75 }}>
+        <ResponsiveContainer width="100%" height={206}>
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              outerRadius={78}
+              innerRadius={54}
+              paddingAngle={2}
+              stroke="none"
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={entry.name || index}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip content={<ChartTooltip />} />
+          </PieChart>
+        </ResponsiveContainer>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <Box sx={{ textAlign: "center" }}>
+            <Typography sx={{ fontSize: 9.5, color: "text.secondary" }}>
+              Recorded
             </Typography>
             <Typography
               sx={{
-                fontSize: 15,
+                fontSize: 14,
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
                 fontVariantNumeric: "tabular-nums",
               }}
             >
-              ₹{Number(total || 0).toLocaleString("en-IN")}
+              {compactINR(total)}
             </Typography>
           </Box>
         </Box>
-      </ChartCard>
-    </Grid>
+      </Box>
+
+      <Stack spacing={0.9} sx={{ mt: 0.5 }}>
+        {data.slice(0, 4).map((item, index) => (
+          <Stack
+            key={item.name || index}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={1.5}
+          >
+            <Stack
+              direction="row"
+              spacing={0.85}
+              alignItems="center"
+              sx={{ minWidth: 0 }}
+            >
+              <Box
+                sx={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "2px",
+                  bgcolor: COLORS[index % COLORS.length],
+                  flexShrink: 0,
+                }}
+              />
+              <Typography
+                sx={{ fontSize: 11.5, color: "text.secondary" }}
+                noWrap
+              >
+                {item.name}
+              </Typography>
+            </Stack>
+            <Typography
+              sx={{
+                fontSize: 11,
+                color: "text.secondary",
+                fontVariantNumeric: "tabular-nums",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {total > 0 ? Math.round((item.value / total) * 100) : 0}%
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Box>
   );
 };
+
+const BalanceBlock = ({ totalIncome, totalExpenses }) => {
+  const total = totalIncome + totalExpenses;
+  const incomeShare = total > 0 ? (totalIncome / total) * 100 : 0;
+  const expenseShare = total > 0 ? (totalExpenses / total) * 100 : 0;
+
+  return (
+    <Box>
+      <SectionHead
+        title="Inflow and outflow"
+        subtitle="Income against expenses"
+        aside={
+          <Typography
+            sx={{ fontSize: 10.5, color: "text.secondary", whiteSpace: "nowrap" }}
+          >
+            {total > 0 ? `${Math.round(incomeShare)}% in` : "No activity"}
+          </Typography>
+        }
+      />
+
+      <Stack spacing={1.5} sx={{ mt: 1.75 }}>
+        {[
+          {
+            label: "Income",
+            value: totalIncome,
+            share: incomeShare,
+            color: "var(--positive)",
+          },
+          {
+            label: "Expenses",
+            value: totalExpenses,
+            share: expenseShare,
+            color: "var(--negative)",
+          },
+        ].map((row) => (
+          <Box key={row.label}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="baseline"
+              sx={{ mb: 0.65 }}
+            >
+              <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+                {row.label}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: "text.secondary",
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {compactINR(row.value)}
+              </Typography>
+            </Stack>
+            <Box
+              sx={{
+                height: 4,
+                borderRadius: 99,
+                bgcolor: "var(--surface-tertiary)",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                sx={{
+                  width: `${Math.max(row.share, row.value > 0 ? 3 : 0)}%`,
+                  height: "100%",
+                  bgcolor: row.color,
+                }}
+              />
+            </Box>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
+  );
+};
+
+export const AnalysisSheet = ({
+  trendData = [],
+  totalIncome = 0,
+  totalExpenses = 0,
+  categoryData = [],
+}) => {
+  const hasCategories = categoryData.length > 0;
+
+  return (
+    <Box
+      component="section"
+      aria-labelledby="analysis-heading"
+      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 3, md: 3.5 } }}
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="baseline"
+        sx={{ mb: 2.5 }}
+      >
+        <Typography
+          id="analysis-heading"
+          component="h2"
+          sx={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.05rem",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Analysis
+        </Typography>
+        <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+          The shape behind the numbers
+        </Typography>
+      </Stack>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            lg: hasCategories
+              ? "minmax(0, 1.5fr) minmax(0, 0.85fr)"
+              : "minmax(0, 1fr)",
+          },
+          columnGap: 5,
+          rowGap: 3,
+          alignItems: "start",
+        }}
+      >
+        <TrendBlock data={trendData} />
+        {hasCategories && <CategoryBlock data={categoryData} />}
+      </Box>
+
+      <Box sx={{ mt: 3.5, pt: 3, borderTop: 1, borderColor: "divider" }}>
+        <BalanceBlock totalIncome={totalIncome} totalExpenses={totalExpenses} />
+      </Box>
+    </Box>
+  );
+};
+
+export default AnalysisSheet;

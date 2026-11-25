@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { FiCpu, FiInbox, FiSend } from "react-icons/fi";
+import { FiCpu, FiSend } from "react-icons/fi";
 
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -14,9 +13,9 @@ import { AICard } from "./AICard";
 
 /**
  * --- FINANCIAL ASSISTANT ---
- * The only dashboard section with its own API call and state: the conversation,
- * the composer and the auto-scroll effect belong together and nothing outside
- * this card reads them.
+ * A correspondence column rather than a chat toy: the question is set like a
+ * note, the answer as an indented reply. The conversation, composer and
+ * auto-scroll live here; nothing outside this panel reads them.
  */
 
 export const AssistantChatCard = () => {
@@ -25,12 +24,13 @@ export const AssistantChatCard = () => {
   const [input, setInput] = useState("");
   const [loadingAI, setLoadingAI] = useState(false);
 
-  // Cognitive Chat: Send a manual query to the AI
   const sendMessage = async () => {
     if (!input.trim()) return;
+
     const userMessage = { role: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+
     try {
       setLoadingAI(true);
       const res = await axiosInstance.post("/ai/ask", { message: input });
@@ -61,127 +61,125 @@ export const AssistantChatCard = () => {
   }, [messages]);
 
   return (
-        <Grid size={{ xs: 12, md: 6 }}>
-          <AICard
-            title="Financial assistant"
-            icon={<FiCpu size={16} />}
-            iconColor="warning.main"
+    <AICard
+      title="Financial assistant"
+      icon={<FiCpu size={15} />}
+      iconColor="warning.main"
+    >
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 250,
+          maxHeight: 330,
+          overflowY: "auto",
+          pr: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}
+      >
+        {messages.length === 0 && (
+          <Box sx={{ my: "auto", px: 1 }}>
+            <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+              No conversation yet
+            </Typography>
+            <Typography
+              sx={{ mt: 0.5, fontSize: 11.5, color: "text.secondary", lineHeight: 1.6 }}
+            >
+              Ask about a category, a budget or the month so far. Replies are
+              based on the records in your account.
+            </Typography>
+          </Box>
+        )}
+
+        {messages.map((msg, i) => (
+          <Box
+            key={i}
+            sx={
+              msg.role === "user"
+                ? {
+                    alignSelf: "flex-end",
+                    maxWidth: "86%",
+                    textAlign: "right",
+                  }
+                : {
+                    alignSelf: "stretch",
+                    pl: 1.75,
+                    borderLeft: "2px solid",
+                    borderColor: "primary.main",
+                  }
+            }
           >
-            <Box
+            <Typography
               sx={{
-                height: 260,
-                overflowY: "auto",
-                mb: 2,
-                pr: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
+                fontSize: 9.5,
+                fontWeight: 600,
+                color: "text.secondary",
+                mb: 0.35,
               }}
             >
-              {messages.length === 0 && (
-                <Stack
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{ height: "100%", opacity: 0.6 }}
-                >
-                  <Box sx={{ color: "text.secondary", display: "flex", mb: 1 }}>
-                    <FiInbox size={22} />
-                  </Box>
-                  <Typography
-                    sx={{ fontSize: 12.5, fontWeight: 600, color: "text.secondary" }}
-                  >
-                    No conversation yet
-                  </Typography>
-                </Stack>
-              )}
-              {messages.map((msg, i) => (
-                <Box
-                  key={i}
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      msg.role === "user" ? "flex-end" : "flex-start",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      maxWidth: "85%",
-                      px: 2,
-                      py: 1.5,
-                      borderRadius: 2,
-                      fontSize: "0.85rem",
-                      lineHeight: 1.5,
-                      boxShadow: 1,
-                      bgcolor:
-                        msg.role === "user" ? "cyan.main" : "action.hover",
-                      color: msg.role === "user" ? "white" : "text.primary",
-                      border: 1,
-                      borderColor: "divider",
-                      borderBottomRightRadius: msg.role === "user" ? 1 : 4,
-                      borderBottomLeftRadius: msg.role === "ai" ? 1 : 4,
-                    }}
-                  >
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  </Box>
-                </Box>
-              ))}
-              {loadingAI && (
-                <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-                  <Box
-                    sx={{
-                      bgcolor: "action.hover",
-                      border: 1,
-                      borderColor: "divider",
-                      px: 2,
-                      py: 1.5,
-                      borderRadius: 2,
-                      borderBottomLeftRadius: 1,
-                      display: "flex",
-                      gap: 1,
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "0.8rem", color: "text.secondary" }}>
-                      Thinking…
-                    </Typography>
-                  </Box>
-                </Box>
-              )}
-              <div ref={chatEndRef} />
+              {msg.role === "user" ? "You" : "FinTrack"}
+            </Typography>
+            <Box
+              sx={{
+                fontSize: 12.5,
+                lineHeight: 1.6,
+                color: msg.role === "user" ? "text.primary" : "text.secondary",
+                "& p": { my: 0.35 },
+                "& ul, & ol": { pl: 2, my: 0.5, textAlign: "left" },
+              }}
+            >
+              <ReactMarkdown>{msg.text}</ReactMarkdown>
             </Box>
+          </Box>
+        ))}
 
-            <Stack direction="row" spacing={1}>
-              <TextField
-                fullWidth
-                size="small"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Ask a question about your finances…"
-                slotProps={{
-                  input: {
-                    sx: { borderRadius: 1.5, fontSize: "0.8rem" },
-                  },
-                }}
-              />
-              <IconButton
-                color="primary"
-                onClick={sendMessage}
-                disabled={loadingAI || !input.trim()}
-                aria-label="Send message"
-                sx={{
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                  borderRadius: "8px",
-                  width: 40,
-                  height: 40,
-                  "&:hover": { bgcolor: "primary.dark" },
-                  "&:disabled": { opacity: 0.4, color: "primary.contrastText" },
-                }}
-              >
-                <FiSend size={16} />
-              </IconButton>
-            </Stack>
-          </AICard>
-        </Grid>
+        {loadingAI && (
+          <Typography sx={{ fontSize: 11.5, color: "text.secondary", pl: 1.75 }}>
+            Thinking…
+          </Typography>
+        )}
+
+        <div ref={chatEndRef} />
+      </Box>
+
+      <Stack direction="row" spacing={0.75} sx={{ mt: 2, alignItems: "center" }}>
+        <TextField
+          fullWidth
+          size="small"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          placeholder="Ask a question about your finances…"
+          variant="standard"
+          slotProps={{
+            input: {
+              disableUnderline: false,
+              sx: {
+                fontSize: "0.8rem",
+                pb: 0.75,
+                "&:before": { borderColor: "divider" },
+              },
+            },
+          }}
+        />
+        <IconButton
+          onClick={sendMessage}
+          disabled={loadingAI || !input.trim()}
+          aria-label="Send message"
+          sx={{
+            width: 36,
+            height: 36,
+            borderRadius: "8px",
+            bgcolor: "primary.main",
+            color: "primary.contrastText",
+            "&:hover": { bgcolor: "primary.dark" },
+            "&:disabled": { opacity: 0.35, color: "primary.contrastText" },
+          }}
+        >
+          <FiSend size={15} />
+        </IconButton>
+      </Stack>
+    </AICard>
   );
 };

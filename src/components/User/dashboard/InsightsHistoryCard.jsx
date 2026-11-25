@@ -1,115 +1,137 @@
-import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-import { FiCpu, FiInbox, FiRefreshCw } from "react-icons/fi";
+import { FiInbox, FiRefreshCw } from "react-icons/fi";
 
-/* ── Saved analysis history (skeleton / empty / populated) ── */
+/* ── Saved analysis history: skeleton / empty / ruled archive ── */
+
+const savedOn = (item) => {
+  if (!item?.createdAt) return "Saved analysis";
+
+  const date = new Date(item.createdAt);
+
+  if (Number.isNaN(date.getTime())) return "Saved analysis";
+
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
-      <Card
-        sx={{
-          border: 1,
-          borderColor: "divider",
-          borderRadius: "12px",
-          p: { xs: 2.5, sm: 3 },
-          position: "relative",
-          overflow: "hidden",
-          boxShadow: "var(--shadow-panel)",
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ mb: 4, position: "relative", zIndex: 1 }}
+  <Box
+    component="section"
+    aria-labelledby="insights-history-heading"
+    sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 3, md: 3.5 } }}
+  >
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="flex-start"
+      spacing={2}
+    >
+      <Box>
+        <Typography
+          id="insights-history-heading"
+          component="h2"
+          sx={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.05rem",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+          }}
         >
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <Box sx={{ color: "primary.main", display: "flex" }}>
-              <FiCpu size={17} />
-            </Box>
-            <Box>
-              <Typography
-                sx={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "0.97rem",
-                  fontWeight: 600,
-                  letterSpacing: "-0.015em",
-                }}
-              >
-                Recent insights
-              </Typography>
-              <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
-                Saved analysis from this account
-              </Typography>
-            </Box>
-          </Stack>
-          {insights.length === 0 && !isLoading && (
-            <Button
-              size="small"
-              onClick={onRefresh}
-              startIcon={<FiRefreshCw size={12} />}
+          Recent insights
+        </Typography>
+        <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.25 }}>
+          Saved analysis from this account
+        </Typography>
+      </Box>
+
+      {insights.length === 0 && !isLoading && (
+        <Button
+          size="small"
+          onClick={onRefresh}
+          startIcon={<FiRefreshCw size={12} />}
+          sx={{
+            minHeight: 30,
+            px: 1.25,
+            fontSize: 11.5,
+            fontWeight: 600,
+            textTransform: "none",
+            color: "text.secondary",
+          }}
+        >
+          Refresh history
+        </Button>
+      )}
+    </Stack>
+
+    {isLoading ? (
+      <Stack spacing={1.5} sx={{ mt: 2 }}>
+        <Skeleton height={54} />
+        <Skeleton height={54} width="84%" />
+      </Stack>
+    ) : !insights || insights.length === 0 ? (
+      <Stack
+        direction="row"
+        spacing={1.25}
+        alignItems="center"
+        sx={{ mt: 2, color: "text.secondary" }}
+      >
+        <FiInbox size={17} />
+        <Box>
+          <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+            No saved insights yet
+          </Typography>
+          <Typography sx={{ fontSize: 11.5 }}>
+            Results from your analyses will appear here.
+          </Typography>
+        </Box>
+      </Stack>
+    ) : (
+      <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, mt: 1.25 }}>
+        {insights.map((item, index) => (
+          <Box
+            component="li"
+            key={item._id || index}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "112px minmax(0, 1fr)" },
+              columnGap: 2.5,
+              rowGap: 0.5,
+              py: 1.65,
+              borderTop: 1,
+              borderColor: "divider",
+            }}
+          >
+            <Typography
               sx={{
+                fontSize: 10.5,
                 fontWeight: 600,
-                textTransform: "none",
-                borderRadius: "8px",
+                color: "text.secondary",
+                pt: 0.2,
+                whiteSpace: "nowrap",
               }}
             >
-              Refresh history
-            </Button>
-          )}
-        </Stack>
-
-        {isLoading ? (
-          <Stack spacing={2}>
-            <Skeleton variant="rectangular" height={100} sx={{ borderRadius: "12px" }} />
-            <Skeleton variant="rectangular" height={100} sx={{ borderRadius: "12px" }} />
-          </Stack>
-        ) : !insights || insights.length === 0 ? (
-          <Stack
-            alignItems="center"
-            justifyContent="center"
-            spacing={2}
-            sx={{ py: 6, opacity: 0.6 }}
-          >
-            <Box sx={{ color: "text.secondary", display: "flex" }}>
-              <FiInbox size={24} />
-            </Box>
-            <Box textAlign="center">
-              <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
-                No saved insights yet
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ maxWidth: 280, mx: "auto", mt: 0.5 }}
-              >
-                Results from your analyses will appear here.
-              </Typography>
-            </Box>
-          </Stack>
-        ) : (
-          <Grid container spacing={3} sx={{ position: "relative", zIndex: 1 }}>
-            {insights.map((item, index) => (
-              <Grid size={{ xs: 12, md: 6 }} key={item._id || index}>
-                <Card
-                  sx={{
-                    p: 2,
-                    borderRadius: "12px",
-                    border: 1,
-                    borderColor: "divider",
-                  }}
-                >
-                  <Typography variant="body2">
-                    {item.content || JSON.stringify(item)}
-                  </Typography>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Card>
+              {savedOn(item)}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 12.5,
+                lineHeight: 1.65,
+                color: "text.primary",
+                "& p": { my: 0.3 },
+              }}
+            >
+              {item.content || JSON.stringify(item)}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    )}
+  </Box>
 );

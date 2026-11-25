@@ -82,9 +82,14 @@ export const Login = () => {
         }
 
         // The server greets the account on every login and points a brand-new
-        // (empty) ledger at its first expense. Older responses fall back to a
-        // plain welcome.
-        toast.success(welcome?.message || "Login successful! Welcome back.", {
+        // (empty) ledger at its first expense. A greeting suppressed by the
+        // user's notification settings falls back to a plain login success.
+        const greeting =
+          welcome && welcome.suppressed !== true
+            ? welcome.message
+            : "Login successful! Welcome back.";
+
+        toast.success(greeting, {
           position: "top-center",
           autoClose: 4000,
         });

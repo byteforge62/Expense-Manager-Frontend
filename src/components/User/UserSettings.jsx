@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -51,6 +51,20 @@ const NOTIFICATION_FIELDS = [
   { key: "recommendations", label: "Recommendations", hint: "Suggest ways to improve your finances." },
 ];
 
+const EMAIL_FIELDS = [
+  {
+    key: "email",
+    label: "Email notifications",
+    hint: "Allow FinTrack to email your account address.",
+  },
+  {
+    key: "accountEmails",
+    label: "Welcome and account emails",
+    hint: "Your welcome note, plus important account notices.",
+    requires: "email",
+  },
+];
+
 const errorText = (error) =>
   error.response?.data?.errors?.[0]?.message ||
   error.response?.data?.message ||
@@ -79,12 +93,16 @@ const Section = ({ title, description, children }) => (
 
 export const UserSettings = () => {
   const { userId } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { user: authUser, updateUser: updateContextUser } = useAuth();
   const { theme, setTheme } = useTheme();
 
   const accountId = userId || authUser?._id;
-  const [tab, setTab] = useState("profile");
+  const [tab, setTab] = useState(() => {
+    const requested = searchParams.get("tab");
+    return TABS.some((item) => item.id === requested) ? requested : "profile";
+  });
 
   const [profile, setProfile] = useState({ name: "", email: "", bio: "", profilePic: "" });
   const [loadingProfile, setLoadingProfile] = useState(Boolean(accountId));
@@ -237,6 +255,8 @@ export const UserSettings = () => {
     try {
       const response = await axiosInstance.put("/notifications/preferences", {
         inApp: preferences.inApp,
+        email: preferences.email,
+        accountEmails: preferences.accountEmails,
         budgetAlerts: preferences.budgetAlerts,
         billReminders: preferences.billReminders,
         recurringActivity: preferences.recurringActivity,
@@ -531,7 +551,7 @@ export const UserSettings = () => {
       {tab === "notifications" && (
         <Section
           title="Notification preferences"
-          description="Choose which alerts FinTrack generates for your account."
+          description="Choose which alerts FinTrack generates, and whether it may email you."
         >
           {!isOwnAccount ? (
             <Alert severity="info">Notification preferences belong to the account owner.</Alert>
@@ -545,7 +565,19 @@ export const UserSettings = () => {
             </Alert>
           ) : (
             <>
-              <Stack divider={<Divider flexItem />} spacing={0}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                }}
+              >
+                In-app
+              </Typography>
+
+              <Stack divider={<Divider flexItem />} spacing={0} sx={{ mt: 0.5 }}>
                 {NOTIFICATION_FIELDS.map((field) => (
                   <Stack
                     key={field.key}
@@ -563,6 +595,7 @@ export const UserSettings = () => {
                     </Box>
                     <Switch
                       checked={Boolean(preferences[field.key])}
+                      disabled={field.key !== "inApp" && !preferences.inApp}
                       onChange={(event) =>
                         setPreferences({ ...preferences, [field.key]: event.target.checked })
                       }
@@ -580,6 +613,7 @@ export const UserSettings = () => {
                 onChange={(event) =>
                   setPreferences({ ...preferences, minimumPriority: event.target.value })
                 }
+                disabled={!preferences.inApp}
                 sx={{ mt: 2, minWidth: 220 }}
               >
                 {[
@@ -593,6 +627,52 @@ export const UserSettings = () => {
                   </MenuItem>
                 ))}
               </TextField>
+
+              <Divider sx={{ my: 3 }} />
+
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "text.secondary",
+                }}
+              >
+                Email
+              </Typography>
+              <Typography sx={{ mt: 0.5, fontSize: 12.5, color: "text.secondary" }}>
+                Account email is sent only with your consent. Turning it off stops future welcome and
+                account messages; it cannot recall one already delivered.
+              </Typography>
+
+              <Stack divider={<Divider flexItem />} spacing={0} sx={{ mt: 1 }}>
+                {EMAIL_FIELDS.map((field) => (
+                  <Stack
+                    key={field.key}
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap={2}
+                    sx={{ py: 1.25 }}
+                  >
+                    <Box>
+                      <Typography sx={{ fontSize: 13.5, fontWeight: 500 }}>{field.label}</Typography>
+                      <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                        {field.hint}
+                      </Typography>
+                    </Box>
+                    <Switch
+                      checked={Boolean(preferences[field.key])}
+                      disabled={Boolean(field.requires && !preferences[field.requires])}
+                      onChange={(event) =>
+                        setPreferences({ ...preferences, [field.key]: event.target.checked })
+                      }
+                      inputProps={{ "aria-label": field.label }}
+                    />
+                  </Stack>
+                ))}
+              </Stack>
 
               {preferencesMessage.text && (
                 <Alert severity={preferencesMessage.type} sx={{ mt: 2 }}>

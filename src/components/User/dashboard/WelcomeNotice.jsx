@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { FiPlus, FiZap } from "react-icons/fi";
+import { FiPlus, FiX, FiZap } from "react-icons/fi";
 import { toast } from "sonner";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -22,11 +22,10 @@ import { fetchBudgets } from "../../../store/slices/budgetSlice";
 import { seedDemoData } from "../../../store/slices/demoSlice";
 
 /**
- * --- WELCOME NOTICE ---
- * The small greeting a new account sees on its first dashboard visit.
- *
- * It only appears once the expense read has finished and come back empty, so a
- * returning user never sees it. It offers the two useful next steps: add a real
+ * --- WELCOME NOTE ---
+ * A first-visit note set into the page's left margin, not a dashboard card.
+ * It only appears after the expense read has succeeded and come back empty, so
+ * a returning account never sees it. Two useful next steps: add a real
  * expense, or fill the account with demo data and look around first.
  */
 export const WelcomeNotice = ({ onSeeded }) => {
@@ -78,67 +77,106 @@ export const WelcomeNotice = ({ onSeeded }) => {
   };
 
   return (
-    <Alert
-      severity="info"
-      onClose={() => setDismissed(true)}
+    <Paper
+      component="section"
+      elevation={0}
       sx={{
-        alignItems: "flex-start",
-        borderRadius: "12px",
+        position: "relative",
         border: 1,
         borderColor: "divider",
+        borderLeft: "3px solid",
+        borderLeftColor: "primary.main",
+        borderRadius: "10px",
         bgcolor: "background.paper",
-        "& .MuiAlert-message": { width: "100%" },
+        px: { xs: 2, sm: 2.5 },
+        py: { xs: 2, sm: 2.25 },
+        display: "grid",
+        gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) auto" },
+        gap: 2,
+        alignItems: { md: "center" },
       }}
     >
-      <AlertTitle sx={{ fontWeight: 700, mb: 0.5 }}>
-        Welcome to FinTrack, {firstName}
-      </AlertTitle>
+      <Box sx={{ minWidth: 0, pr: { md: 2 } }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+          <Typography
+            sx={{
+              fontFamily: "var(--font-display)",
+              fontSize: "0.98rem",
+              fontWeight: 700,
+              letterSpacing: "-0.015em",
+            }}
+          >
+            Welcome to FinTrack, {firstName}
+          </Typography>
+          <IconButton
+            size="small"
+            aria-label="Dismiss welcome note"
+            onClick={() => setDismissed(true)}
+            sx={{ mt: -0.5, mr: -0.75, display: { md: "none" } }}
+          >
+            <FiX size={15} />
+          </IconButton>
+        </Stack>
 
-      <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: "text.secondary" }}>
-        You have not added an expense yet. Add your first one to see your budget,
-        insights and forecast come alive — or load a ready-made demo ledger and
-        look around first.
-      </Typography>
+        <Typography
+          sx={{ mt: 0.4, fontSize: 12.5, lineHeight: 1.65, color: "text.secondary" }}
+        >
+          You have not added an expense yet. Add your first one to see your
+          budget, insights and forecast come alive, or load a ready-made demo
+          ledger and look around first.
+        </Typography>
+      </Box>
 
       <Stack
-        direction={{ xs: "column", sm: "row" }}
+        direction={{ xs: "column", sm: "row", md: "column", lg: "row" }}
         spacing={1}
-        sx={{ mt: 1.75 }}
+        sx={{ alignItems: { sm: "center", md: "stretch", lg: "center" } }}
       >
-        <Box>
-          <Button
-            component={RouterLink}
-            to="/private/expenses?action=add"
-            size="small"
-            variant="contained"
-            startIcon={<FiPlus size={15} />}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            Add your first expense
-          </Button>
-        </Box>
+        <Button
+          component={RouterLink}
+          to="/private/expenses?action=add"
+          size="small"
+          variant="contained"
+          startIcon={<FiPlus size={14} />}
+          sx={{ textTransform: "none", fontWeight: 600, minHeight: 34 }}
+        >
+          Add your first expense
+        </Button>
 
-        <Box>
-          <Button
-            type="button"
-            size="small"
-            variant="outlined"
-            onClick={handleSeed}
-            disabled={seeding}
-            startIcon={
-              seeding ? (
-                <CircularProgress size={14} sx={{ color: "inherit" }} />
-              ) : (
-                <FiZap size={15} />
-              )
-            }
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            {seeding ? "Preparing demo…" : "Explore with demo data"}
-          </Button>
-        </Box>
+        <Button
+          type="button"
+          size="small"
+          variant="outlined"
+          onClick={handleSeed}
+          disabled={seeding}
+          startIcon={
+            seeding ? (
+              <CircularProgress size={13} sx={{ color: "inherit" }} />
+            ) : (
+              <FiZap size={14} />
+            )
+          }
+          sx={{
+            textTransform: "none",
+            fontWeight: 600,
+            minHeight: 34,
+            borderColor: "divider",
+            color: "text.primary",
+          }}
+        >
+          {seeding ? "Preparing demo…" : "Explore with demo data"}
+        </Button>
+
+        <IconButton
+          size="small"
+          aria-label="Dismiss welcome note"
+          onClick={() => setDismissed(true)}
+          sx={{ display: { xs: "none", md: "inline-flex" }, alignSelf: "center" }}
+        >
+          <FiX size={15} />
+        </IconButton>
       </Stack>
-    </Alert>
+    </Paper>
   );
 };
 

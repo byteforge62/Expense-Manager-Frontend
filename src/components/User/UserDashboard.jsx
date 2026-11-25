@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -37,20 +36,14 @@ import {
 import { DashboardSkeleton } from "./dashboard/DashboardSkeleton";
 import { DashboardHeader } from "./dashboard/DashboardHeader";
 import { WelcomeNotice } from "./dashboard/WelcomeNotice";
-import { FinancialSnapshotCard } from "./dashboard/FinancialSnapshotCard";
-import { MetricSummaryCards } from "./dashboard/MetricSummaryCards";
+import { LedgerStatement } from "./dashboard/LedgerStatement";
 import { AITextInsightCard, SpendingRiskCard } from "./dashboard/InsightCards";
 import { AssistantChatCard } from "./dashboard/AssistantChatCard";
-import {
-  SpendingTrendChart,
-  CashEquilibriumChart,
-  CategoryBreakdownChart,
-} from "./dashboard/AnalyticsCharts";
+import { AnalysisSheet } from "./dashboard/AnalyticsCharts";
 import { RecurringOperationsCard } from "./dashboard/RecurringOperationsCard";
 import { InsightsHistoryCard } from "./dashboard/InsightsHistoryCard";
 import { QuickActions } from "./dashboard/QuickActions";
-import { ObligationsCard } from "./dashboard/ObligationsCard";
-import { PurchaseSnapshotCard } from "./dashboard/PurchaseSnapshotCard";
+import { MoneyFlow } from "./dashboard/MoneyFlow";
 
 /**
  * --- INTELLIGENCE HUB (USER DASHBOARD) ---
@@ -304,162 +297,166 @@ export const UserDashboard = () => {
 
       <QuickActions />
 
-      <FinancialSnapshotCard
+      <LedgerStatement
         hasActivity={hasActivity}
         netSavings={netSavings}
         totalIncome={totalIncome}
         totalExpenses={totalExpenses}
         savingsRate={savingsRate}
-        formatCurrency={formatCurrency}
-      />
-
-      <MetricSummaryCards
-        totalIncome={totalIncome}
-        totalExpenses={totalExpenses}
         totalBudget={totalBudget}
         hasFinancialData={hasFinancialData}
         formatCurrency={formatCurrency}
       />
 
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <ObligationsCard
-            items={upcomingBills}
-            isLoading={loadingPlanning}
-            formatCurrency={formatCurrency}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <PurchaseSnapshotCard
-            summary={purchaseSummary}
-            isLoading={loadingPlanning}
-            formatCurrency={formatCurrency}
-            monthLabel={new Date().toLocaleDateString("en-IN", {
-              month: "long",
-              year: "numeric",
-            })}
-          />
-        </Grid>
-      </Grid>
+      <MoneyFlow
+        bills={upcomingBills}
+        billsLoading={loadingPlanning}
+        purchaseSummary={purchaseSummary}
+        purchasesLoading={loadingPlanning}
+        formatCurrency={formatCurrency}
+        monthLabel={new Date().toLocaleDateString("en-IN", {
+          month: "long",
+          year: "numeric",
+        })}
+      />
 
-      <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", sm: "flex-end" }} spacing={1}>
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: "-0.025em" }}>
-            Insights & planning
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.4 }}>
-            Helpful tools when you’re ready to take a closer look.
-          </Typography>
-        </Box>
-        <Button
-          component={RouterLink}
-          to="/private/financial-intelligence"
-          size="small"
-          endIcon={<FiArrowUpRight size={15} />}
-          sx={{ px: 1.25, textTransform: "none", fontWeight: 600 }}
+      <Box component="section" aria-labelledby="insights-heading">
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "flex-end" }}
+          spacing={1}
         >
-          Explore intelligence
-        </Button>
-      </Stack>
+          <Box>
+            <Typography
+              id="insights-heading"
+              component="h2"
+              sx={{
+                fontFamily: "var(--font-display)",
+                fontSize: "1.05rem",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Insights & planning
+            </Typography>
+            <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.3 }}>
+              Helpful tools when you’re ready to take a closer look.
+            </Typography>
+          </Box>
+          <Button
+            component={RouterLink}
+            to="/private/financial-intelligence"
+            size="small"
+            endIcon={<FiArrowUpRight size={15} />}
+            sx={{ px: 1.25, textTransform: "none", fontWeight: 600 }}
+          >
+            Explore intelligence
+          </Button>
+        </Stack>
 
-      <Grid container spacing={3}>
-        <SpendingRiskCard
-          riskData={riskData}
-          isLoading={loadingRisk}
-          onRefresh={fetchRisk}
-        />
+        <Box
+          sx={{
+            mt: 1,
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              lg: "minmax(0, 1.42fr) minmax(0, 0.58fr)",
+            },
+            columnGap: { lg: 4 },
+            rowGap: 3,
+            alignItems: "start",
+          }}
+        >
+          <Box
+            component="ul"
+            sx={{
+              listStyle: "none",
+              m: 0,
+              p: 0,
+              borderBottom: 1,
+              borderColor: "divider",
+            }}
+          >
+            <SpendingRiskCard
+              riskData={riskData}
+              isLoading={loadingRisk}
+              onRefresh={fetchRisk}
+            />
 
-        <AITextInsightCard
-          title="Financial health"
-          icon={<FiShield size={16} />}
-          iconColor="secondary.main"
-          isLoading={loadingHealth}
-          value={healthScore}
-          onRefresh={fetchHealthScore}
-          prompt="Review your income, expenses, and available budget data."
-          loadingLabel="Reviewing financial health..."
-          loadingColor="secondary"
-          buttonLabel="Check health"
-          buttonColor="bg-violet-500 text-white hover:bg-violet-600"
-        />
+            <AITextInsightCard
+              title="Financial health"
+              icon={<FiShield size={15} />}
+              iconColor="secondary.main"
+              isLoading={loadingHealth}
+              value={healthScore}
+              onRefresh={fetchHealthScore}
+              prompt="Review your income, expenses, and available budget data."
+              loadingLabel="Reviewing financial health..."
+              loadingColor="secondary"
+              buttonLabel="Check health"
+            />
 
-        <AITextInsightCard
-          title="Spending patterns"
-          icon={<FiBarChart2 size={16} />}
-          iconColor="cyan.main"
-          isLoading={loadingInsights}
-          value={expenseInsights}
-          onRefresh={fetchExpenseInsights}
-          prompt="Compare recent spending by category and over time."
-          loadingLabel="Analyzing spending..."
-          loadingColor="primary"
-          buttonLabel="Analyze patterns"
-          buttonColor="bg-cyan-500 text-white hover:bg-cyan-600"
-        />
+            <AITextInsightCard
+              title="Spending patterns"
+              icon={<FiBarChart2 size={15} />}
+              iconColor="cyan.main"
+              isLoading={loadingInsights}
+              value={expenseInsights}
+              onRefresh={fetchExpenseInsights}
+              prompt="Compare recent spending by category and over time."
+              loadingLabel="Analyzing spending..."
+              loadingColor="primary"
+              buttonLabel="Analyze patterns"
+            />
 
-        <AITextInsightCard
-          title="Cash-flow forecast"
-          icon={<FiTrendingUp size={16} />}
-          iconColor="primary.main"
-          isLoading={loadingForecast}
-          value={forecast}
-          onRefresh={fetchForecast}
-          prompt="Estimate the next three months using your available financial data."
-          loadingLabel="Preparing forecast..."
-          loadingColor="primary"
-          buttonLabel="Generate forecast"
-          buttonColor="bg-blue-500 text-white hover:bg-blue-600"
-        />
+            <AITextInsightCard
+              title="Cash-flow forecast"
+              icon={<FiTrendingUp size={15} />}
+              iconColor="primary.main"
+              isLoading={loadingForecast}
+              value={forecast}
+              onRefresh={fetchForecast}
+              prompt="Estimate the next three months using your available financial data."
+              loadingLabel="Preparing forecast..."
+              loadingColor="primary"
+              buttonLabel="Generate forecast"
+            />
 
-        <AITextInsightCard
-          title="Savings suggestions"
-          icon={<FiZap size={16} />}
-          iconColor="success.main"
-          isLoading={loadingSavings}
-          value={savingOpportunities}
-          onRefresh={fetchSavingOpportunities}
-          prompt="Identify specific budget optimizations to maximize your monthly net surplus."
-          loadingLabel="Preparing suggestions..."
-          loadingColor="success"
-          buttonLabel="View suggestions"
-          buttonColor="bg-emerald-500 text-white hover:bg-emerald-600"
-        />
+            <AITextInsightCard
+              title="Savings suggestions"
+              icon={<FiZap size={15} />}
+              iconColor="success.main"
+              isLoading={loadingSavings}
+              value={savingOpportunities}
+              onRefresh={fetchSavingOpportunities}
+              prompt="Identify specific budget optimizations to maximize your monthly net surplus."
+              loadingLabel="Preparing suggestions..."
+              loadingColor="success"
+              buttonLabel="View suggestions"
+            />
+          </Box>
 
-        <AssistantChatCard />
-      </Grid>
+          <Box sx={{ position: { lg: "sticky" }, top: { lg: 88 } }}>
+            <AssistantChatCard />
+          </Box>
+        </Box>
+      </Box>
 
-      {/* ══ VISUAL ANALYTICS ══ */}
       {loadingCharts ? (
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, lg: 6 }}>
-            <Skeleton
-              variant="rectangular"
-              height={320}
-              sx={{ borderRadius: "12px" }}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, lg: 6 }}>
-            <Skeleton
-              variant="rectangular"
-              height={320}
-              sx={{ borderRadius: "12px" }}
-            />
-          </Grid>
-        </Grid>
+        <Skeleton
+          variant="rectangular"
+          height={300}
+          sx={{ borderRadius: "12px" }}
+        />
       ) : (
         (totalIncome > 0 || totalExpenses > 0) && (
-          <Grid container spacing={3}>
-            <SpendingTrendChart data={trendData} />
-
-            <CashEquilibriumChart
-              totalIncome={totalIncome}
-              totalExpenses={totalExpenses}
-            />
-
-            {categoryData.length > 0 && (
-              <CategoryBreakdownChart data={categoryData} />
-            )}
-          </Grid>
+          <AnalysisSheet
+            trendData={trendData}
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+            categoryData={categoryData}
+          />
         )
       )}
 
