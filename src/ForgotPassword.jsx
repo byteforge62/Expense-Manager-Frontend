@@ -28,18 +28,22 @@ export const ForgotPassword = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [devResetUrl, setDevResetUrl] = useState("");
 
   const submitHandler = async (data) => {
     // Guard against a double submit while the request is in flight.
     if (loading) return;
 
     setLoading(true);
+    setDevResetUrl("");
 
     try {
-      await axiosInstance.post("/user/forgotpassword", {
+      const response = await axiosInstance.post("/user/forgotpassword", {
         email: data.email.trim().toLowerCase(),
       });
 
+      // Development only: the API returns a one-time link when SMTP is down.
+      setDevResetUrl(response?.data?.data?.devResetUrl || "");
       setSent(true);
     } catch (error) {
       toast.error(
@@ -103,7 +107,36 @@ export const ForgotPassword = () => {
               </Typography>
             </Box>
 
-            {sent && (
+            {sent && devResetUrl && (
+              <Box
+                role="status"
+                sx={{
+                  p: 2,
+                  borderRadius: 1,
+                  border: 1,
+                  borderColor: "warning.main",
+                  bgcolor: "rgba(245,158,11, 0.08)",
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Email delivery is unavailable
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                  This development environment could not send the email. Use the
+                  one-time link below to reset the password.
+                </Typography>
+                <Button
+                  href={devResetUrl}
+                  variant="contained"
+                  size="small"
+                  sx={{ mt: 1.5, textTransform: "none", fontWeight: "bold" }}
+                >
+                  Open reset link
+                </Button>
+              </Box>
+            )}
+
+            {sent && !devResetUrl && (
               <Box
                 role="status"
                 sx={{

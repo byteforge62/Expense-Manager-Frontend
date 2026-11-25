@@ -26,6 +26,13 @@ import Divider from "@mui/material/Divider";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 import fintrackMark from "./assets/brand/fintrack-mark.svg";
 
+// Local development only: shown as one-click fill buttons so the seeded
+// accounts can never be locked out by a typo in the documented password.
+const DEMO_ACCOUNTS = [
+  { email: "patelmuhammad192@gmail.com", password: "Muhammad192", role: "User" },
+  { email: "admin@fintrack.com", password: "Admin@192", role: "Admin" },
+];
+
 /**
  * --- LOGIN ---
  * Authenticates the user and routes them to the right dashboard.
@@ -36,6 +43,7 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
@@ -343,6 +351,62 @@ export const Login = () => {
                   )}
                 </Button>
               </Stack>
+
+              {import.meta.env.DEV && (
+                <Box
+                  sx={{
+                    mt: 2.5,
+                    p: 1.75,
+                    border: 1,
+                    borderColor: "divider",
+                    borderRadius: "8px",
+                    bgcolor: "action.hover",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "text.secondary",
+                    }}
+                  >
+                    Demo accounts
+                  </Typography>
+                  <Stack spacing={1} sx={{ mt: 1 }}>
+                    {DEMO_ACCOUNTS.map((account) => (
+                      <Stack
+                        key={account.email}
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        spacing={1.5}
+                      >
+                        <Box sx={{ minWidth: 0 }}>
+                          <Typography sx={{ fontSize: 12, fontWeight: 600 }} noWrap>
+                            {account.email}
+                          </Typography>
+                          <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+                            {account.password} · {account.role}
+                          </Typography>
+                        </Box>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => {
+                            setValue("email", account.email);
+                            setValue("password", account.password);
+                          }}
+                          sx={{ flexShrink: 0, textTransform: "none", fontSize: 11.5 }}
+                        >
+                          Use
+                        </Button>
+                      </Stack>
+                    ))}
+                  </Stack>
+                </Box>
+              )}
 
               <Divider sx={{ my: 3 }} />
 

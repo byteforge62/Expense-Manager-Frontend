@@ -98,6 +98,28 @@ describe("Forgot password page", () => {
     expect(screen.queryByText(/no account|not found|does not exist/i)).toBeNull();
   });
 
+  test("offers the development reset link when email delivery is unavailable", async () => {
+    const devResetUrl = "http://localhost:5174/reset-password/dev-token-123";
+    post.mockResolvedValue({
+      status: 200,
+      data: { success: true, data: { devResetUrl } },
+    });
+    renderForgot();
+
+    fireEvent.change(screen.getByLabelText(/Email Address/i), {
+      target: { value: "someone@example.com" },
+    });
+    fireEvent.click(submitButton("Send Reset Link"));
+
+    expect(
+      await screen.findByText(/email delivery is unavailable/i),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /open reset link/i })).toHaveAttribute(
+      "href",
+      devResetUrl,
+    );
+  });
+
   test("links back to the sign-in page", () => {
     renderForgot();
 
