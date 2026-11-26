@@ -103,9 +103,9 @@ const TrendBlock = ({ data }) => (
         </Typography>
       }
     />
-    <Box sx={{ mt: 0.75, ml: -1 }}>
-      <ResponsiveContainer width="100%" height={85}>
-        <LineChart data={data} margin={{ top: 10, right: 8, left: -10, bottom: 0 }}>
+    <Box sx={{ mt: 0.5, ml: -1 }}>
+      <ResponsiveContainer width="100%" height={54}>
+        <LineChart data={data} margin={{ top: 6, right: 8, left: -10, bottom: 0 }}>
           <CartesianGrid
             strokeDasharray="2 6"
             stroke="var(--border-subtle)"
@@ -167,7 +167,7 @@ const CategoryBlock = ({ data }) => {
       />
 
       <Box sx={{ position: "relative", mt: 0.25 }}>
-        <ResponsiveContainer width="100%" height={78}>
+        <ResponsiveContainer width="100%" height={52}>
           <PieChart>
             <Pie
               data={data}
@@ -348,13 +348,13 @@ export const AnalysisSheet = ({
     <Box
       component="section"
       aria-labelledby="analysis-heading"
-      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
+      sx={{ borderTop: 1, borderColor: "divider", pt: 0.85 }}
     >
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="baseline"
-        sx={{ mb: 0.5 }}
+        sx={{ mb: 0.25 }}
       >
         <Typography
           id="analysis-heading"
@@ -378,12 +378,12 @@ export const AnalysisSheet = ({
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            lg: hasCategories
+            md: hasCategories
               ? "minmax(0, 1.5fr) minmax(0, 0.85fr)"
               : "minmax(0, 1fr)",
           },
-          columnGap: 3.5,
-          rowGap: 2,
+          columnGap: 2.5,
+          rowGap: 1.25,
           alignItems: "start",
         }}
       >
@@ -391,7 +391,7 @@ export const AnalysisSheet = ({
         {hasCategories && <CategoryBlock data={categoryData} />}
       </Box>
 
-      <Box sx={{ mt: 1.5, pt: 1.25, borderTop: 1, borderColor: "divider" }}>
+      <Box sx={{ mt: 0.75, pt: 0.75, borderTop: 1, borderColor: "divider" }}>
         <BalanceBlock totalIncome={totalIncome} totalExpenses={totalExpenses} />
       </Box>
     </Box>

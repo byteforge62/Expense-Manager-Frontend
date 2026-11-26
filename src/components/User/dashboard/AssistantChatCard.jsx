@@ -70,7 +70,7 @@ export const AssistantChatCard = () => {
         sx={{
           flex: 1,
           minHeight: 60,
-          maxHeight: 110,
+          maxHeight: 70,
           overflowY: "auto",
           pr: 1,
           display: "flex",

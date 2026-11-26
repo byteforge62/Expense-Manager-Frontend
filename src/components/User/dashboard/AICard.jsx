@@ -31,7 +31,7 @@ const AICard = memo(
         alignItems="center"
         sx={{
           px: 1.6,
-          py: 1.1,
+          py: 0.75,
           borderBottom: 1,
           borderColor: "divider",
         }}
@@ -76,7 +76,7 @@ const AICard = memo(
 
       <Box
         sx={{
-          p: 1.2,
+          p: 1,
           flex: 1,
           minHeight: 0,
           display: "flex",

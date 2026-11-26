@@ -139,6 +139,24 @@ export const fetchPurchaseSummary = async (params) => {
   return response.data.data;
 };
 
+/**
+ * Saved account preference: when `linkedStoresOnly` is true the API returns
+ * only purchases imported from linked stores (manual records are kept, just
+ * not delivered). Enforcement lives on the server, so this only reads/saves
+ * the choice.
+ */
+export const fetchPurchasePreferences = async () => {
+  const response = await axiosInstance.get("/purchases/preferences", {
+    skipGlobalLoader: true,
+  });
+  return response.data.data;
+};
+
+export const savePurchasePreferences = async (preferences) => {
+  const response = await axiosInstance.put("/purchases/preferences", preferences);
+  return response.data.data;
+};
+
 export const createPurchase = async (payload) => {
   const response = await axiosInstance.post("/purchases", payload);
   return response.data.data;

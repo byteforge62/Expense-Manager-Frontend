@@ -34,6 +34,7 @@ import { RecurringOperationsCard } from "./dashboard/RecurringOperationsCard";
 import { InsightsHistoryCard } from "./dashboard/InsightsHistoryCard";
 import { QuickActions } from "./dashboard/QuickActions";
 import { MoneyFlow } from "./dashboard/MoneyFlow";
+import { RecentPurchases } from "./dashboard/RecentPurchases";
 
 /**
  * --- INTELLIGENCE HUB (USER DASHBOARD) ---
@@ -76,6 +77,7 @@ export const UserDashboard = () => {
   const [loadingSecondary, setloadingSecondary] = useState(true);
   const [upcomingBills, setUpcomingBills] = useState([]);
   const [purchaseSummary, setPurchaseSummary] = useState(null);
+  const [recentPurchases, setRecentPurchases] = useState([]);
   const [loadingPlanning, setLoadingPlanning] = useState(true);
 
   // --- AI MODULES: DATA FETCHING ---
@@ -93,9 +95,9 @@ export const UserDashboard = () => {
   };
 
   /**
-   * Pending bills and this month's purchase summary. Both are real reads; a
-   * failure in either leaves its card in an empty state rather than blocking
-   * the rest of the dashboard.
+   * Pending bills, this month's purchase summary and the latest purchases.
+   * All are real reads; a failure in any leaves its card in an empty state
+   * rather than blocking the rest of the dashboard.
    */
   const fetchPlanningSnapshot = async () => {
     setLoadingPlanning(true);
@@ -107,7 +109,8 @@ export const UserDashboard = () => {
       .toISOString()
       .slice(0, 10);
 
-    const [billsResult, purchasesResult] = await Promise.allSettled([
+    const [billsResult, purchasesResult, recentPurchasesResult] =
+      await Promise.allSettled([
       axiosInstance.get("/bills/me", {
         params: {
           status: "pending",
@@ -122,6 +125,14 @@ export const UserDashboard = () => {
         params: { startDate: monthStart },
         skipGlobalLoader: true,
       }),
+      axiosInstance.get("/purchases/me", {
+        params: {
+          sortBy: "purchaseDate",
+          sortOrder: "desc",
+          limit: 5,
+        },
+        skipGlobalLoader: true,
+      }),
     ]);
 
     if (billsResult.status === "fulfilled") {
@@ -131,6 +142,11 @@ export const UserDashboard = () => {
 
     if (purchasesResult.status === "fulfilled") {
       setPurchaseSummary(purchasesResult.value?.data?.data ?? null);
+    }
+
+    if (recentPurchasesResult.status === "fulfilled") {
+      const items = recentPurchasesResult.value?.data?.data;
+      setRecentPurchases(Array.isArray(items) ? items : []);
     }
 
     setLoadingPlanning(false);
@@ -228,6 +244,21 @@ export const UserDashboard = () => {
   const formatCurrency = (amount) =>
     `₹${Number(amount || 0).toLocaleString("en-IN")}`;
 
+  // Purchases are measured against the income recorded in the same month.
+  const monthIncome = useMemo(() => {
+    const now = new Date();
+
+    return (income || []).reduce((sum, item) => {
+      const date = new Date(item.date);
+
+      return !Number.isNaN(date.getTime()) &&
+        date.getFullYear() === now.getFullYear() &&
+        date.getMonth() === now.getMonth()
+        ? sum + Number(item.amount || 0)
+        : sum;
+    }, 0);
+  }, [income]);
+
   // --- ANALYTICS DATA PROCESSING ---
 
   // Calculate 30-day trend
@@ -273,7 +304,7 @@ export const UserDashboard = () => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      sx={{ display: "flex", flexDirection: "column", gap: { xs: 1.25, md: 1.5 } }}
+      sx={{ display: "flex", flexDirection: "column", gap: { xs: 1.25, md: 1 } }}
     >
 
       <WelcomeNotice
@@ -292,13 +323,16 @@ export const UserDashboard = () => {
           display: "grid",
           gridTemplateColumns: {
             xs: "minmax(0, 1fr)",
-            lg: "minmax(0, 1.55fr) minmax(0, 0.95fr)",
+            lg: "repeat(12, minmax(0, 1fr))",
           },
-          gap: { xs: 1.75, md: 2 },
+          gap: { xs: 1.5, md: 1.25 },
           alignItems: "start",
         }}
       >
-        <Stack spacing={{ xs: 1.75, md: 2 }} sx={{ minWidth: 0 }}>
+        <Stack
+          spacing={{ xs: 1.5, md: 1.25 }}
+          sx={{ gridColumn: { lg: "span 6" }, minWidth: 0 }}
+        >
           <LedgerStatement
             hasActivity={hasActivity}
             netSavings={netSavings}
@@ -313,7 +347,7 @@ export const UserDashboard = () => {
           {loadingCharts ? (
             <Skeleton
               variant="rectangular"
-              height={220}
+              height={200}
               sx={{ borderRadius: "12px" }}
             />
           ) : (
@@ -327,6 +361,19 @@ export const UserDashboard = () => {
             )
           )}
 
+          <RecentPurchases
+            purchases={recentPurchases}
+            summary={purchaseSummary}
+            monthIncome={monthIncome}
+            isLoading={loadingPlanning}
+            formatCurrency={formatCurrency}
+          />
+        </Stack>
+
+        <Stack
+          spacing={{ xs: 1.5, md: 1.25 }}
+          sx={{ gridColumn: { lg: "span 3" }, minWidth: 0 }}
+        >
           <MoneyFlow
             bills={upcomingBills}
             billsLoading={loadingPlanning}
@@ -338,9 +385,17 @@ export const UserDashboard = () => {
               year: "numeric",
             })}
           />
+
+          <RecurringOperationsCard
+            items={upcomingRecurring}
+            isLoading={loadingSecondary}
+          />
         </Stack>
 
-        <Stack spacing={{ xs: 1.75, md: 2 }} sx={{ minWidth: 0 }}>
+        <Stack
+          spacing={{ xs: 1.5, md: 1.25 }}
+          sx={{ gridColumn: { lg: "span 3" }, minWidth: 0 }}
+        >
           <InsightsPanel
             riskData={riskData}
             loadingRisk={loadingRisk}
@@ -359,18 +414,13 @@ export const UserDashboard = () => {
             fetchSavingOpportunities={fetchSavingOpportunities}
           />
 
-          <AssistantChatCard />
-
-          <RecurringOperationsCard
-            items={upcomingRecurring}
-            isLoading={loadingSecondary}
-          />
-
           <InsightsHistoryCard
             insights={allInsights}
             isLoading={loadingHistory}
             onRefresh={fetchAllInsights}
           />
+
+          <AssistantChatCard />
         </Stack>
       </Box>
     </Box>

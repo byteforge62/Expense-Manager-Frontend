@@ -48,7 +48,7 @@ export const InsightsPanel = ({
           component="h2"
           sx={{
             fontFamily: "var(--font-display)",
-            fontSize: "0.98rem",
+            fontSize: "0.92rem",
             fontWeight: 700,
             letterSpacing: "-0.02em",
           }}
@@ -81,7 +81,7 @@ export const InsightsPanel = ({
         listStyle: "none",
         m: 0,
         p: 0,
-        mt: 1,
+        mt: 0.6,
         borderBottom: 1,
         borderColor: "divider",
       }}

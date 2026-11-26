@@ -53,7 +53,7 @@ const SectionLink = ({ to, children }) => (
       display: "inline-flex",
       alignItems: "center",
       gap: 0.5,
-      mt: 1,
+      mt: 0.7,
       fontSize: 11.5,
       fontWeight: 600,
       color: "primary.main",
@@ -83,12 +83,7 @@ export const MoneyFlow = ({
   return (
     <Box
       component="section"
-      sx={{
-        display: "grid",
-        gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) minmax(0, 1fr)" },
-        columnGap: { md: 4 },
-        rowGap: 2,
-      }}
+      sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}
     >
       {/* ── Bills, on a date rail ── */}
       <Box component="div">
@@ -144,7 +139,7 @@ export const MoneyFlow = ({
                     gridTemplateColumns: "42px minmax(0, 1fr) auto",
                     alignItems: "center",
                     columnGap: 1.5,
-                    py: 0.75,
+                    py: 0.5,
                     borderTop: 1,
                     borderColor: "divider",
                   }}
@@ -209,15 +204,7 @@ export const MoneyFlow = ({
       </Box>
 
       {/* ── Purchases, as a receipt ── */}
-      <Box
-        sx={{
-          borderTop: { xs: 1, md: 0 },
-          borderLeft: { md: 1 },
-          borderColor: "divider",
-          pt: { xs: 2.5, md: 0 },
-          pl: { md: 4 },
-        }}
-      >
+      <Box sx={{ borderTop: 1, borderColor: "divider", pt: 1.25 }}>
         <SectionHeading
           id="purchase-snapshot-heading"
           aside={<FiShoppingBag size={15} style={{ color: "var(--text-muted)" }} />}
@@ -243,12 +230,12 @@ export const MoneyFlow = ({
               direction="row"
               alignItems="baseline"
               spacing={2}
-              sx={{ mt: 0.9 }}
+              sx={{ mt: 0.6 }}
             >
               <Typography
                 sx={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "1.35rem",
+                  fontSize: "1.2rem",
                   fontWeight: 700,
                   letterSpacing: "-0.045em",
                   lineHeight: 1,

@@ -28,7 +28,11 @@ import expensesReducer from "../store/slices/expensesSlice";
 import { UserDashboard } from "../components/User/UserDashboard";
 
 const budget = { _id: "bud-1", amount: 30000 };
-const income = { _id: "inc-1", amount: 50000 };
+const income = {
+  _id: "inc-1",
+  amount: 50000,
+  date: new Date().toISOString(),
+};
 const expense = {
   _id: "exp-1",
   amount: 20000,
@@ -129,6 +133,79 @@ describe("UserDashboard", () => {
     expect(screen.getByText("Budget planned")).toBeInTheDocument();
     expect(screen.getByText("Add income")).toBeInTheDocument();
     expect(screen.getByText("Add expense")).toBeInTheDocument();
+  });
+
+  test("shows recent purchases beside their impact on this month", async () => {
+    get.mockImplementation((url) => {
+      if (url === "/budgets/me") return Promise.resolve({ data: { data: [budget] } });
+      if (url === "/incomes/me") return Promise.resolve({ data: { data: [income] } });
+      if (url === "/expenses/me") {
+        return Promise.resolve({ data: { data: [expense] } });
+      }
+      if (url === "/purchases/summary") {
+        return Promise.resolve({
+          data: {
+            data: {
+              totals: {
+                purchaseCount: 2,
+                totalSpend: 5000,
+                itemCount: 3,
+                averageSpend: 2500,
+              },
+              byMerchant: [{ merchant: "Amazon", spend: 5000, count: 2 }],
+              byMonth: [],
+              largest: [{ _id: "p1", name: "Sony Headphones", totalAmount: 4999 }],
+              recent: [],
+            },
+          },
+        });
+      }
+      if (url === "/purchases/me") {
+        return Promise.resolve({
+          data: {
+            data: [
+              {
+                _id: "p1",
+                name: "Sony Headphones",
+                merchant: "Amazon",
+                totalAmount: 4999,
+                quantity: 1,
+                purchaseDate: new Date().toISOString(),
+              },
+              {
+                _id: "p2",
+                name: "USB Cable",
+                merchant: "Flipkart",
+                totalAmount: 1,
+                quantity: 2,
+                purchaseDate: new Date().toISOString(),
+              },
+            ],
+          },
+        });
+      }
+      return Promise.resolve({ data: { data: [] } });
+    });
+
+    renderDashboard();
+    await settle();
+
+    expect(await screen.findByText("Impact this month")).toBeInTheDocument();
+    expect(screen.getByText("Recent purchases")).toBeInTheDocument();
+    expect(screen.getByText("USB Cable")).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/2 purchases · 3 items/).length,
+    ).toBeGreaterThan(0);
+    // 5,000 of the 50,000 income recorded this month.
+    expect(screen.getByText("10%")).toBeInTheDocument();
+    expect(screen.getByText("Against ₹50,000 income")).toBeInTheDocument();
+    const purchaseLinks = screen.getAllByRole("link", {
+      name: /open purchase log/i,
+    });
+    expect(purchaseLinks.length).toBeGreaterThan(0);
+    purchaseLinks.forEach((link) =>
+      expect(link).toHaveAttribute("href", "/private/purchases"),
+    );
   });
 
   test("renders the empty financial state without chart cards", async () => {
@@ -354,7 +431,7 @@ describe("UserDashboard", () => {
     expect(screen.getByText("₹15,000")).toBeInTheDocument();
   });
 
-  test("initialization issues 6 requests: the financial slices plus bills and purchases", async () => {
+  test("initialization issues 7 requests: the financial slices plus bills and purchases", async () => {
     mockHappyPath();
     renderDashboard();
     await settle();
@@ -363,13 +440,14 @@ describe("UserDashboard", () => {
 
     // Exact issue order of the init effect: budget pair, income pair, the
     // full-expense thunk, then the recurring fetch.
-    expect(calls.slice(0, 6)).toEqual([
+    expect(calls.slice(0, 7)).toEqual([
       "/budgets/me",
       "/incomes/me",
       "/expenses/me",
       "/recurring/upcoming",
       "/bills/me",
       "/purchases/summary",
+      "/purchases/me",
     ]);
 
     expect(calls.filter((url) => url === "/budgets/me")).toHaveLength(1);
@@ -377,6 +455,7 @@ describe("UserDashboard", () => {
     expect(calls.filter((url) => url === "/recurring/upcoming")).toHaveLength(1);
     expect(calls.filter((url) => url === "/bills/me")).toHaveLength(1);
     expect(calls.filter((url) => url === "/purchases/summary")).toHaveLength(1);
+    expect(calls.filter((url) => url === "/purchases/me")).toHaveLength(1);
 
     // Expenses are read once and shared: the budget and income slices no
     // longer keep their own copies of /expenses/me.
@@ -385,7 +464,7 @@ describe("UserDashboard", () => {
     expect(expenseCalls.filter(([, config]) => config?.params)).toHaveLength(1);
 
     // Three financial reads, then recurring, bills and purchase planning.
-    expect(calls).toHaveLength(6);
+    expect(calls).toHaveLength(7);
   });
 
   test("makes no further requests after unmount", async () => {
@@ -421,8 +500,9 @@ describe("UserDashboard", () => {
     expect(urls.filter((url) => url === "/recurring/upcoming")).toHaveLength(2);
     expect(urls.filter((url) => url === "/bills/me")).toHaveLength(2);
     expect(urls.filter((url) => url === "/purchases/summary")).toHaveLength(2);
-    // 6 reads per mount, two independent mounts.
-    expect(urls).toHaveLength(12);
+    expect(urls.filter((url) => url === "/purchases/me")).toHaveLength(2);
+    // 7 reads per mount, two independent mounts.
+    expect(urls).toHaveLength(14);
   });
 
   test("re-rendering the same dashboard adds no requests", async () => {
@@ -460,8 +540,8 @@ describe("UserDashboard", () => {
         get.mock.calls.filter(([url]) => url === "/budgets/me"),
       ).toHaveLength(2),
     );
-    // The effect re-ran once for the new userId: 6 more requests, not a loop.
-    expect(get.mock.calls).toHaveLength(12);
+    // The effect re-ran once for the new userId: 7 more requests, not a loop.
+    expect(get.mock.calls).toHaveLength(14);
   });
 
   test("keeps the section header and intelligence link", async () => {

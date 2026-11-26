@@ -84,7 +84,7 @@ export const AITextInsightCard = ({
   <Box
     component="li"
     sx={{
-      py: 0.65,
+      py: 0.45,
       borderTop: 1,
       borderColor: "divider",
     }}

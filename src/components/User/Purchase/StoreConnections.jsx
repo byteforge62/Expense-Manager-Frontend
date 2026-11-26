@@ -240,6 +240,16 @@ export const StoreConnections = ({ onRecordsChanged }) => {
       const data = await fetchStoreOrdersNow(activeConnection._id);
       const orders = Array.isArray(data?.orders) ? data.orders : [];
 
+      // Keep the persisted "fetched" state on the connection row, so it is
+      // still visible after closing and reopening the store dialog.
+      if (data?.connection?._id === activeConnection._id) {
+        setConnections((current) =>
+          current.map((row) =>
+            row._id === data.connection._id ? data.connection : row,
+          ),
+        );
+      }
+
       setFetched(orders);
       setMessage(
         orders.length > 0
@@ -483,7 +493,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                       sx={{
                         display: "grid",
                         gap: 1.5,
-                        gridTemplateColumns: { xs: "1fr 1fr", sm: "repeat(3, 1fr)" },
+                        gridTemplateColumns: { xs: "1fr 1fr", sm: "repeat(4, 1fr)" },
                         border: 1,
                         borderColor: "divider",
                         borderRadius: "10px",
@@ -513,6 +523,18 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                         <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
                           {activeConnection.lastSyncedAt
                             ? formatPurchaseDate(activeConnection.lastSyncedAt)
+                            : "Never"}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography sx={{ fontSize: 11.5, color: "text.secondary" }}>
+                          Last fetched
+                        </Typography>
+                        <Typography sx={{ fontSize: 13, fontWeight: 600 }} noWrap>
+                          {activeConnection.lastFetchedAt
+                            ? `${activeConnection.lastFetchCount ?? 0} on ${formatPurchaseDate(
+                                activeConnection.lastFetchedAt,
+                              )}`
                             : "Never"}
                         </Typography>
                       </Box>

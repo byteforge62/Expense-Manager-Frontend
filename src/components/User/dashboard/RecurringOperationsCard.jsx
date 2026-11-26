@@ -13,7 +13,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
     <Box
       component="section"
       aria-labelledby="recurring-heading"
-      sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
+      sx={{ borderTop: 1, borderColor: "divider", pt: 0.85 }}
     >
       <Stack
         direction="row"
@@ -27,7 +27,7 @@ export const RecurringOperationsCard = ({ items, isLoading }) => {
             component="h2"
             sx={{
               fontFamily: "var(--font-display)",
-              fontSize: "0.98rem",
+              fontSize: "0.92rem",
               fontWeight: 700,
               letterSpacing: "-0.02em",
             }}

@@ -411,8 +411,8 @@ export const UserDashboardLayout = () => {
           sx={{
             maxWidth: 1480,
             mx: "auto",
-            pt: { xs: 1.5, md: 1.75 },
-            pb: 1,
+            pt: { xs: 1.5, md: 1.25 },
+            pb: { xs: 1, md: 0.5 },
             px: { xs: 2, sm: 3, lg: 4 },
           }}
         >

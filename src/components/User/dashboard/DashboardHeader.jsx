@@ -30,7 +30,7 @@ export const DashboardHeader = () => {
             component="h1"
             sx={{
               fontFamily: "var(--font-display)",
-              fontSize: { xs: "1.4rem", md: "1.6rem" },
+              fontSize: { xs: "1.35rem", md: "1.5rem" },
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: "-0.03em",
@@ -38,7 +38,7 @@ export const DashboardHeader = () => {
           >
             Overview
           </Typography>
-          <Typography sx={{ mt: 0.4, fontSize: 11.5, color: "text.secondary" }}>
+          <Typography sx={{ mt: 0.25, fontSize: 11.5, color: "text.secondary" }}>
             {today.toLocaleDateString("en-IN", {
               weekday: "long",
               year: "numeric",
@@ -86,7 +86,7 @@ export const DashboardHeader = () => {
         direction="row"
         alignItems="center"
         spacing={1.25}
-        sx={{ mt: 1.4 }}
+        sx={{ mt: 0.6 }}
       >
         <Box
           aria-hidden

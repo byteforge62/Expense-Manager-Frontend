@@ -25,7 +25,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
   <Box
     component="section"
     aria-labelledby="insights-history-heading"
-    sx={{ borderTop: 1, borderColor: "divider", pt: { xs: 1, md: 1.25 } }}
+    sx={{ borderTop: 1, borderColor: "divider", pt: 0.85 }}
   >
     <Stack
       direction="row"
@@ -39,7 +39,7 @@ export const InsightsHistoryCard = ({ insights, isLoading, onRefresh }) => (
           component="h2"
           sx={{
             fontFamily: "var(--font-display)",
-            fontSize: "0.98rem",
+            fontSize: "0.92rem",
             fontWeight: 700,
             letterSpacing: "-0.02em",
           }}
