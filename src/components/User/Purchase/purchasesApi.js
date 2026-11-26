@@ -190,11 +190,40 @@ export const unlinkStoreAccount = async (id) => {
   await axiosInstance.delete(`/store-connections/${id}`);
 };
 
-export const importStoreOrders = async (id, orders) => {
-  const response = await axiosInstance.post(`/store-connections/${id}/import`, {
-    orders,
-  });
+/**
+ * Reads the store's order history through the local helper the API runs and
+ * returns what it found. The request waits for a Chrome window the user may
+ * need to sign in to, so it has no client timeout.
+ */
+export const fetchStoreOrdersNow = async (id) => {
+  const response = await axiosInstance.post(
+    `/store-connections/${id}/fetch`,
+    {},
+    { timeout: 0, skipGlobalLoader: true },
+  );
+
   return response.data.data;
+};
+
+const IMPORT_BATCH_SIZE = 200;
+
+export const importStoreOrders = async (id, orders) => {
+  let imported = 0;
+  let duplicates = 0;
+  let connection = null;
+
+  for (let index = 0; index < orders.length; index += IMPORT_BATCH_SIZE) {
+    const response = await axiosInstance.post(`/store-connections/${id}/import`, {
+      orders: orders.slice(index, index + IMPORT_BATCH_SIZE),
+    });
+    const data = response.data.data || {};
+
+    imported += data.imported || 0;
+    duplicates += data.duplicates || 0;
+    connection = data.connection || connection;
+  }
+
+  return { imported, duplicates, connection };
 };
 
 export const fetchExpenseCategories = async () => {

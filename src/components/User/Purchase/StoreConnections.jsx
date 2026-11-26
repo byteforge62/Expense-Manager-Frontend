@@ -7,12 +7,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import {
   FiCheck,
   FiExternalLink,
   FiLink2,
+  FiRefreshCw,
   FiUploadCloud,
 } from "react-icons/fi";
 
@@ -21,6 +23,8 @@ import { parseOrderCsv } from "./purchaseCsv";
 import {
   errorText,
   fetchStoreConnections,
+  fetchStoreOrdersNow,
+  formatMoney,
   formatPurchaseDate,
   importStoreOrders,
   linkStoreAccount,
@@ -93,6 +97,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
   const [busy, setBusy] = useState("");
   const [dialogError, setDialogError] = useState("");
   const [result, setResult] = useState(null);
+  const [fetched, setFetched] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -126,6 +131,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
     setAccountLabel(existing?.accountLabel || "");
     setCsvText("");
     setResult(null);
+    setFetched(null);
     setDialogError("");
   };
 
@@ -133,6 +139,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
     if (busy) return;
     setActiveKey("");
     setResult(null);
+    setFetched(null);
     setCsvText("");
     setDialogError("");
   };
@@ -153,7 +160,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
         connection,
       ]);
       setMessage(
-        `${activeStore.name} linked. Import the store's order export to add its purchases.`,
+        `${activeStore.name} linked. Fetch its orders to add them to your purchase log.`,
       );
     } catch (requestError) {
       setDialogError(errorText(requestError));
@@ -179,6 +186,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
       );
       setAccountLabel("");
       setResult(null);
+      setFetched(null);
       setCsvText("");
       setMessage(
         `${activeStore.name} unlinked. Your imported purchases were kept.`,
@@ -221,6 +229,60 @@ export const StoreConnections = ({ onRecordsChanged }) => {
     }
   };
 
+  /** Primary path: the API reads the store through a local Chrome window. */
+  const runFetch = async () => {
+    if (!activeConnection) return;
+
+    setBusy("fetch");
+    setDialogError("");
+    setFetched(null);
+    try {
+      const data = await fetchStoreOrdersNow(activeConnection._id);
+      const orders = Array.isArray(data?.orders) ? data.orders : [];
+
+      setFetched(orders);
+      setMessage(
+        orders.length > 0
+          ? `${orders.length} order${
+              orders.length === 1 ? "" : "s"
+            } read from ${activeStore.name}. Review them, then import.`
+          : `No orders could be read from ${activeStore.name}.`,
+      );
+    } catch (requestError) {
+      setDialogError(errorText(requestError));
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const importFetched = async () => {
+    if (!activeConnection || !fetched || fetched.length === 0) return;
+
+    setBusy("import");
+    setDialogError("");
+    try {
+      const response = await importStoreOrders(activeConnection._id, fetched);
+
+      setConnections((current) =>
+        current.map((row) =>
+          row._id === response.connection?._id ? response.connection : row,
+        ),
+      );
+      setResult(response);
+      setFetched(null);
+      setMessage(
+        `${response.imported} order${
+          response.imported === 1 ? "" : "s"
+        } imported from ${activeStore.name}.`,
+      );
+      onRecordsChanged?.();
+    } catch (requestError) {
+      setDialogError(errorText(requestError));
+    } finally {
+      setBusy("");
+    }
+  };
+
   const handleFile = async (event) => {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -250,8 +312,8 @@ export const StoreConnections = ({ onRecordsChanged }) => {
             Connected stores
           </h2>
           <p className="mt-0.5 text-xs text-[var(--text-muted)]">
-            Link the shops you buy from, then import their order history into this
-            purchase log.
+            Link the shops you buy from, then fetch their order history straight
+            into this purchase log.
           </p>
         </div>
         <span className="text-xs text-[var(--text-muted)]">
@@ -410,11 +472,8 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                         }}
                       >
                         <li>Link this store account.</li>
-                        <li>{activeStore.importHint}</li>
-                        <li>
-                          Import the file here — each order becomes a purchase
-                          record.
-                        </li>
+                        <li>Fetch its orders automatically, or import an export file.</li>
+                        <li>Each order becomes a purchase record.</li>
                       </Box>
                     </Box>
                   </Stack>
@@ -460,19 +519,141 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                     </Box>
 
                     <Box>
-                      <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
-                        Import order history
-                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
+                          Automatic import
+                        </Typography>
+                        <Box
+                          component="span"
+                          sx={{
+                            px: 0.75,
+                            py: 0.1,
+                            border: 1,
+                            borderColor: "primary.main",
+                            borderRadius: "999px",
+                            color: "primary.main",
+                            fontSize: 10.5,
+                            fontWeight: 700,
+                            letterSpacing: 0.3,
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          Fastest
+                        </Box>
+                      </Box>
                       <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.25 }}>
+                        FinTrack opens a Chrome window on this computer and reads
+                        your {activeStore.name} order history there — every year,
+                        not just the last few months. Nothing is saved until you
+                        confirm. Sign in once in that window; your store password
+                        and cookies never reach FinTrack.
+                      </Typography>
+
+                      <Button
+                        size="small"
+                        variant="contained"
+                        onClick={runFetch}
+                        disabled={Boolean(busy)}
+                        startIcon={<FiRefreshCw size={15} />}
+                        sx={{ mt: 1.25, textTransform: "none", fontWeight: 600 }}
+                      >
+                        {busy === "fetch"
+                          ? "Reading your orders…"
+                          : `Fetch orders from ${activeStore.name}`}
+                      </Button>
+
+                      {busy === "fetch" && (
+                        <Typography
+                          role="status"
+                          sx={{ fontSize: 12, mt: 1, color: "text.secondary" }}
+                        >
+                          A Chrome window is opening. Sign in there if the page
+                          asks; this finishes on its own and can take a minute.
+                        </Typography>
+                      )}
+
+                      {fetched && fetched.length === 0 && (
+                        <Typography sx={{ fontSize: 12, mt: 1, color: "text.secondary" }}>
+                          No orders could be read. Check that the Chrome window
+                          shows your {activeStore.name} order list, then fetch
+                          again.
+                        </Typography>
+                      )}
+
+                      {fetched && fetched.length > 0 && (
+                        <Box
+                          sx={{
+                            mt: 1.25,
+                            p: 1.5,
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+                            {fetched.length} order
+                            {fetched.length === 1 ? "" : "s"} found · nothing
+                            saved yet
+                          </Typography>
+                          <Box
+                            component="ul"
+                            sx={{
+                              m: 0,
+                              mt: 0.5,
+                              pl: 2,
+                              display: "grid",
+                              gap: 0.25,
+                              fontSize: 12,
+                              color: "text.secondary",
+                            }}
+                          >
+                            {fetched.slice(0, 5).map((order) => (
+                              <li key={order.orderId}>
+                                {order.name.slice(0, 44)} ·{" "}
+                                {formatMoney(order.unitPrice)}
+                              </li>
+                            ))}
+                          </Box>
+                          {fetched.length > 5 && (
+                            <Typography
+                              sx={{ fontSize: 11.5, mt: 0.5, color: "text.secondary" }}
+                            >
+                              …and {fetched.length - 5} more
+                            </Typography>
+                          )}
+                          <Button
+                            size="small"
+                            variant="contained"
+                            onClick={importFetched}
+                            disabled={Boolean(busy)}
+                            sx={{ mt: 1, textTransform: "none", fontWeight: 600 }}
+                          >
+                            {busy === "import"
+                              ? "Importing…"
+                              : `Import ${fetched.length} order${
+                                  fetched.length === 1 ? "" : "s"
+                                }`}
+                          </Button>
+                        </Box>
+                      )}
+                    </Box>
+
+                    <Divider />
+
+                    <Box>
+                      <Typography sx={{ fontSize: 12.5, fontWeight: 600 }}>
+                        Or import an export file
+                      </Typography>
+                      <Typography sx={{ fontSize: 11.5, color: "text.secondary", mt: 0.25 }}>
                         {activeStore.importHint}
                       </Typography>
 
                       <Button
                         component="label"
                         size="small"
-                        variant="outlined"
+                        variant="text"
                         startIcon={<FiUploadCloud size={15} />}
-                        sx={{ mt: 1.25, textTransform: "none", fontWeight: 600 }}
+                        sx={{ mt: 1, textTransform: "none", fontWeight: 600 }}
                       >
                         Choose CSV file
                         <input
@@ -486,10 +667,10 @@ export const StoreConnections = ({ onRecordsChanged }) => {
 
                       <TextField
                         multiline
-                        minRows={4}
+                        minRows={3}
                         fullWidth
                         size="small"
-                        sx={{ mt: 1.5 }}
+                        sx={{ mt: 1 }}
                         label="Or paste the order list"
                         placeholder={
                           "Order ID, Order Date, Title, Price, Quantity\nAMZ-1001, 2026-10-04, Headphones, 8999, 1"
@@ -500,8 +681,8 @@ export const StoreConnections = ({ onRecordsChanged }) => {
 
                       <Typography
                         sx={{
-                          fontSize: 12,
-                          mt: 1,
+                          fontSize: 11.5,
+                          mt: 0.75,
                           color: parsed.orders.length ? "success.main" : "text.secondary",
                         }}
                       >
@@ -515,7 +696,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                                   } skipped`
                                 : ""
                             }`
-                          : "CSV or tab-separated exports from the store work as-is."}
+                          : "CSV or tab-separated exports still work as-is."}
                       </Typography>
                     </Box>
                   </Stack>
@@ -576,9 +757,7 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                 >
                   {busy === "import"
                     ? "Importing…"
-                    : `Import ${parsed.orders.length} order${
-                        parsed.orders.length === 1 ? "" : "s"
-                      }`}
+                    : `Import ${parsed.orders.length} from file`}
                 </Button>
               )}
             </DialogActions>
