@@ -6,9 +6,15 @@ import {
   createSingleFlight,
   ensureIdempotencyKey,
   isAuthExemptRequest,
+  isMutatingMethod,
   isRetryableNetworkError,
   shouldRetryMethod,
 } from "./httpPolicy";
+import {
+  isCacheableRequest,
+  requestCache,
+  requestCacheKey,
+} from "./requestCache";
 
 /**
  * --- AXIOS GLOBAL CONFIGURATION ---
@@ -34,9 +40,45 @@ const API_BASE_URL = resolveApiBaseUrl();
 // A lost response is retried once, and only for methods that are safe to repeat.
 const NETWORK_RETRY_DELAY_MS = 2000;
 
+/**
+ * Resolved on first use: tests stub `axios` without the adapter registry, and
+ * importing this module must stay side-effect free for them.
+ */
+let resolvedDefaultAdapter;
+
+const getDefaultAdapter = () => {
+  if (!resolvedDefaultAdapter) {
+    resolvedDefaultAdapter =
+      typeof axios.getAdapter === "function"
+        ? axios.getAdapter(axios.defaults?.adapter)
+        : axios.defaults?.adapter;
+  }
+
+  return resolvedDefaultAdapter;
+};
+
+/**
+ * Reads go through the per-user response cache: a repeated read inside the
+ * TTL is answered from memory, and two components asking for the same read at
+ * the same time share one request. Writes bypass it (no cache key).
+ */
+const cachedAdapter = async (config) => {
+  if (!config._cacheKey) {
+    return getDefaultAdapter()(config);
+  }
+
+  const response = await requestCache.getOrFetch(config._cacheKey, () =>
+    getDefaultAdapter()(config),
+  );
+
+  // Every caller gets its own config so the interceptors see their request.
+  return { ...response, config };
+};
+
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 120000,
+  adapter: cachedAdapter,
   withCredentials: true, // Crucial for sending/receiving HttpOnly cookies
   headers: {
     "Content-Type": "application/json",
@@ -90,6 +132,7 @@ const releaseGlobalLoader = (config) => {
  * request interceptor stops attaching a token), then storage and redirect.
  */
 const endSession = () => {
+  requestCache.clear();
   store?.dispatch(logout());
   clearLegacyAuthStorage();
   redirectToLogin();
@@ -99,6 +142,24 @@ const endSession = () => {
 // Runs before every single request we make
 axiosInstance.interceptors.request.use(
   (config) => {
+    // 0. Reads are cacheable per user for a few seconds. A hit skips the
+    //    spinner as well, because there is no network wait to cover.
+    if (isCacheableRequest(config)) {
+      const key = requestCacheKey({
+        userId: store?.getState()?.auth?.user?._id,
+        url: config.url,
+        params: config.params,
+      });
+
+      if (key) {
+        config._cacheKey = key;
+
+        if (requestCache.read(key)) {
+          config.skipGlobalLoader = true;
+        }
+      }
+    }
+
     // 1. Show the global loading spinner unless told otherwise
     if (store && !config.skipGlobalLoader) {
       config._globalLoading = true;
@@ -130,6 +191,12 @@ axiosInstance.interceptors.request.use(
 // Runs after every response or error from the server
 axiosInstance.interceptors.response.use(
   (response) => {
+    // A committed write can change any of the cached reads; drop them so the
+    // next read reflects the mutation instead of waiting out the TTL.
+    if (isMutatingMethod(response.config?.method)) {
+      requestCache.clear();
+    }
+
     // Hide loader on success
     if (store && response.config?._globalLoading) {
       store.dispatch(stopLoading());
