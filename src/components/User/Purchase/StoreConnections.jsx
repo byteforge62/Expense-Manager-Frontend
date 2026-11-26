@@ -543,10 +543,10 @@ export const StoreConnections = ({ onRecordsChanged }) => {
                       </Box>
                       <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.25 }}>
                         FinTrack opens a Chrome window on this computer and reads
-                        your {activeStore.name} order history there — every year,
-                        not just the last few months. Nothing is saved until you
-                        confirm. Sign in once in that window; your store password
-                        and cookies never reach FinTrack.
+                        your {activeStore.name} order history there, including
+                        older pages where the store offers them. Nothing is saved
+                        until you confirm. Sign in once in that window; your store
+                        password and cookies never reach FinTrack.
                       </Typography>
 
                       <Button
