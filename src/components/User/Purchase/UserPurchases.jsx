@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
@@ -317,6 +317,26 @@ export const UserPurchases = () => {
               }
             >
               {error}
+            </Alert>
+          )}
+
+          {meta?.purchaseFilter?.linkedStoresOnly && (
+            <Alert
+              severity="info"
+              action={
+                <Button
+                  component={RouterLink}
+                  to="/private/settings?tab=purchases"
+                  color="inherit"
+                  size="small"
+                  sx={{ textTransform: "none" }}
+                >
+                  Change
+                </Button>
+              }
+            >
+              Showing only purchases imported from linked stores. Manually recorded
+              purchases are kept, but hidden by your saved setting.
             </Alert>
           )}
 

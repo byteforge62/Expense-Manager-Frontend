@@ -73,6 +73,10 @@ const UserSettings = lazyNamed(
   () => import("./components/User/UserSettings"),
   "UserSettings",
 );
+const InvestmentPortfolio = lazyNamed(
+  () => import("./components/User/Investments/InvestmentPortfolio"),
+  "InvestmentPortfolio",
+);
 
 const AdminDashboard = lazyNamed(
   () => import("./components/Admin/AdminDashboard"),
@@ -170,6 +174,14 @@ function App() {
             <Route
               path="bills"
               element={<Suspense fallback={<div role="status">Loading bills…</div>}><Bills /></Suspense>}
+            />
+            <Route
+              path="investments"
+              element={
+                <Suspense fallback={<div role="status">Loading investments…</div>}>
+                  <InvestmentPortfolio />
+                </Suspense>
+              }
             />
             <Route path="userdashboard" element={<UserDashboard />} />
             <Route path="settings" element={<UserSettings />} />

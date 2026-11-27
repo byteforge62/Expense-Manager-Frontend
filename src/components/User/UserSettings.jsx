@@ -24,6 +24,10 @@ import axiosInstance from "../Utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { updateUser as updateAuthUser } from "../../store/slices/authSlice";
+import {
+  fetchPurchasePreferences,
+  savePurchasePreferences,
+} from "./Purchase/purchasesApi";
 
 /**
  * Settings — the single place where account, appearance, notification and
@@ -39,6 +43,7 @@ const TABS = [
   { id: "profile", label: "Profile" },
   { id: "appearance", label: "Appearance" },
   { id: "notifications", label: "Notifications" },
+  { id: "purchases", label: "Purchases" },
   { id: "security", label: "Security" },
 ];
 
@@ -116,6 +121,14 @@ export const UserSettings = () => {
   const [savingPreferences, setSavingPreferences] = useState(false);
   const [preferencesMessage, setPreferencesMessage] = useState({ type: "", text: "" });
 
+  const [purchasePreferences, setPurchasePreferences] = useState(null);
+  const [loadingPurchasePreferences, setLoadingPurchasePreferences] = useState(false);
+  const [savingPurchasePreferences, setSavingPurchasePreferences] = useState(false);
+  const [purchasePreferencesMessage, setPurchasePreferencesMessage] = useState({
+    type: "",
+    text: "",
+  });
+
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "", confirm: "" });
   const [changingPassword, setChangingPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState({ type: "", text: "" });
@@ -177,6 +190,55 @@ export const UserSettings = () => {
       active = false;
     };
   }, [isOwnAccount]);
+
+  // Loaded only when its tab is opened: the dashboard and purchase pages do
+  // not pay for a preference read they do not display.
+  useEffect(() => {
+    if (tab !== "purchases" || !isOwnAccount) return undefined;
+
+    let active = true;
+    setLoadingPurchasePreferences(true);
+    setPurchasePreferencesMessage({ type: "", text: "" });
+
+    fetchPurchasePreferences()
+      .then((data) => {
+        if (active) setPurchasePreferences(data);
+      })
+      .catch((error) => {
+        if (active) {
+          setPurchasePreferencesMessage({ type: "error", text: errorText(error) });
+        }
+      })
+      .finally(() => {
+        if (active) setLoadingPurchasePreferences(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [tab, isOwnAccount]);
+
+  const toggleLinkedStoreFilter = async (event) => {
+    const linkedStoresOnly = event.target.checked;
+
+    setSavingPurchasePreferences(true);
+    setPurchasePreferencesMessage({ type: "", text: "" });
+
+    try {
+      const saved = await savePurchasePreferences({ linkedStoresOnly });
+      setPurchasePreferences(saved);
+      setPurchasePreferencesMessage({
+        type: "success",
+        text: saved.linkedStoresOnly
+          ? "Only purchases imported from linked stores will be shown."
+          : "All recorded purchases will be shown again.",
+      });
+    } catch (error) {
+      setPurchasePreferencesMessage({ type: "error", text: errorText(error) });
+    } finally {
+      setSavingPurchasePreferences(false);
+    }
+  };
 
   const saveProfile = async (event) => {
     event.preventDefault();
@@ -690,6 +752,65 @@ export const UserSettings = () => {
                   {savingPreferences ? "Saving…" : "Save preferences"}
                 </Button>
               </Stack>
+            </>
+          )}
+        </Section>
+      )}
+
+      {tab === "purchases" && (
+        <Section
+          title="Purchase log"
+          description="Choose which recorded purchases FinTrack returns on the purchases page, the dashboard and purchase analytics."
+        >
+          {!isOwnAccount ? (
+            <Alert severity="info">Purchase preferences belong to the account owner.</Alert>
+          ) : loadingPurchasePreferences ? (
+            <Typography role="status" sx={{ fontSize: 13, color: "text.secondary" }}>
+              Loading purchase preference…
+            </Typography>
+          ) : !purchasePreferences ? (
+            <Alert severity="error">
+              {purchasePreferencesMessage.text ||
+                "The purchase preference could not be loaded."}
+            </Alert>
+          ) : (
+            <>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                gap={2}
+                sx={{ py: 1 }}
+              >
+                <Box>
+                  <Typography sx={{ fontSize: 13.5, fontWeight: 500 }}>
+                    Only purchases from linked stores
+                  </Typography>
+                  <Typography sx={{ mt: 0.25, fontSize: 12, color: "text.secondary" }}>
+                    Shows only purchases added by a linked store import. Manually
+                    recorded purchases stay saved — they are simply not returned
+                    while this is on. Enforced by the server, so it applies to
+                    every view, including the dashboard.
+                  </Typography>
+                </Box>
+                <Switch
+                  checked={Boolean(purchasePreferences.linkedStoresOnly)}
+                  onChange={toggleLinkedStoreFilter}
+                  disabled={savingPurchasePreferences}
+                  inputProps={{ "aria-label": "Only purchases from linked stores" }}
+                />
+              </Stack>
+
+              <Typography sx={{ mt: 1.5, fontSize: 12, color: "text.secondary" }}>
+                Purchases imported before this preference existed are treated as
+                manual, because their store link was not stored at the time.
+              </Typography>
+
+              {purchasePreferencesMessage.text && (
+                <Alert severity={purchasePreferencesMessage.type} sx={{ mt: 2 }}>
+                  {purchasePreferencesMessage.text}
+                </Alert>
+              )}
             </>
           )}
         </Section>
